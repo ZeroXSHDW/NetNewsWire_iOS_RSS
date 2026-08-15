@@ -1,0 +1,8 @@
+.digest-state.json
+digest-input.json
+.rss-validation-cache/
+.validation-history.json
+__pycache__/
+tests/__pycache__/
+*.py[cod]
+.DS_Store

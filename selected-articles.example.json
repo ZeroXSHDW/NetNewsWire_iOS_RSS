@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Example headline",
+    "link": "https://example.com/article",
+    "feed": "Example source",
+    "published": "2026-08-15T09:30:00Z",
+    "summary": "Optional RSS summary",
+    "source_class": "official",
+    "language": "en"
+  }
+]

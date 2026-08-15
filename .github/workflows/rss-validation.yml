@@ -1,0 +1,37 @@
+name: Validate RSS bundles
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 1 * *"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XML validator and zsh
+        run: sudo apt-get update && sudo apt-get install --yes libxml2-utils zsh
+      - name: Run deterministic tests
+        run: make test
+      - name: Generate bundles
+        run: make generate
+      - name: Ensure generated artifacts are committed
+        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md
+      - name: Validate master bundle
+        run: make validate
+      - name: Validate iPhone-lite bundle
+        run: make validate-lite
+      - name: Upload validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rss-validation-reports
+          path: |
+            NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
+            NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
+            NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md
+            NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json

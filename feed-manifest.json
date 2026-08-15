@@ -1,0 +1,998 @@
+{
+  "manifest_version": 1,
+  "opml_titles": {
+    "master": "Finance and Cyber Security — NetNewsWire high-signal bundle",
+    "iphone-lite": "Finance and Cyber Security — NetNewsWire iPhone-lite bundle"
+  },
+  "validation": {
+    "max_age_days": 180,
+    "duplicate_title_rate_limit": 0.5,
+    "min_items_for_noise": 10,
+    "stale_review_default_days": 365,
+    "mobile_review_bytes": 262144,
+    "mobile_large_bytes": 1048576,
+    "mobile_slow_seconds": 2.0
+  },
+  "profile_notes": {
+    "master": "The master profile preserves the full 51-feed coverage set. Notification preferences are documented below and must be enabled manually after OPML import.",
+    "iphone-lite": "The iPhone-lite profile contains 30 feeds: official/core alerts, Ireland/EU/UK macro context, selected market reporting and a compact cyber research layer. Optional specialist and high-payload research feeds remain in the master profile."
+  },
+  "feeds": [
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Nasdaq Trader — Trade Halts",
+      "url": "https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts",
+      "html_url": "https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltRSS",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-nasdaq-trader-trade-halts",
+      "purpose": "Official exchange alert; fast-moving structured halt items",
+      "signal_type": "alert",
+      "access": "None",
+      "cadence": "High; trading-day alerts; structured-item exception documented below",
+      "notification": "on",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Nasdaq Trader — Equity Trader Alerts",
+      "url": "https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&categorylist=2",
+      "html_url": "https://www.nasdaqtrader.com/Trader.aspx?id=NewsRSS",
+      "event_driven": true,
+      "id": "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
+      "purpose": "Official Nasdaq exchange operations; equity trading notices, market-structure changes and listing/trader alerts",
+      "signal_type": "regulatory/event",
+      "access": "None",
+      "cadence": "High; event-driven; includes older archive items",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven; includes older archive items",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "BBC — Business",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "html_url": "https://www.bbc.com/news/business",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-bbc-business",
+      "purpose": "Independent public broadcaster; free context",
+      "signal_type": "context",
+      "access": "None",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Bloomberg — Markets",
+      "url": "https://www.bloomberg.com/feeds/markets/news.rss",
+      "html_url": "https://www.bloomberg.com/markets",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-bloomberg-markets",
+      "purpose": "Independent commercial news; fast market context",
+      "signal_type": "market",
+      "access": "Metered / subscription",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Financial Times — Markets",
+      "url": "https://www.ft.com/markets?format=rss",
+      "html_url": "https://www.ft.com/markets",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-financial-times-markets",
+      "purpose": "Independent commercial news; global markets",
+      "signal_type": "market/research",
+      "access": "Metered / subscription",
+      "cadence": "High; fast and analytical",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "MarketWatch — Top Stories",
+      "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+      "html_url": "https://www.marketwatch.com/",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-marketwatch-top-stories",
+      "purpose": "Independent commercial news; broad market headlines",
+      "signal_type": "market",
+      "access": "Metered / subscription",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "RTÉ — Business",
+      "url": "https://www.rte.ie/feeds/rss/?index=/news/business",
+      "html_url": "https://www.rte.ie/news/business/",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-rte-business",
+      "purpose": "Independent Irish public broadcaster; Ireland and international business",
+      "signal_type": "context",
+      "access": "None",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "The Wall Street Journal — Markets",
+      "url": "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain",
+      "html_url": "https://www.wsj.com/news/markets",
+      "event_driven": false,
+      "id": "finance-01-core-market-trading-the-wall-street-journal-markets",
+      "purpose": "Independent commercial news; markets",
+      "signal_type": "market",
+      "access": "Subscription",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of Ireland — News",
+      "url": "https://www.centralbank.ie/feeds/news-media-feed",
+      "html_url": "https://www.centralbank.ie/news-media/press-releases",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-central-bank-of-ireland-news",
+      "purpose": "Official Irish central bank; regulation, financial stability and policy",
+      "signal_type": "policy/regulatory",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Central Bank — Press",
+      "url": "https://www.ecb.europa.eu/rss/press.xml",
+      "html_url": "https://www.ecb.europa.eu/press/html/index.en.html",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-european-central-bank-press",
+      "purpose": "Official euro-area central bank; policy and market operations",
+      "signal_type": "policy/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of England — News",
+      "url": "https://www.bankofengland.co.uk/rss/news",
+      "html_url": "https://www.bankofengland.co.uk/news/latest-and-upcoming",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-bank-of-england-news",
+      "purpose": "Official UK central bank; Bank Rate, financial stability and prudential news",
+      "signal_type": "policy/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "HM Treasury — News & Communications",
+      "url": "https://www.gov.uk/search/news-and-communications.atom?organisations%5B%5D=hm-treasury",
+      "html_url": "https://www.gov.uk/search/news-and-communications?organisations%5B%5D=hm-treasury&parent=hm-treasury",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-hm-treasury-news-communications",
+      "purpose": "Official UK finance ministry; fiscal policy, budget, public spending, financial-services and economic announcements",
+      "signal_type": "policy/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Federal Reserve — Monetary Policy",
+      "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "html_url": "https://www.federalreserve.gov/monetarypolicy.htm",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-federal-reserve-monetary-policy",
+      "purpose": "Official US central bank; policy decisions and statements",
+      "signal_type": "policy/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "SEC — Press Releases",
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "html_url": "https://www.sec.gov/news/pressreleases",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-sec-press-releases",
+      "purpose": "Official US regulator; filings, enforcement and market structure",
+      "signal_type": "regulatory/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "CFTC — General Press Releases",
+      "url": "https://www.cftc.gov/RSS/RSSGP/rssgp.xml",
+      "html_url": "https://www.cftc.gov/PressRoom/PressReleases",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-cftc-general-press-releases",
+      "purpose": "Official US derivatives regulator; commodities, futures, swaps, prediction-market and market-stability actions",
+      "signal_type": "regulatory/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "ECB — Market Operations",
+      "url": "https://www.ecb.europa.eu/rss/operations.html",
+      "html_url": "https://www.ecb.europa.eu/mopo/implement/omo/html/index.en.html",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-ecb-market-operations",
+      "purpose": "Official euro-area central bank; liquidity-providing and other market-operation allotments",
+      "signal_type": "market-data/event",
+      "access": "None",
+      "cadence": "High; frequent/event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; frequent/event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Federal Reserve — Speeches",
+      "url": "https://www.federalreserve.gov/feeds/speeches.xml",
+      "html_url": "https://www.federalreserve.gov/newsevents/speeches.htm",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-federal-reserve-speeches",
+      "purpose": "Official US central bank; speeches, outlooks and policymaker context",
+      "signal_type": "policy/research",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — USD Reference Rate",
+      "url": "https://www.ecb.europa.eu/rss/fxref-usd.html",
+      "html_url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "event_driven": false,
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
+      "purpose": "Official daily EUR/USD reference-rate data",
+      "signal_type": "daily-data",
+      "access": "None",
+      "cadence": "High; daily data",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — GBP Reference Rate",
+      "url": "https://www.ecb.europa.eu/rss/fxref-gbp.html",
+      "html_url": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-gbp.en.html",
+      "event_driven": false,
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
+      "purpose": "Official daily EUR/GBP reference-rate data; Ireland/UK relevance",
+      "signal_type": "daily-data",
+      "access": "None",
+      "cadence": "High; daily data",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — Statistical Releases",
+      "url": "https://www.ecb.europa.eu/rss/statpress.html",
+      "html_url": "https://www.ecb.europa.eu/press/stats/intro/html/index.en.html",
+      "event_driven": true,
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
+      "purpose": "Official euro-area monetary, interest-rate, balance-of-payments and financial statistics",
+      "signal_type": "data/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "Central Bank of Ireland — Markets Update",
+      "url": "https://www.centralbank.ie/feeds/markets-updates-feed",
+      "html_url": "https://www.centralbank.ie/regulation/markets-update",
+      "event_driven": true,
+      "id": "finance-03-optional-data-ireland-eu-uk-central-bank-of-ireland-markets-update",
+      "purpose": "Official Irish market-supervision and investment-firm updates",
+      "signal_type": "regulatory/event",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "Eurostat — Economy & Finance Releases",
+      "url": "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_ECOFIN",
+      "html_url": "https://ec.europa.eu/eurostat/web/rss",
+      "event_driven": true,
+      "id": "finance-03-optional-data-ireland-eu-uk-eurostat-economy-finance-releases",
+      "purpose": "Official EU statistics; inflation, GDP, employment, trade and public finance releases",
+      "signal_type": "data/event",
+      "access": "None",
+      "cadence": "High; scheduled releases",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; scheduled releases",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "European Commission — Sanctions Guidance",
+      "url": "https://finance.ec.europa.eu/node/1296/rss_en",
+      "html_url": "https://finance.ec.europa.eu/eu-and-world/sanctions-restrictive-measures/sanctions-adopted-following-russias-military-aggression-against-ukraine/guidance-documents_en",
+      "event_driven": true,
+      "id": "finance-03-optional-data-ireland-eu-uk-european-commission-sanctions-guidance",
+      "purpose": "Official EU financial-policy guidance; sanctions, finance/banking and circumvention updates",
+      "signal_type": "regulatory/event",
+      "access": "None",
+      "cadence": "High; event-driven; may be quiet between releases",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "Official policy guidance is episodic; review if no dated release appears for 270 days.",
+      "stale_review_days": 270
+    },
+    {
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "UK ONS — Release Calendar",
+      "url": "https://www.ons.gov.uk/releasecalendar?rss&highlight=true&limit=10&page=1&release-type=type-published&sort=date-newest",
+      "html_url": "https://www.ons.gov.uk/releasecalendar",
+      "event_driven": false,
+      "id": "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+      "purpose": "Official UK statistics release calendar; timing context rather than live market data",
+      "signal_type": "calendar/data",
+      "access": "None",
+      "cadence": "High; scheduled, broad",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "BIS — Statistical Releases",
+      "url": "https://www.bis.org/doclist/all_statistics.rss",
+      "html_url": "https://www.bis.org/rss/index.htm",
+      "event_driven": true,
+      "id": "finance-04-optional-global-data-research-bis-statistical-releases",
+      "purpose": "Official global central-bank statistics; liquidity, banking and property data",
+      "signal_type": "data/research",
+      "access": "None",
+      "cadence": "High; event-driven/research",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven/research",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "BIS — Press Releases",
+      "url": "https://www.bis.org/doclist/all_pressrels.rss",
+      "html_url": "https://www.bis.org/rss/index.htm",
+      "event_driven": true,
+      "id": "finance-04-optional-global-data-research-bis-press-releases",
+      "purpose": "Official global financial-stability and central-bank context",
+      "signal_type": "policy/research",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Bank of England — Publications",
+      "url": "https://www.bankofengland.co.uk/rss/publications",
+      "html_url": "https://www.bankofengland.co.uk/rss",
+      "event_driven": true,
+      "id": "finance-04-optional-global-data-research-bank-of-england-publications",
+      "purpose": "Official UK central-bank research, reports and weekly publications",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; periodic/research",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; periodic/research",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "FCA — News & Warnings",
+      "url": "https://www.fca.org.uk/news/rss.xml",
+      "html_url": "https://www.fca.org.uk/what-we-publish",
+      "event_driven": true,
+      "id": "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
+      "purpose": "Official UK financial-conduct regulator; market conduct and scam warnings",
+      "signal_type": "regulatory/alert",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "Ireland NCSC — Alerts & Advisories",
+      "url": "https://www.ncsc.gov.ie/news/alerts.rss",
+      "html_url": "https://www.ncsc.gov.ie/news/",
+      "event_driven": true,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
+      "purpose": "Official Irish national cyber alerts",
+      "signal_type": "alert",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "on",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CISA — All Advisories",
+      "url": "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+      "html_url": "https://www.cisa.gov/news-events/cybersecurity-advisories",
+      "event_driven": true,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
+      "purpose": "Official US cyber advisories and vulnerability guidance",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; frequent",
+      "notification": "on",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; frequent",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CERT-EU — Security Advisories",
+      "url": "https://cert.europa.eu/publications/security-advisories-rss",
+      "html_url": "https://cert.europa.eu/publications/security-advisories",
+      "event_driven": true,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
+      "purpose": "Official EU institutional security advisories",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "on",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CERT-FR — Security Alerts (French)",
+      "url": "https://www.cert.ssi.gouv.fr/alerte/feed/",
+      "html_url": "https://www.cert.ssi.gouv.fr/alerte/",
+      "event_driven": true,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
+      "purpose": "Official French national CSIRT; urgent vulnerability and incident alerts; French-language",
+      "signal_type": "alert/advisory",
+      "access": "None",
+      "cadence": "High; event-driven; French-language",
+      "notification": "optional-french",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven; French-language",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "NCSC UK — News",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/news-rss-feed.xml",
+      "html_url": "https://www.ncsc.gov.uk/information/rss-feeds",
+      "event_driven": false,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
+      "purpose": "Official UK national cyber authority; current incidents, state-backed activity, vulnerability warnings and response guidance",
+      "signal_type": "alert/news",
+      "access": "None",
+      "cadence": "High; current/event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "NCSC UK — All Updates",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+      "html_url": "https://www.ncsc.gov.uk/information/rss-feeds",
+      "event_driven": true,
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
+      "purpose": "Official UK guidance, news and threat updates",
+      "signal_type": "alert/context",
+      "access": "None",
+      "cadence": "High; frequent/event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; frequent/event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "BleepingComputer",
+      "url": "https://www.bleepingcomputer.com/feed/",
+      "html_url": "https://www.bleepingcomputer.com/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
+      "purpose": "Independent specialist reporting; fast incidents and vulnerabilities",
+      "signal_type": "news",
+      "access": "None",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "Dark Reading",
+      "url": "https://www.darkreading.com/rss.xml",
+      "html_url": "https://www.darkreading.com/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-dark-reading",
+      "purpose": "Independent trade publication; enterprise security news",
+      "signal_type": "news",
+      "access": "Free / may be metered",
+      "cadence": "High; fast",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "Krebs on Security",
+      "url": "https://krebsonsecurity.com/feed/",
+      "html_url": "https://krebsonsecurity.com/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+      "purpose": "Independent investigative reporting; fraud and breaches",
+      "signal_type": "news/research",
+      "access": "None",
+      "cadence": "High; investigative",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "SecurityWeek",
+      "url": "https://www.securityweek.com/feed/",
+      "html_url": "https://www.securityweek.com/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-securityweek",
+      "purpose": "Independent trade publication; vulnerabilities and incidents",
+      "signal_type": "news",
+      "access": "None",
+      "cadence": "High; fast and analytical",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "The Record — Cybersecurity News",
+      "url": "https://therecord.media/feed",
+      "html_url": "https://therecord.media/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
+      "purpose": "Independent investigative cyber/geopolitical reporting",
+      "signal_type": "news",
+      "access": "Free / some restricted",
+      "cadence": "High; fast and analytical",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "SANS Internet Storm Center",
+      "url": "https://isc.sans.edu/rssfeed_full.xml",
+      "html_url": "https://isc.sans.edu/",
+      "event_driven": false,
+      "id": "cyber-security-03-core-technical-research-sans-internet-storm-center",
+      "purpose": "Independent nonprofit technical analysis and current threat activity",
+      "signal_type": "research/alert",
+      "access": "None",
+      "cadence": "High; frequent technical updates",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "CERT/CC — Vulnerability Notes",
+      "url": "https://www.kb.cert.org/vuls/atomfeed/",
+      "html_url": "https://www.kb.cert.org/vuls/",
+      "event_driven": true,
+      "id": "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
+      "purpose": "Official CERT/CC coordinated vulnerability notes; VU/CVE identifiers, technical details and remediation",
+      "signal_type": "advisory/research",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "NIST — Cybersecurity Insights",
+      "url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "html_url": "https://www.nist.gov/blogs/cybersecurity-insights",
+      "event_driven": true,
+      "id": "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
+      "purpose": "Official US standards and guidance; slower research context",
+      "signal_type": "research/guidance",
+      "access": "None",
+      "cadence": "High; periodic guidance",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; periodic guidance",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Google Threat Intelligence — Mandiant",
+      "url": "https://feeds.feedburner.com/threatintelligence/pvexyqv7v0v",
+      "html_url": "https://cloud.google.com/blog/topics/threat-intelligence",
+      "event_driven": false,
+      "id": "cyber-security-03-core-technical-research-google-threat-intelligence-mandiant",
+      "purpose": "Vendor research; threat intelligence and intrusion analysis",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; research-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Microsoft Security Blog",
+      "url": "https://www.microsoft.com/en-us/security/blog/feed/",
+      "html_url": "https://www.microsoft.com/en-us/security/blog/",
+      "event_driven": false,
+      "id": "cyber-security-03-core-technical-research-microsoft-security-blog",
+      "purpose": "Official vendor research, threat intelligence and advisories",
+      "signal_type": "research/advisory",
+      "access": "None",
+      "cadence": "High; research/event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CISA — ICS Advisories",
+      "url": "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml",
+      "html_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/ics-advisories",
+      "event_driven": true,
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisa-ics-advisories",
+      "purpose": "Official US critical-infrastructure vulnerability advisories",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; frequent/event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; frequent/event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CERT-EU — Threat Intelligence",
+      "url": "https://cert.europa.eu/publications/threat-intelligence-rss",
+      "html_url": "https://cert.europa.eu/publications/threat-intelligence",
+      "event_driven": true,
+      "id": "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
+      "purpose": "Official EU threat-intelligence analysis",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; research/event-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; research/event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CERT-FR — Security Advisories (French)",
+      "url": "https://www.cert.ssi.gouv.fr/feed/",
+      "html_url": "https://www.cert.ssi.gouv.fr/avis/",
+      "event_driven": false,
+      "id": "cyber-security-04-optional-specialist-alerts-research-cert-fr-security-advisories-french",
+      "purpose": "Official French national CSIRT; dated vulnerability advisories, CVE context and remediation signals; French-language",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; frequent; French-language",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Cisco PSIRT — Security Advisories",
+      "url": "https://sec.cloudapps.cisco.com/security/center/psirtrss20/CiscoSecurityAdvisory.xml",
+      "html_url": "https://sec.cloudapps.cisco.com/security/center/publicationListing.x",
+      "event_driven": true,
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisco-psirt-security-advisories",
+      "purpose": "Official vendor-product advisories",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "optional",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Cisco Talos",
+      "url": "https://blog.talosintelligence.com/rss/",
+      "html_url": "https://blog.talosintelligence.com/",
+      "event_driven": false,
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisco-talos",
+      "purpose": "Vendor research; malware, vulnerability and threat analysis",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; research-driven",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CrowdStrike — Cybersecurity Research",
+      "url": "https://www.crowdstrike.com/en-us/blog/feed",
+      "html_url": "https://www.crowdstrike.com/en-us/blog/",
+      "event_driven": false,
+      "id": "cyber-security-04-optional-specialist-alerts-research-crowdstrike-cybersecurity-research",
+      "purpose": "Official vendor research; threat intelligence, vulnerability and incident analysis",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; fast/research",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "OpenSSF — Supply Chain Security",
+      "url": "https://openssf.org/feed/",
+      "html_url": "https://openssf.org/blog/",
+      "event_driven": true,
+      "id": "cyber-security-04-optional-specialist-alerts-research-openssf-supply-chain-security",
+      "purpose": "Independent nonprofit Linux Foundation project; open-source supply-chain security, CRA and tooling guidance",
+      "signal_type": "research/guidance",
+      "access": "None",
+      "cadence": "High; periodic/research",
+      "notification": "off",
+      "validated": "2026-08-15",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; periodic/research",
+      "stale_review_days": 365
+    }
+  ]
+}
