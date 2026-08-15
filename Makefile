@@ -1,4 +1,4 @@
-.PHONY: generate test validate validate-lite check
+.PHONY: generate lint test validate validate-lite check
 
 PYTHON ?= python3
 
@@ -16,6 +16,9 @@ generate:
 test:
 	PYTHONPATH=. $(PYTHON) -m unittest discover -s tests -v
 
+lint:
+	$(PYTHON) validate-manifest.py --manifest feed-manifest.json --root .
+
 validate:
 	./validate-rss-bundle.sh
 
@@ -26,4 +29,4 @@ validate-lite:
 	REPORT_JSON_FILE=NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json \
 	./validate-rss-bundle.sh NetNewsWire-Finance-Cyber-iPhone-Lite.opml
 
-check: generate test
+check: generate lint test

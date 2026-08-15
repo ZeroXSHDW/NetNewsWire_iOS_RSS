@@ -134,6 +134,20 @@ class GeneratedArtifactsTest(unittest.TestCase):
             self.assertEqual(len(matrix["feeds"]), 51)
             self.assertIn("## Import checklist", table_path.read_text(encoding="utf-8"))
 
+    def test_manifest_lint_accepts_committed_artifacts(self) -> None:
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "validate-manifest.py"),
+                "--manifest",
+                str(ROOT / "feed-manifest.json"),
+                "--root",
+                str(ROOT),
+            ],
+            check=True,
+            cwd=ROOT,
+        )
+
 
 class DigestPreparationTest(unittest.TestCase):
     def test_digest_state_prevents_repeat_items(self) -> None:
@@ -182,10 +196,56 @@ class DigestPreparationTest(unittest.TestCase):
             self.assertEqual(enriched["manifest_id"], "finance-01-core-market-trading-nasdaq-trader-trade-halts")
             self.assertEqual(enriched["notification_policy"], "on")
             self.assertTrue(enriched["text_truncated"])
+            self.assertEqual(first["manifest_enriched_count"], 1)
+            self.assertEqual(first["unmatched_source_count"], 1)
             subprocess.run(command, check=True, cwd=ROOT)
             second = json.loads(output_path.read_text(encoding="utf-8"))
             self.assertEqual(second["article_count"], 0)
             self.assertEqual(second["skipped_seen_count"], 2)
+
+    def test_digest_marks_conservative_duplicate_story_groups(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            input_path = directory / "articles.json"
+            output_path = directory / "digest.json"
+            input_path.write_text(
+                json.dumps(
+                    [
+                        {
+                            "title": "NCSC issues advice following global targeting of Fortinet firewalls",
+                            "link": "https://example.test/ncsc-fortinet",
+                            "feed": "Ireland NCSC — Alerts & Advisories",
+                            "published": "2026-08-15T10:00:00Z",
+                        },
+                        {
+                            "title": "NCSC: advice follows global targeting of Fortinet firewalls",
+                            "link": "https://example.test/cisa-fortinet",
+                            "feed": "CISA — All Advisories",
+                            "published": "2026-08-15T09:00:00Z",
+                        },
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "prepare-rss-digest-input.py"),
+                    "--input",
+                    str(input_path),
+                    "--output",
+                    str(output_path),
+                    "--dry-run",
+                ],
+                check=True,
+                cwd=ROOT,
+            )
+            package = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(package["duplicate_cluster_count"], 1)
+            self.assertEqual(package["duplicate_article_count"], 2)
+            group_ids = {article["duplicate_group_id"] for article in package["articles"]}
+            self.assertEqual(len(group_ids), 1)
+            self.assertEqual(package["manifest_enriched_count"], 2)
 
 
 class ValidationHistoryTest(unittest.TestCase):

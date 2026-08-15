@@ -24,12 +24,14 @@ jobs:
           key: rss-validation-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
           restore-keys: |
             rss-validation-${{ runner.os }}-${{ github.ref_name }}-
-      - name: Run deterministic tests
-        run: make test
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
         run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
+      - name: Lint manifest and generated artifacts
+        run: make lint
+      - name: Run deterministic tests
+        run: make test
       - name: Validate master bundle
         run: make validate
       - name: Validate iPhone-lite bundle

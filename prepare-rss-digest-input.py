@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from rss_validation import normalize_link, normalize_title, parse_date, url_is_web
+from rss_validation import normalize_link, normalize_title, parse_date, similar_titles, url_is_web
 
 
 def load_articles(path: Path) -> list[dict]:
@@ -69,19 +69,28 @@ def load_manifest_index(path: Path) -> tuple[dict[str, dict], dict[str, list[dic
     return by_url, by_title
 
 
-def resolve_manifest_feed(article: dict, by_url: dict[str, dict], by_title: dict[str, list[dict]]) -> dict | None:
-    explicit_feed_url = str(article.get("feed_url", article.get("feedUrl", ""))).strip()
+def clean_text(value: object) -> str:
+    return " ".join(str(value or "").split())
+
+
+def resolve_manifest_feed(
+    article: dict,
+    by_url: dict[str, dict],
+    by_title: dict[str, list[dict]],
+) -> tuple[dict | None, str]:
+    explicit_feed_url = clean_text(article.get("feed_url") or article.get("feedUrl") or "")
     if explicit_feed_url:
         metadata = by_url.get(explicit_feed_url) or by_url.get(normalize_link(explicit_feed_url))
         if metadata:
-            return metadata
-    feed_title = normalize_title(str(article.get("feed", "")))
+            return metadata, "manifest-url"
+    raw_feed_title = clean_text(article.get("feed", ""))
+    feed_title = normalize_title(raw_feed_title)
     matches = by_title.get(feed_title, []) if feed_title else []
-    return matches[0] if len(matches) == 1 else None
-
-
-def clean_text(value: object) -> str:
-    return " ".join(str(value or "").split())
+    if len(matches) == 1:
+        return matches[0], "manifest-title"
+    if explicit_feed_url:
+        return None, "unmatched-feed-url"
+    return None, "unmatched-feed-title" if raw_feed_title else "unmatched"
 
 
 def truncate_text(value: str, limit: int) -> tuple[str, bool]:
@@ -124,8 +133,9 @@ def article_record(
         raise ValueError(f"article link is not an HTTP(S) URL: {link!r}")
     published = str(article.get("published", "")).strip()
     parsed = parse_date(published) if published else None
-    metadata = resolve_manifest_feed(article, by_url, by_title)
+    metadata, source_match = resolve_manifest_feed(article, by_url, by_title)
     summary, content, text_truncated = bounded_text_fields(article, max_item_chars)
+    input_feed_url = clean_text(article.get("feed_url") or article.get("feedUrl") or "")
     record = {
         "id": article_id(article),
         "title": title,
@@ -136,6 +146,7 @@ def article_record(
         "content": content,
         "source_class": str(article.get("source_class", "")).strip() or (str(metadata.get("signal_type", "")) if metadata else ""),
         "language": clean_text(article.get("language", "")),
+        "source_match": source_match,
         "text_characters": len(summary) + len(content),
         "text_truncated": text_truncated,
     }
@@ -155,7 +166,81 @@ def article_record(
                 ],
             }
         )
+    elif url_is_web(input_feed_url):
+        record["feed_url"] = input_feed_url
     return record
+
+
+def assign_duplicate_groups(records: list[dict]) -> list[dict]:
+    """Assign conservative fuzzy headline groups before the prompt sees the package."""
+
+    parent = list(range(len(records)))
+
+    def find(index: int) -> int:
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    def union(left: int, right: int) -> None:
+        left_root = find(left)
+        right_root = find(right)
+        if left_root != right_root:
+            parent[right_root] = left_root
+
+    exact_title_index: dict[str, int] = {}
+    for index, record in enumerate(records):
+        normalized = normalize_title(record["title"])
+        if normalized in exact_title_index:
+            union(index, exact_title_index[normalized])
+        else:
+            exact_title_index[normalized] = index
+
+    token_index: dict[str, set[int]] = {}
+    for index, record in enumerate(records):
+        for token in set(normalize_title(record["title"]).split()):
+            if len(token) >= 5:
+                token_index.setdefault(token, set()).add(index)
+    for index, record in enumerate(records):
+        candidates: set[int] = set()
+        for token in set(normalize_title(record["title"]).split()):
+            if len(token) >= 5:
+                candidates.update(token_index.get(token, set()))
+        for other_index in candidates:
+            if other_index <= index:
+                continue
+            if similar_titles(record["title"], records[other_index]["title"]):
+                union(index, other_index)
+
+    groups: dict[int, list[int]] = {}
+    for index in range(len(records)):
+        groups.setdefault(find(index), []).append(index)
+
+    clusters: list[dict] = []
+    for indexes in groups.values():
+        if len(indexes) < 2:
+            continue
+        titles = sorted({normalize_title(records[index]["title"]) for index in indexes})
+        representative = max((records[index]["title"] for index in indexes), key=len)
+        group_id = "story-" + hashlib.sha256(normalize_title(representative).encode("utf-8")).hexdigest()[:10]
+        match_type = "exact" if len(titles) == 1 else "fuzzy"
+        feeds = sorted({records[index].get("feed", "") or "Unknown source" for index in indexes})
+        cluster = {
+            "id": group_id,
+            "title": representative,
+            "article_count": len(indexes),
+            "feed_count": len(feeds),
+            "feeds": feeds,
+            "match_type": match_type,
+            "title_variants": len(titles),
+        }
+        clusters.append(cluster)
+        for index in indexes:
+            records[index]["duplicate_group_id"] = group_id
+            records[index]["duplicate_match_type"] = match_type
+
+    clusters.sort(key=lambda cluster: (-cluster["article_count"], cluster["title"].casefold()))
+    return clusters
 
 
 def load_state(path: Path) -> dict:
@@ -233,6 +318,13 @@ def main() -> int:
             bounded_selected.append(record)
             input_characters += record_characters
         selected = bounded_selected
+        duplicate_clusters = assign_duplicate_groups(selected)
+        manifest_enriched_count = sum(
+            1 for record in selected if str(record.get("source_match", "")).startswith("manifest-")
+        )
+        unmatched_source_count = sum(
+            1 for record in selected if str(record.get("source_match", "")) in {"unmatched", "unmatched-feed-url", "unmatched-feed-title"}
+        )
         now = datetime.now(ZoneInfo("Europe/Dublin"))
         package = {
             "generated_at": now.isoformat(timespec="seconds"),
@@ -243,10 +335,15 @@ def main() -> int:
             "max_item_chars": args.max_item_chars,
             "max_total_chars": args.max_total_chars,
             "truncated_item_count": sum(1 for record in selected if record["text_truncated"]),
+            "manifest_enriched_count": manifest_enriched_count,
+            "unmatched_source_count": unmatched_source_count,
+            "duplicate_cluster_count": len(duplicate_clusters),
+            "duplicate_article_count": sum(cluster["article_count"] for cluster in duplicate_clusters),
             "skipped_seen_count": skipped_seen,
             "skipped_old_count": skipped_old,
             "skipped_budget_count": skipped_budget,
             "articles": selected,
+            "duplicate_clusters": duplicate_clusters,
             "instructions": "Pass this package to the Apple Intelligence prompt. Cluster duplicate events, separate confirmed facts from claims, and end with No action recommendation.",
         }
         serialized = json.dumps(package, indent=2, ensure_ascii=False) + "\n"

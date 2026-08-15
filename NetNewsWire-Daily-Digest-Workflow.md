@@ -20,7 +20,7 @@ Create a JSON array like this:
 ]
 ```
 
-`title` and an HTTP(S) `link` are required. `published`, `summary`, `content`, `feed`, `feed_url`, `source_class` and `language` are optional. When `feed` or `feed_url` matches `feed-manifest.json`, the preparation step adds the canonical source, folder, signal type, notification policy and profile membership.
+`title` and an HTTP(S) `link` are required. `published`, `summary`, `content`, `feed`, `feed_url`, `source_class` and `language` are optional. When `feed` or `feed_url` matches `feed-manifest.json`, the preparation step adds the canonical source, folder, signal type, notification policy and profile membership; otherwise it records the source as unmatched for review.
 
 ## 2. Prepare only new items
 
@@ -31,7 +31,7 @@ python3 prepare-rss-digest-input.py \
   --state .digest-state.json
 ```
 
-The first run includes all supplied items. Later runs skip canonicalized links already recorded in `.digest-state.json`, sort newest first and include the coverage window in the output. Article text is bounded to 6,000 characters per item and 180,000 characters per package by default; the package reports truncation and budget skips. Use `--max-item-chars` or `--max-total-chars` for a different prompt budget, and use `--dry-run` when checking an export. Keep the state file local; it is ignored by Git.
+The first run includes all supplied items. Later runs skip canonicalized links already recorded in `.digest-state.json`, assign conservative duplicate-story groups, sort newest first and include the coverage window in the output. Article text is bounded to 6,000 characters per item and 180,000 characters per package by default; the package reports source matches, duplicate clusters, truncation and budget skips. Use `--max-item-chars` or `--max-total-chars` for a different prompt budget, and use `--dry-run` when checking an export. Keep the state file local; it is ignored by Git.
 
 ## 3. Summarize
 

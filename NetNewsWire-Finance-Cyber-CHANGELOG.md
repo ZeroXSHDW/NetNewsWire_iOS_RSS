@@ -2,6 +2,20 @@
 
 Checked: 15 August 2026 (Europe/Dublin)
 
+## This maintenance pass — manifest linting and digest story grouping
+
+### Added
+
+- `validate-manifest.py` and `make lint` now validate profile invariants, HTTPS/canonical URL uniqueness, event-driven freshness metadata, dates and reproducibility of every committed generated artifact.
+- `make check` now regenerates, lints and tests the bundle in one deterministic command; CI runs the same manifest/artifact lint before live fetches.
+- Digest preparation now records whether each source matched the manifest by feed URL, feed title or not at all.
+- Digest packages now include conservative fuzzy duplicate-story groups, making likely cross-source corroboration visible before Apple Intelligence summarization.
+
+### Operating effect
+
+- A manifest edit cannot silently leave OPML, source tables or notification matrices stale.
+- Unmatched exported feed names are visible in package telemetry instead of looking like fully attributed sources.
+
 ## This maintenance pass — drift detection, notification matrix and digest bounds
 
 ### Added
