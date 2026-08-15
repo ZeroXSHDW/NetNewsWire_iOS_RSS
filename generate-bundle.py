@@ -176,12 +176,129 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
     destination.write_text("\n".join(lines), encoding="utf-8")
 
 
+def notification_matrix_data(data: dict) -> dict:
+    profiles = OrderedDict()
+    for profile, label in (("master", "Master"), ("iphone-lite", "iPhone Lite")):
+        feeds = selected_feeds(data, profile)
+        counts = OrderedDict((policy, 0) for policy in NOTIFICATION_DISPLAY)
+        for feed in feeds:
+            counts[feed["notification"]] += 1
+        profiles[profile] = {
+            "label": label,
+            "feed_count": len(feeds),
+            "notification_counts": counts,
+            "feed_ids": [feed["id"] for feed in feeds],
+        }
+    return {
+        "manifest_version": data.get("manifest_version"),
+        "profiles": profiles,
+        "feeds": [
+            {
+                "id": feed["id"],
+                "section": feed["section"],
+                "folder": feed["folder"],
+                "title": feed["title"],
+                "url": feed["url"],
+                "notification": feed["notification"],
+                "notification_display": NOTIFICATION_DISPLAY[feed["notification"]],
+                "signal_type": feed["signal_type"],
+                "profiles": {
+                    "master": True,
+                    "iphone-lite": bool(feed.get("profiles", {}).get("iphone-lite", False)),
+                },
+            }
+            for feed in data["feeds"]
+        ],
+    }
+
+
+def write_notification_matrix(data: dict, destination: Path) -> None:
+    matrix = notification_matrix_data(data)
+    lines = [
+        "# NetNewsWire notification and profile matrix",
+        "",
+        "Generated from `feed-manifest.json`; regenerate with `make generate` after manifest changes.",
+        "",
+        "OPML imports carry the feed structure but do not reliably carry NetNewsWire notification settings. Apply the policy below manually after import.",
+        "",
+        "## Profile summary",
+        "",
+        "| Profile | Feeds | On | Optional | Optional French | Off |",
+        "|---|---:|---:|---:|---:|---:|",
+    ]
+    for profile, profile_data in matrix["profiles"].items():
+        counts = profile_data["notification_counts"]
+        lines.append(
+            f"| {profile_data['label']} | {profile_data['feed_count']} | {counts['on']} | {counts['optional']} | {counts['optional-french']} | {counts['off']} |"
+        )
+
+    lines.extend([
+        "",
+        "## Policy meanings",
+        "",
+        "| Policy | Meaning |",
+        "|---|---|",
+        "| On | Enable immediate notifications for urgent, high-signal alerts. |",
+        "| Optional | Keep off by default; enable when the topic is actively relevant. |",
+        "| Optional French | Same as Optional; translate/summarize in the daily digest when useful. |",
+        "| Off | Do not interrupt; include in the daily Apple Intelligence digest. |",
+        "",
+        "## Per-feed matrix",
+        "",
+        "| Section | Folder | Feed | Master | iPhone Lite | Notification policy | Signal type |",
+        "|---|---|---|---|---|---|---|",
+    ])
+    for feed in matrix["feeds"]:
+        lines.append(
+            "| "
+            + " | ".join(
+                escape_markdown(value)
+                for value in (
+                    feed["section"],
+                    feed["folder"],
+                    feed["title"],
+                    "Yes",
+                    "Yes" if feed["profiles"]["iphone-lite"] else "No",
+                    feed["notification_display"],
+                    feed["signal_type"],
+                )
+            )
+            + " |"
+        )
+
+    lines.extend([
+        "",
+        "## Import checklist",
+        "",
+        "1. Import the iPhone Lite OPML for the lower-refresh profile, or the master OPML for full coverage.",
+        "2. Apply **On** only to the four urgent official alert feeds unless your operating needs justify more interruptions.",
+        "3. Review **Optional** feeds after import; leave them off during normal use.",
+        "4. Leave **Off** feeds notification-disabled and process them in the daily digest.",
+        "5. Re-check this matrix after any manifest change; the generated OPML and source tables should be regenerated together.",
+        "",
+        "See [NetNewsWire setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md) for batch review.",
+        "",
+    ])
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_notification_json(data: dict, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(notification_matrix_data(data), indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", default="feed-manifest.json", type=Path)
     parser.add_argument("--profile", choices=("master", "iphone-lite"), default="master")
     parser.add_argument("--opml", type=Path)
     parser.add_argument("--source-table", type=Path)
+    parser.add_argument("--notification-table", type=Path)
+    parser.add_argument("--notification-json", type=Path)
     args = parser.parse_args()
 
     try:
@@ -193,11 +310,15 @@ def main() -> int:
             write_opml(data, feeds, args.opml, args.profile)
         if args.source_table:
             write_source_table(data, feeds, args.source_table, args.profile)
+        if args.notification_table:
+            write_notification_matrix(data, args.notification_table)
+        if args.notification_json:
+            write_notification_json(data, args.notification_json)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"generate-bundle: {exc}", file=sys.stderr)
         return 2
 
-    print(f"profile={args.profile} feeds={len(feeds)}")
+    print(f"profile={args.profile} feeds={len(feeds)} notification_matrix={'yes' if args.notification_table or args.notification_json else 'no'}")
     return 0
 
 

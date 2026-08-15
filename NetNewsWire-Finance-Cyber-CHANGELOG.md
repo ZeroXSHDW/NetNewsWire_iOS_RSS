@@ -2,6 +2,21 @@
 
 Checked: 15 August 2026 (Europe/Dublin)
 
+## This maintenance pass — drift detection, notification matrix and digest bounds
+
+### Added
+
+- Cross-run validation baselines in `.validation-history.json`, with advisory detection for feed identity changes, redirects, item-count collapse/spikes, freshness regressions, payload growth, new legacy/missing item links and noise-threshold crossings.
+- Generated [notification/profile matrix](./NetNewsWire-Notification-Profile.md) plus machine-readable [JSON](./NetNewsWire-Notification-Profile.json), derived from the manifest and covering all 51 feeds across master and iPhone Lite.
+- Manifest-aware digest preparation: recognized exports now carry canonical source, folder, signal type, notification policy and profile membership.
+- Digest text limits and package telemetry: 6,000 characters per item and 180,000 characters per package by default, with truncation and budget-skip counts included in the output.
+- GitHub Actions cache persistence for the feed response cache and per-profile drift baseline between monthly/manual validation runs.
+
+### Operating effect
+
+- The first validation after this change establishes a per-profile drift baseline; later runs make maintenance changes visible without turning advisory movement into an automatic feed failure.
+- `make generate` now regenerates the notification matrix alongside both OPML profiles and source tables.
+
 ## This maintenance pass — manifest, iPhone-lite profile and operational tooling
 
 ### Added

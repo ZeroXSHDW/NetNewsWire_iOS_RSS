@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from rss_validation import (
+    compare_feed_snapshots,
     extract_feed,
     normalize_link,
     normalize_title,
@@ -53,6 +54,45 @@ class ValidationHelpersTest(unittest.TestCase):
             )
         )
 
+    def test_feed_drift_comparison_flags_operational_regressions(self) -> None:
+        url = "https://example.test/feed.xml"
+        previous = {
+            url: {
+                "url": url,
+                "title": "Example Feed",
+                "root": "rss",
+                "http_code": "200",
+                "effective_url": url,
+                "passed": "yes",
+                "recent": "yes",
+                "item_count": 20,
+                "payload_bytes": 100000,
+                "duplicate_title_rate": 0.1,
+                "duplicate_link_rate": 0.1,
+                "http_item_link_count": 0,
+                "missing_item_link_count": 0,
+                "content_type": "application/rss+xml",
+            }
+        }
+        current = {
+            url: {
+                **previous[url],
+                "title": "Example Feed Renamed",
+                "passed": "no",
+                "recent": "no",
+                "item_count": 4,
+                "payload_bytes": 250000,
+                "duplicate_title_rate": 0.7,
+                "http_item_link_count": 2,
+            }
+        }
+        warnings = compare_feed_snapshots(previous, current)
+        kinds = {warning["kind"] for warning in warnings}
+        self.assertTrue({"validation-regression", "item-count-collapse", "freshness-regression"} <= kinds)
+        self.assertIn("payload-growth", kinds)
+        self.assertIn("duplicate-title-threshold", kinds)
+        self.assertIn("item-link-transport-regression", kinds)
+
 
 class GeneratedArtifactsTest(unittest.TestCase):
     def test_manifest_matches_master_and_lite_artifacts(self) -> None:
@@ -69,6 +109,31 @@ class GeneratedArtifactsTest(unittest.TestCase):
             30,
         )
 
+    def test_notification_matrix_is_generated_from_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            table_path = directory / "notifications.md"
+            json_path = directory / "notifications.json"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "generate-bundle.py"),
+                    "--manifest",
+                    str(ROOT / "feed-manifest.json"),
+                    "--notification-table",
+                    str(table_path),
+                    "--notification-json",
+                    str(json_path),
+                ],
+                check=True,
+                cwd=ROOT,
+            )
+            matrix = json.loads(json_path.read_text(encoding="utf-8"))
+            self.assertEqual(matrix["profiles"]["master"]["feed_count"], 51)
+            self.assertEqual(matrix["profiles"]["iphone-lite"]["feed_count"], 30)
+            self.assertEqual(len(matrix["feeds"]), 51)
+            self.assertIn("## Import checklist", table_path.read_text(encoding="utf-8"))
+
 
 class DigestPreparationTest(unittest.TestCase):
     def test_digest_state_prevents_repeat_items(self) -> None:
@@ -83,8 +148,10 @@ class DigestPreparationTest(unittest.TestCase):
                         {
                             "title": "Story one",
                             "link": "https://example.test/one?utm_source=rss",
-                            "feed": "Example",
+                            "feed": "Nasdaq Trader — Trade Halts",
+                            "feed_url": "https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts",
                             "published": "2026-08-15T10:00:00Z",
+                            "content": "A very long body that should be bounded before it reaches the digest prompt.",
                         },
                         {
                             "title": "Story two",
@@ -105,10 +172,16 @@ class DigestPreparationTest(unittest.TestCase):
                 str(output_path),
                 "--state",
                 str(state_path),
+                "--max-item-chars",
+                "24",
             ]
             subprocess.run(command, check=True, cwd=ROOT)
             first = json.loads(output_path.read_text(encoding="utf-8"))
             self.assertEqual(first["article_count"], 2)
+            enriched = next(article for article in first["articles"] if article["title"] == "Story one")
+            self.assertEqual(enriched["manifest_id"], "finance-01-core-market-trading-nasdaq-trader-trade-halts")
+            self.assertEqual(enriched["notification_policy"], "on")
+            self.assertTrue(enriched["text_truncated"])
             subprocess.run(command, check=True, cwd=ROOT)
             second = json.loads(output_path.read_text(encoding="utf-8"))
             self.assertEqual(second["article_count"], 0)

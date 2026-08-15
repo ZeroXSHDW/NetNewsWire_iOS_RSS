@@ -14,6 +14,8 @@ from zoneinfo import ZoneInfo
 from rss_validation import (
     extract_feed,
     link_scheme,
+    compare_feed_snapshots,
+    feed_snapshot,
     manifest_entries,
     normalize_link,
     normalize_title,
@@ -39,6 +41,7 @@ from rss_validation import (
 
 manifest_path = optional_args[0] if optional_args else str(Path(bundle_path).with_name("feed-manifest.json"))
 manifest_profile = optional_args[1] if len(optional_args) > 1 else "master"
+history_path = optional_args[2] if len(optional_args) > 2 else ""
 
 MAX_AGE_DAYS = float(max_age_raw)
 DUPLICATE_RATE_LIMIT = float(duplicate_rate_raw)
@@ -384,6 +387,35 @@ def percentile(values: list[float], fraction: float) -> float | None:
 stale_review_failures = [detail for detail in details if detail["stale_review_due"]]
 future_date_failures = [detail for detail in details if int(detail["future_item_date_count"]) > 0]
 
+current_snapshots = {
+    str(snapshot["url"]): snapshot
+    for snapshot in (feed_snapshot(detail) for detail in details)
+    if snapshot.get("url")
+}
+previous_snapshots: dict[str, dict[str, object]] = {}
+if history_path:
+    try:
+        history_data = json.loads(Path(history_path).read_text(encoding="utf-8"))
+        profile_history = history_data.get("profiles", {}).get(manifest_profile, {})
+        stored_snapshots = profile_history.get("feed_snapshots", {})
+        if isinstance(stored_snapshots, dict):
+            previous_snapshots = {
+                str(url): snapshot
+                for url, snapshot in stored_snapshots.items()
+                if isinstance(snapshot, dict)
+            }
+    except (OSError, json.JSONDecodeError, AttributeError):
+        previous_snapshots = {}
+regression_warnings = (
+    compare_feed_snapshots(
+        previous_snapshots,
+        current_snapshots,
+        duplicate_rate_limit=DUPLICATE_RATE_LIMIT,
+    )
+    if previous_snapshots
+    else []
+)
+
 summary = {
     "feed_count": len(opml_url_list),
     "unique_url_count": len(opml_url_set),
@@ -471,6 +503,9 @@ summary = {
     "stale_review_due_count": len(stale_review_failures),
     "future_item_date_feed_count": len(future_date_failures),
     "future_item_date_total": sum(int(d["future_item_date_count"]) for d in details),
+    "drift_baseline_available": bool(previous_snapshots),
+    "regression_warning_count": len(regression_warnings),
+    "regression_critical_count": sum(1 for warning in regression_warnings if warning["severity"] == "critical"),
 }
 
 hard_failure = bool(
@@ -516,6 +551,7 @@ payload = {
     "noisy_feeds": noisy_feeds,
     "item_link_transport_warnings": item_link_transport_warnings,
     "mobile_refresh_warnings": mobile_refresh_warnings,
+    "regression_warnings": regression_warnings,
     "duplicate_story_clusters": duplicate_story_clusters[:100],
     "duplicate_link_clusters": duplicate_link_clusters[:100],
     "feeds": details,
@@ -613,6 +649,8 @@ lines = [
     f"| Stale-review deadlines due | {summary['stale_review_due_count']} |",
     f"| Future-dated items | {summary['future_item_date_total']} |",
     f"| Failed feeds | {summary['failed_feed_count']} |",
+    f"| Cross-run drift baseline available | {'Yes' if summary['drift_baseline_available'] else 'No — this run establishes it'} |",
+    f"| Cross-run drift warnings | {summary['regression_warning_count']} ({summary['regression_critical_count']} critical) |",
     "",
     "Duplicate-story clusters are reported for Apple Intelligence deduplication. A feed crosses the noise gate when it has at least "
     f"{MIN_ITEMS_FOR_NOISE} items and more than {DUPLICATE_RATE_LIMIT:.0%} repeated item titles or links.",
@@ -659,6 +697,18 @@ for detail in details:
             md(validators),
         ]) + " |"
     )
+
+lines.extend(["", "## Cross-run drift review", ""])
+if regression_warnings:
+    lines.append("These advisory comparisons use the previous per-feed validation snapshot for this profile:")
+    lines.extend(
+        f"- **{md(item['feed'])}** — `{item['severity']}` `{item['kind']}`: {md(item['message'])}."
+        for item in regression_warnings[:100]
+    )
+elif summary["drift_baseline_available"]:
+    lines.append("No feed identity, freshness, payload, item-count, link-transport or noise-threshold drift was detected against the previous snapshot.")
+else:
+    lines.append("No prior per-feed snapshot was available; this run establishes the baseline for the next maintenance check.")
 
 lines.extend(["", "## Duplicate-story clusters detected", ""])
 if duplicate_story_clusters:

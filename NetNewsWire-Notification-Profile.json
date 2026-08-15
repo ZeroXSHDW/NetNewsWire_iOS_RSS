@@ -1,0 +1,826 @@
+{
+  "manifest_version": 1,
+  "profiles": {
+    "master": {
+      "label": "Master",
+      "feed_count": 51,
+      "notification_counts": {
+        "on": 4,
+        "optional": 10,
+        "optional-french": 1,
+        "off": 36
+      },
+      "feed_ids": [
+        "finance-01-core-market-trading-nasdaq-trader-trade-halts",
+        "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
+        "finance-01-core-market-trading-bbc-business",
+        "finance-01-core-market-trading-bloomberg-markets",
+        "finance-01-core-market-trading-financial-times-markets",
+        "finance-01-core-market-trading-marketwatch-top-stories",
+        "finance-01-core-market-trading-rte-business",
+        "finance-01-core-market-trading-the-wall-street-journal-markets",
+        "finance-02-core-official-macro-central-bank-of-ireland-news",
+        "finance-02-core-official-macro-european-central-bank-press",
+        "finance-02-core-official-macro-bank-of-england-news",
+        "finance-02-core-official-macro-hm-treasury-news-communications",
+        "finance-02-core-official-macro-federal-reserve-monetary-policy",
+        "finance-02-core-official-macro-sec-press-releases",
+        "finance-02-core-official-macro-cftc-general-press-releases",
+        "finance-02-core-official-macro-ecb-market-operations",
+        "finance-02-core-official-macro-federal-reserve-speeches",
+        "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
+        "finance-03-optional-data-ireland-eu-uk-central-bank-of-ireland-markets-update",
+        "finance-03-optional-data-ireland-eu-uk-eurostat-economy-finance-releases",
+        "finance-03-optional-data-ireland-eu-uk-european-commission-sanctions-guidance",
+        "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+        "finance-04-optional-global-data-research-bis-statistical-releases",
+        "finance-04-optional-global-data-research-bis-press-releases",
+        "finance-04-optional-global-data-research-bank-of-england-publications",
+        "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
+        "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
+        "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
+        "cyber-security-02-core-news-incident-reporting-dark-reading",
+        "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+        "cyber-security-02-core-news-incident-reporting-securityweek",
+        "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
+        "cyber-security-03-core-technical-research-sans-internet-storm-center",
+        "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
+        "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
+        "cyber-security-03-core-technical-research-google-threat-intelligence-mandiant",
+        "cyber-security-03-core-technical-research-microsoft-security-blog",
+        "cyber-security-04-optional-specialist-alerts-research-cisa-ics-advisories",
+        "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
+        "cyber-security-04-optional-specialist-alerts-research-cert-fr-security-advisories-french",
+        "cyber-security-04-optional-specialist-alerts-research-cisco-psirt-security-advisories",
+        "cyber-security-04-optional-specialist-alerts-research-cisco-talos",
+        "cyber-security-04-optional-specialist-alerts-research-crowdstrike-cybersecurity-research",
+        "cyber-security-04-optional-specialist-alerts-research-openssf-supply-chain-security"
+      ]
+    },
+    "iphone-lite": {
+      "label": "iPhone Lite",
+      "feed_count": 30,
+      "notification_counts": {
+        "on": 4,
+        "optional": 8,
+        "optional-french": 1,
+        "off": 17
+      },
+      "feed_ids": [
+        "finance-01-core-market-trading-nasdaq-trader-trade-halts",
+        "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
+        "finance-01-core-market-trading-bbc-business",
+        "finance-01-core-market-trading-financial-times-markets",
+        "finance-01-core-market-trading-rte-business",
+        "finance-02-core-official-macro-central-bank-of-ireland-news",
+        "finance-02-core-official-macro-european-central-bank-press",
+        "finance-02-core-official-macro-bank-of-england-news",
+        "finance-02-core-official-macro-hm-treasury-news-communications",
+        "finance-02-core-official-macro-federal-reserve-monetary-policy",
+        "finance-02-core-official-macro-sec-press-releases",
+        "finance-02-core-official-macro-cftc-general-press-releases",
+        "finance-02-core-official-macro-ecb-market-operations",
+        "finance-02-core-official-macro-federal-reserve-speeches",
+        "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+        "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
+        "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
+        "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+        "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
+        "cyber-security-03-core-technical-research-sans-internet-storm-center",
+        "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
+        "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
+        "cyber-security-03-core-technical-research-microsoft-security-blog"
+      ]
+    }
+  },
+  "feeds": [
+    {
+      "id": "finance-01-core-market-trading-nasdaq-trader-trade-halts",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Nasdaq Trader — Trade Halts",
+      "url": "https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts",
+      "notification": "on",
+      "notification_display": "**On**",
+      "signal_type": "alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Nasdaq Trader — Equity Trader Alerts",
+      "url": "https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&categorylist=2",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-bbc-business",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "BBC — Business",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "context",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-bloomberg-markets",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Bloomberg — Markets",
+      "url": "https://www.bloomberg.com/feeds/markets/news.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "market",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-financial-times-markets",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Financial Times — Markets",
+      "url": "https://www.ft.com/markets?format=rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "market/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-marketwatch-top-stories",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "MarketWatch — Top Stories",
+      "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "market",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-rte-business",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "RTÉ — Business",
+      "url": "https://www.rte.ie/feeds/rss/?index=/news/business",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "context",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-the-wall-street-journal-markets",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "The Wall Street Journal — Markets",
+      "url": "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "market",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-central-bank-of-ireland-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of Ireland — News",
+      "url": "https://www.centralbank.ie/feeds/news-media-feed",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "policy/regulatory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-european-central-bank-press",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Central Bank — Press",
+      "url": "https://www.ecb.europa.eu/rss/press.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "policy/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-bank-of-england-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of England — News",
+      "url": "https://www.bankofengland.co.uk/rss/news",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "policy/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-hm-treasury-news-communications",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "HM Treasury — News & Communications",
+      "url": "https://www.gov.uk/search/news-and-communications.atom?organisations%5B%5D=hm-treasury",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "policy/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-federal-reserve-monetary-policy",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Federal Reserve — Monetary Policy",
+      "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "policy/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-sec-press-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "SEC — Press Releases",
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "regulatory/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-cftc-general-press-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "CFTC — General Press Releases",
+      "url": "https://www.cftc.gov/RSS/RSSGP/rssgp.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-ecb-market-operations",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "ECB — Market Operations",
+      "url": "https://www.ecb.europa.eu/rss/operations.html",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "market-data/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-federal-reserve-speeches",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Federal Reserve — Speeches",
+      "url": "https://www.federalreserve.gov/feeds/speeches.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "policy/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — USD Reference Rate",
+      "url": "https://www.ecb.europa.eu/rss/fxref-usd.html",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "daily-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — GBP Reference Rate",
+      "url": "https://www.ecb.europa.eu/rss/fxref-gbp.html",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "daily-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "ECB — Statistical Releases",
+      "url": "https://www.ecb.europa.eu/rss/statpress.html",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "data/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-central-bank-of-ireland-markets-update",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "Central Bank of Ireland — Markets Update",
+      "url": "https://www.centralbank.ie/feeds/markets-updates-feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-eurostat-economy-finance-releases",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "Eurostat — Economy & Finance Releases",
+      "url": "https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_ECOFIN",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "data/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-european-commission-sanctions-guidance",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "European Commission — Sanctions Guidance",
+      "url": "https://finance.ec.europa.eu/node/1296/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/event",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "UK ONS — Release Calendar",
+      "url": "https://www.ons.gov.uk/releasecalendar?rss&highlight=true&limit=10&page=1&release-type=type-published&sort=date-newest",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "calendar/data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bis-statistical-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "BIS — Statistical Releases",
+      "url": "https://www.bis.org/doclist/all_statistics.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "data/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bis-press-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "BIS — Press Releases",
+      "url": "https://www.bis.org/doclist/all_pressrels.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "policy/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bank-of-england-publications",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Bank of England — Publications",
+      "url": "https://www.bankofengland.co.uk/rss/publications",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "FCA — News & Warnings",
+      "url": "https://www.fca.org.uk/news/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "Ireland NCSC — Alerts & Advisories",
+      "url": "https://www.ncsc.gov.ie/news/alerts.rss",
+      "notification": "on",
+      "notification_display": "**On**",
+      "signal_type": "alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CISA — All Advisories",
+      "url": "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+      "notification": "on",
+      "notification_display": "**On**",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CERT-EU — Security Advisories",
+      "url": "https://cert.europa.eu/publications/security-advisories-rss",
+      "notification": "on",
+      "notification_display": "**On**",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "CERT-FR — Security Alerts (French)",
+      "url": "https://www.cert.ssi.gouv.fr/alerte/feed/",
+      "notification": "optional-french",
+      "notification_display": "Optional on; French",
+      "signal_type": "alert/advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "NCSC UK — News",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/news-rss-feed.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "alert/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "NCSC UK — All Updates",
+      "url": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "alert/context",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "BleepingComputer",
+      "url": "https://www.bleepingcomputer.com/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-dark-reading",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "Dark Reading",
+      "url": "https://www.darkreading.com/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "Krebs on Security",
+      "url": "https://krebsonsecurity.com/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-securityweek",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "SecurityWeek",
+      "url": "https://www.securityweek.com/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "The Record — Cybersecurity News",
+      "url": "https://therecord.media/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-sans-internet-storm-center",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "SANS Internet Storm Center",
+      "url": "https://isc.sans.edu/rssfeed_full.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "research/alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "CERT/CC — Vulnerability Notes",
+      "url": "https://www.kb.cert.org/vuls/atomfeed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "advisory/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "NIST — Cybersecurity Insights",
+      "url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research/guidance",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-google-threat-intelligence-mandiant",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Google Threat Intelligence — Mandiant",
+      "url": "https://feeds.feedburner.com/threatintelligence/pvexyqv7v0v",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-microsoft-security-blog",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Microsoft Security Blog",
+      "url": "https://www.microsoft.com/en-us/security/blog/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research/advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisa-ics-advisories",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CISA — ICS Advisories",
+      "url": "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CERT-EU — Threat Intelligence",
+      "url": "https://cert.europa.eu/publications/threat-intelligence-rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-cert-fr-security-advisories-french",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CERT-FR — Security Advisories (French)",
+      "url": "https://www.cert.ssi.gouv.fr/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisco-psirt-security-advisories",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Cisco PSIRT — Security Advisories",
+      "url": "https://sec.cloudapps.cisco.com/security/center/psirtrss20/CiscoSecurityAdvisory.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-cisco-talos",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Cisco Talos",
+      "url": "https://blog.talosintelligence.com/rss/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-crowdstrike-cybersecurity-research",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "CrowdStrike — Cybersecurity Research",
+      "url": "https://www.crowdstrike.com/en-us/blog/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-openssf-supply-chain-security",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "OpenSSF — Supply Chain Security",
+      "url": "https://openssf.org/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research/guidance",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false
+      }
+    }
+  ]
+}

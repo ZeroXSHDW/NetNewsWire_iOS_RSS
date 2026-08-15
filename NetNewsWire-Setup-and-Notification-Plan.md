@@ -6,6 +6,7 @@ Import [NetNewsWire-Finance-Cyber-iPhone-Lite.opml](./NetNewsWire-Finance-Cyber-
 Review [Coverage-Gap-Assessment.md](./Coverage-Gap-Assessment.md) for the source-selection decisions behind the bundle.
 Use the [RSS feed discovery and addition prompt](./NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md) when searching for new candidates; it defines the evidence, mobile-cost and rejection gates before any feed is added.
 The [feed manifest](./feed-manifest.json) is the source of truth. Run `make generate` after changing it rather than editing generated OPML or source-table rows by hand.
+Use the generated [notification/profile matrix](./NetNewsWire-Notification-Profile.md) as the post-import per-feed checklist; the machine-readable version is [NetNewsWire-Notification-Profile.json](./NetNewsWire-Notification-Profile.json).
 
 ## iPhone refresh profile
 

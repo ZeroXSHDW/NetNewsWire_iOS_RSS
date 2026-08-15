@@ -15,12 +15,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install XML validator and zsh
         run: sudo apt-get update && sudo apt-get install --yes libxml2-utils zsh
+      - name: Restore RSS cache and drift baseline
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .rss-validation-cache
+            .validation-history.json
+          key: rss-validation-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            rss-validation-${{ runner.os }}-${{ github.ref_name }}-
       - name: Run deterministic tests
         run: make test
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
-        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md
+        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
       - name: Validate master bundle
         run: make validate
       - name: Validate iPhone-lite bundle
@@ -35,3 +44,11 @@ jobs:
             NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
             NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md
             NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json
+      - name: Save RSS cache and drift baseline
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .rss-validation-cache
+            .validation-history.json
+          key: rss-validation-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}

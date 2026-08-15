@@ -248,7 +248,8 @@ python3 "$report_generator" \
   "$min_items_for_noise" \
   "$script_path" \
   "$manifest_file_path" \
-  "$validation_profile" || report_status=$?
+  "$validation_profile" \
+  "$validation_history_file" || report_status=$?
 
 python3 "$script_dir/record-validation-result.py" \
   --report "$report_json_file" \

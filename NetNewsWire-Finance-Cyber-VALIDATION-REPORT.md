@@ -1,6 +1,6 @@
 # NetNewsWire Finance + Cyber Validation Report — master
 
-Validation date: 15 August 2026 17:28 IST (Europe/Dublin)
+Validation date: 15 August 2026 17:59 IST (Europe/Dublin)
 
 Command:
 
@@ -17,8 +17,8 @@ Command:
 | Duplicate URLs | 0 |
 | HTTPS feed URLs | 51/51 |
 | Effective URLs remain HTTPS | 51/51 |
-| HTTP 200 responses | 51/51 |
-| Conditional 304 responses reused from cache | 0 |
+| HTTP 200 responses | 38/51 |
+| Conditional 304 responses reused from cache | 13 |
 | Successful responses including cached 304s | 51/51 |
 | Feed bodies verified as RSS/XML (not JSON) | 51/51 |
 | MIME labels explicitly XML/RSS/Atom | 50/51 |
@@ -28,15 +28,15 @@ Command:
 | Median feed payload | 22.7 KB |
 | 95th-percentile feed payload | 503.2 KB |
 | Compressed/wire bytes measured | 51/51 |
-| Total measured wire bytes | 1.41 MB |
+| Total measured wire bytes | 1.22 MB |
 | 95th-percentile wire bytes | 164.9 KB |
 | Feed parse time measured | 51/51 |
-| Total feed parse time | 0.065 seconds |
+| Total feed parse time | 0.059 seconds |
 | Slowest feed parse | 0.006 seconds |
 | Feeds over mobile review threshold (256 KB) | 5 |
 | Feeds over 1 MB | 1 |
 | Fetches over 2 seconds | 0 |
-| Slowest measured fetch | 1.68 seconds |
+| Slowest measured fetch | 1.32 seconds |
 | Parseable XML documents | 51/51 |
 | RSS/Atom/RSS 1.0 roots | 51/51 |
 | Non-empty feed titles | 51/51 |
@@ -73,6 +73,8 @@ Command:
 | Stale-review deadlines due | 0 |
 | Future-dated items | 0 |
 | Failed feeds | 0 |
+| Cross-run drift baseline available | Yes |
+| Cross-run drift warnings | 1 (0 critical) |
 
 Duplicate-story clusters are reported for Apple Intelligence deduplication. A feed crosses the noise gate when it has at least 10 items and more than 50% repeated item titles or links.
 
@@ -85,57 +87,62 @@ The manifest is the source of truth for feed identity, folder, profile, freshnes
 
 | Feed | HTTP | Cache | Root | Final HTTPS | Content type | Body | Wire | Encoding | Fetch s | Parse s | Freshness policy | Recent | Items | Missing titles | Missing dates | HTTPS item links | HTTP item links | Missing item links | Latest age | Duplicate titles | Duplicate links | Redirected | ETag / Last-Modified |
 |---|---:|---|---|---|---|---:|---:|---|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|
-| NASDAQTrader.com | 200 | no | rss | yes | text/xml | 23.6 KB (small) | 3.4 KB | gzip | 0.36 | 0.001 | standard | yes | 18 | 0 | 0 | 0 | 0 | 18 | 1.5 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
-| NASDAQTrader.com | 200 | no | rss | yes | text/xml | 34.7 KB (small) | 4.7 KB | gzip | 0.50 | 0.001 | event-driven | yes | 40 | 0 | 0 | 0 | 40 | 0 | 4.8 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| NASDAQTrader.com | 200 | no | rss | yes | text/xml | 23.6 KB (small) | 3.4 KB | gzip | 0.33 | 0.001 | standard | yes | 18 | 0 | 0 | 0 | 0 | 18 | 1.5 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| NASDAQTrader.com | 200 | no | rss | yes | text/xml | 34.7 KB (small) | 4.7 KB | gzip | 0.41 | 0.001 | event-driven | yes | 40 | 0 | 0 | 0 | 40 | 0 | 4.8 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
 | BBC News | 200 | no | rss | yes | text/xml; charset=utf-8 | 37.9 KB (small) | 7.9 KB | gzip | 0.17 | 0.001 | standard | yes | 53 | 0 | 0 | 53 | 0 | 0 | 0.5 | 11.3% | 7.5% | no | — / — |
-| Bloomberg Markets | 200 | no | rss | yes | text/xml; charset=utf-8 | 16.8 KB (small) | 5.4 KB | gzip | 0.40 | 0.001 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 0.0 | 0.0% | 0.0% | no | W/"431f-QigON6bLJ2OheOeKySCPRGluAcg" / — |
-| Markets | 200 | no | rss | yes | text/xml; charset=utf-8 | 11.4 KB (small) | 3.7 KB | gzip | 0.21 | 0.001 | standard | yes | 25 | 0 | 0 | 25 | 0 | 0 | 0.3 | 0.0% | 0.0% | no | W/"2d88-WYQncRHTHw5llXHqUcTAIOFbW24" / — |
-| MarketWatch.com - Top Stories | 200 | no | rss | yes | application/xml; charset=utf-8 | 7.9 KB (small) | 2.5 KB | gzip | 0.15 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 0.0 | 0.0% | 0.0% | no | W/"1fbe-sK1OpdVQrDBmdJxP8ZC4mtuzQDg" / — |
-| Business | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 25.9 KB (small) | 6.2 KB | gzip | 0.13 | 0.001 | standard | yes | 40 | 0 | 0 | 40 | 0 | 0 | 0.7 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 12 |
-| WSJ.com: Markets | 200 | no | rss | yes | application/xml; charset=utf-8 | 38.4 KB (small) | 10.0 KB | gzip | 0.12 | 0.002 | standard | yes | 60 | 0 | 0 | 60 | 0 | 0 | 0.0 | 6.7% | 3.3% | no | W/"996b-HdHigeV2Sxa+eHKOfX9kbC9z+HQ" / — |
-| News and Media | 200 | no | rss | yes | application/rss+xml | 143.8 KB (small) | 32.5 KB | gzip | 0.22 | 0.002 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | — / — |
-| ECB - European Central Bank | 200 | no | rss | yes | text/xml | 5.8 KB (small) | 1.5 KB | gzip | 0.21 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 2.3 | 0.0% | 0.0% | no | — / Fri, 14 Aug 2026 12 |
-| News | 200 | no | rss | yes | text/xml; charset=utf-8 | 24.6 KB (small) | 6.5 KB | gzip | 0.19 | 0.001 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 4.1 | 0.0% | 0.0% | no | — / — |
-| News and communications from HM Treasury (HMT) | 200 | no | feed | yes | application/atom+xml; charset=utf-8 | 12.6 KB (small) | 12.6 KB | identity | 0.19 | 0.001 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 8.3 | 0.0% | 0.0% | no | W/"7913ee7c3ce8674aaf03d62f49ba9432" / — |
-| FRB: Press Release - Monetary Policy | 200 | no | rss | yes | text/xml | 9.4 KB (small) | 0.9 KB | gzip | 0.22 | 0.001 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 16.9 | 26.7% | 0.0% | no | W/"e950b61b841fdd1 / Wed, 29 Jul 2026 18 |
-| Press Releases | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 17.7 KB (small) | 5.0 KB | gzip | 0.29 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 0.8 | 0.0% | 0.0% | no | "1786811021" / Sat, 15 Aug 2026 16 |
-| Press Releases | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 4.6 KB (small) | 1.2 KB | gzip | 0.22 | 0.000 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 2.1 | 0.0% | 0.0% | no | W/"1786769334" / Sat, 15 Aug 2026 04 |
-| ECB - Monetary policy tender operations and ad-hoc communications | 200 | no | rss | yes | application/rss+xml | 11.4 KB (small) | 1.1 KB | gzip | 0.16 | 0.001 | event-driven | yes | 32 | 0 | 0 | 0 | 32 | 0 | 3.3 | 0.0% | 0.0% | no | "myra-4117b712" / — |
-| FRB: Speeches | 200 | no | rss | yes | text/xml | 9.5 KB (small) | 1.7 KB | gzip | 0.17 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 9.8 | 0.0% | 0.0% | no | W/"db4d36b91525dd1 / Wed, 05 Aug 2026 20 |
-| ECB \| US dollar (USD) - Euro foreign exchange reference rates | 200 | no | rdf:RDF | yes | application/rss+xml | 7.1 KB (small) | 1.2 KB | gzip | 0.16 | 0.000 | standard | yes | 5 | 0 | 0 | 0 | 5 | 0 | 1.1 | 0.0% | 0.0% | no | "myra-9a2cbd41" / — |
-| ECB \| Pound sterling (GBP) - Euro foreign exchange reference rates | 200 | no | rdf:RDF | yes | application/rss+xml | 7.2 KB (small) | 1.2 KB | gzip | 0.16 | 0.000 | standard | yes | 5 | 0 | 0 | 0 | 5 | 0 | 1.1 | 0.0% | 0.0% | no | "myra-66fca46b" / — |
-| ECB - European Central Bank | 200 | no | rss | yes | application/rss+xml | 5.4 KB (small) | 1.2 KB | gzip | 0.16 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 15.4 | 0.0% | 0.0% | no | "myra-97a37a58" / — |
-| Markets Updates Feed | 200 | no | rss | yes | application/rss+xml | 7.9 KB (small) | 1.0 KB | gzip | 0.22 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 16.4 | 0.0% | 0.0% | no | — / — |
-| Eurostat - Custom RSS Feed | 200 | no | feed | yes | application/atom+xml;charset=UTF-8 | 10.1 KB (small) | 1.9 KB | gzip | 0.70 | 0.000 | event-driven | yes | 11 | 0 | 0 | 11 | 0 | 0 | 1.3 | 0.0% | 0.0% | no | — / — |
-| Finance \| Guidance documents | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 24.7 KB (small) | 3.5 KB | gzip | 0.55 | 0.001 | event-driven | event-driven | 19 | 0 | 0 | 19 | 0 | 0 | 212.2 | 0.0% | 0.0% | no | — / — |
-| ONS Release Calendar RSS Feed. | 200 | no | rss | yes | application/rss+xml | 5.7 KB (small) | 1.5 KB | gzip | 0.18 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.3 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
-| BIS statistical releases | 200 | no | rdf:RDF | yes | application/rss+xml | 35.3 KB (small) | 5.4 KB | gzip | 0.18 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 15.3 | 0.0% | 0.0% | no | "8d32-657e3932b61c3-gzip" / Fri, 31 Jul 2026 07 |
-| Press releases | 200 | no | rdf:RDF | yes | application/rss+xml | 29.3 KB (small) | 5.3 KB | gzip | 1.68 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 48.2 | 0.0% | 0.0% | no | "750f-6554c8e799cf3-gzip" / Sun, 28 Jun 2026 08 |
-| Publications | 200 | no | rss | yes | text/xml; charset=utf-8 | 22.7 KB (small) | 5.5 KB | gzip | 0.49 | 0.001 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 1.1 | 0.0% | 0.0% | no | — / — |
-| Financial Conduct Authority (FCA) | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 65.2 KB (small) | 21.7 KB | gzip | 0.14 | 0.006 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 1.3 | 0.0% | 0.0% | no | W/"1786723349" / Fri, 14 Aug 2026 16 |
-| NCSC Alerts & Advisories | 200 | no | rss | yes | application/rss+xml | 119.3 KB (small) | 119.3 KB | identity | 0.29 | 0.005 | event-driven | yes | 225 | 0 | 0 | 225 | 0 | 0 | 24.7 | 1.8% | 1.8% | no | "6a7f18bb-1dd23" / Fri, 14 Aug 2026 13 |
-| All CISA Advisories | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 496.4 KB (review) | 59.5 KB | gzip | 0.24 | 0.004 | event-driven | yes | 30 | 0 | 0 | 30 | 0 | 0 | 2.2 | 16.7% | 0.0% | no | — / — |
-| Latest publications of type Security Advisories | 200 | no | rss | yes | text/xml; charset=utf-8 | 9.1 KB (small) | 9.1 KB | identity | 0.46 | 0.000 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 23.3 | 0.0% | 0.0% | no | — / — |
-| CERT-FR | 200 | no | rss | yes | application/xml | 25.5 KB (small) | 25.5 KB | identity | 0.13 | 0.001 | event-driven | yes | 40 | 0 | 0 | 40 | 0 | 0 | 24.7 | 0.0% | 0.0% | no | "0be3967825899f6c231265373e818eda" / Fri, 14 Aug 2026 13 |
-| News Feed | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 11.9 KB (small) | 2.9 KB | gzip | 0.18 | 0.001 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 11.2 | 0.0% | 0.0% | no | W/"1786716944" / Fri, 14 Aug 2026 14 |
-| All Feed | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 11.2 KB (small) | 2.9 KB | gzip | 0.13 | 0.001 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 2.2 | 0.0% | 0.0% | no | W/"1786716704" / Fri, 14 Aug 2026 14 |
-| BleepingComputer | 200 | no | rss | yes | text/xml; charset=utf-8 | 12.7 KB (small) | 3.2 KB | gzip | 0.15 | 0.001 | standard | yes | 15 | 0 | 0 | 15 | 0 | 0 | 0.1 | 0.0% | 0.0% | no | e41bf92aaf38bfd9e9389549e2ecd387 / Sat, 15 Aug 2026 16 |
-| darkreading | 200 | no | rss | yes | text/xml; charset=utf-8 | 75.9 KB (small) | 11.8 KB | gzip | 0.55 | 0.002 | standard | yes | 50 | 0 | 0 | 50 | 0 | 0 | 0.9 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
-| Krebs on Security | 200 | no | rss | yes | text/html; charset=UTF-8 | 123.0 KB (small) | 36.5 KB | gzip | 0.15 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
-| SecurityWeek | 200 | no | rss | yes | application/rss+xml; charset=UTF-8 | 11.5 KB (small) | 2.6 KB | gzip | 0.44 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | W/"5475fad6b2cb90f7077ae22b49c53ca7" / Sat, 15 Aug 2026 13 |
-| The Record from Recorded Future News | 200 | no | rss | yes | text/xml | 5.2 KB (small) | 1.6 KB | gzip | 0.26 | 0.000 | standard | yes | 5 | 0 | 0 | 5 | 0 | 0 | 0.8 | 0.0% | 0.0% | no | — / — |
-| SANS Internet Storm Center, InfoCON: green | 200 | no | rss | yes | text/xml; charset=utf-8 | 149.7 KB (small) | 19.6 KB | gzip | 0.91 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.6 | 0.0% | 0.0% | no | W/"256df-659185d69cec0" / Sat, 15 Aug 2026 16 |
-| CERT Recently Published Vulnerability Notes | 200 | no | feed | yes | application/atom+xml; charset=utf-8 | 164.9 KB (small) | 164.9 KB | identity | 0.30 | 0.001 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 4.1 | 0.0% | 0.0% | no | — / Fri, 14 Aug 2026 14 |
-| Cybersecurity Insights | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 42.3 KB (small) | 11.1 KB | gzip | 0.53 | 0.001 | event-driven | yes | 40 | 0 | 0 | 40 | 0 | 0 | 3.2 | 20.0% | 0.0% | no | "1786784497-gzip" / Sat, 15 Aug 2026 09 |
-| Threat Intelligence | 200 | no | rss | yes | text/xml; charset=utf-8 | 1.13 MB (large) | 197.4 KB | gzip | 0.43 | 0.006 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 9.1 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
-| Microsoft Security Blog | 200 | no | rss | yes | application/rss+xml; charset=UTF-8 | 304.2 KB (review) | 78.9 KB | gzip | 0.55 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 5.0 | 0.0% | 0.0% | no | "c8f0c308c3fb485beed7fba1ccf23b95-gzip" / Fri, 14 Aug 2026 15 |
-| ICS Advisories | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 503.2 KB (review) | 45.4 KB | gzip | 0.17 | 0.004 | event-driven | yes | 30 | 0 | 0 | 30 | 0 | 0 | 2.2 | 0.0% | 0.0% | no | — / — |
+| Bloomberg Markets | 304 | yes | rss | yes | text/xml; charset=utf-8 | 16.8 KB (small) | 0.0 KB | gzip | 0.17 | 0.001 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 0.1 | 0.0% | 0.0% | no | W/"431f-rwXfzKwykUGJaE44msEXPdKIvuI" / — |
+| Markets | 200 | no | rss | yes | text/xml; charset=utf-8 | 11.4 KB (small) | 3.7 KB | gzip | 0.42 | 0.001 | standard | yes | 25 | 0 | 0 | 25 | 0 | 0 | 0.3 | 0.0% | 0.0% | no | W/"2d88-WYQncRHTHw5llXHqUcTAIOFbW24" / — |
+| MarketWatch.com - Top Stories | 200 | no | rss | yes | application/xml; charset=utf-8 | 7.9 KB (small) | 2.5 KB | gzip | 0.10 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 0.0 | 0.0% | 0.0% | no | W/"1fb0-nkY4Twgp6kwV24fLNRkpUJZ//MY" / — |
+| Business | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 25.9 KB (small) | 6.2 KB | gzip | 0.29 | 0.001 | standard | yes | 40 | 0 | 0 | 40 | 0 | 0 | 0.7 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 12 |
+| WSJ.com: Markets | 200 | no | rss | yes | application/xml; charset=utf-8 | 38.4 KB (small) | 10.0 KB | gzip | 0.11 | 0.001 | standard | yes | 60 | 0 | 0 | 60 | 0 | 0 | 0.0 | 6.7% | 3.3% | no | W/"996b-FZBHvmKYMflXHkycp5eY/Rl/USM" / — |
+| News and Media | 200 | no | rss | yes | application/rss+xml | 143.8 KB (small) | 32.5 KB | gzip | 0.17 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | — / — |
+| ECB - European Central Bank | 200 | no | rss | yes | text/xml | 5.8 KB (small) | 1.5 KB | gzip | 0.20 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 2.3 | 0.0% | 0.0% | no | — / Fri, 14 Aug 2026 12 |
+| News | 200 | no | rss | yes | text/xml; charset=utf-8 | 24.5 KB (small) | 6.5 KB | gzip | 0.18 | 0.001 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 4.2 | 0.0% | 0.0% | no | — / — |
+| News and communications from HM Treasury (HMT) | 304 | yes | feed | yes | application/atom+xml; charset=utf-8 | 12.6 KB (small) | 0.0 KB | identity | 0.16 | 0.001 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 8.4 | 0.0% | 0.0% | no | W/"7913ee7c3ce8674aaf03d62f49ba9432" / — |
+| FRB: Press Release - Monetary Policy | 200 | no | rss | yes | text/xml | 9.4 KB (small) | 0.9 KB | gzip | 0.13 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 17.0 | 26.7% | 0.0% | no | W/"e950b61b841fdd1 / Wed, 29 Jul 2026 18 |
+| Press Releases | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 17.7 KB (small) | 5.0 KB | gzip | 0.38 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 0.9 | 0.0% | 0.0% | no | "1786813073" / Sat, 15 Aug 2026 16 |
+| Press Releases | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 4.6 KB (small) | 0.0 KB | gzip | 0.17 | 0.000 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 2.1 | 0.0% | 0.0% | no | "1786769334" / Sat, 15 Aug 2026 04 |
+| ECB - Monetary policy tender operations and ad-hoc communications | 200 | no | rss | yes | application/rss+xml | 11.4 KB (small) | 1.1 KB | gzip | 0.16 | 0.001 | event-driven | yes | 32 | 0 | 0 | 0 | 32 | 0 | 3.3 | 0.0% | 0.0% | no | "myra-4118c74f" / — |
+| FRB: Speeches | 200 | no | rss | yes | text/xml | 9.5 KB (small) | 1.7 KB | gzip | 0.22 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 9.9 | 0.0% | 0.0% | no | W/"db4d36b91525dd1 / Wed, 05 Aug 2026 20 |
+| ECB \| US dollar (USD) - Euro foreign exchange reference rates | 304 | yes | rdf:RDF | yes | application/rss+xml | 7.1 KB (small) | 0.0 KB | gzip | 0.18 | 0.000 | standard | yes | 5 | 0 | 0 | 0 | 5 | 0 | 1.2 | 0.0% | 0.0% | no | "myra-9a2dcdc3" / — |
+| ECB \| Pound sterling (GBP) - Euro foreign exchange reference rates | 304 | yes | rdf:RDF | yes | application/rss+xml | 7.2 KB (small) | 0.0 KB | gzip | 0.16 | 0.000 | standard | yes | 5 | 0 | 0 | 0 | 5 | 0 | 1.2 | 0.0% | 0.0% | no | "myra-66fd49d0" / — |
+| ECB - European Central Bank | 304 | yes | rss | yes | application/rss+xml | 5.4 KB (small) | 0.0 KB | gzip | 0.16 | 0.000 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 15.4 | 0.0% | 0.0% | no | "myra-97a48a97" / — |
+| Markets Updates Feed | 200 | no | rss | yes | application/rss+xml | 7.9 KB (small) | 1.0 KB | gzip | 0.20 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 16.4 | 0.0% | 0.0% | no | — / — |
+| Eurostat - Custom RSS Feed | 200 | no | feed | yes | application/atom+xml;charset=UTF-8 | 10.1 KB (small) | 1.9 KB | gzip | 0.20 | 0.000 | event-driven | yes | 11 | 0 | 0 | 11 | 0 | 0 | 1.3 | 0.0% | 0.0% | no | — / — |
+| Finance \| Guidance documents | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 24.7 KB (small) | 3.5 KB | gzip | 0.11 | 0.001 | event-driven | event-driven | 19 | 0 | 0 | 19 | 0 | 0 | 212.2 | 0.0% | 0.0% | no | — / — |
+| ONS Release Calendar RSS Feed. | 200 | no | rss | yes | application/rss+xml | 5.7 KB (small) | 1.5 KB | gzip | 0.22 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.4 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| BIS statistical releases | 200 | no | rdf:RDF | yes | application/rss+xml | 35.3 KB (small) | 5.4 KB | gzip | 0.16 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 15.3 | 0.0% | 0.0% | no | "8d32-657e3932b61c3-gzip" / Fri, 31 Jul 2026 07 |
+| Press releases | 200 | no | rdf:RDF | yes | application/rss+xml | 29.3 KB (small) | 5.3 KB | gzip | 0.16 | 0.001 | event-driven | yes | 25 | 0 | 0 | 25 | 0 | 0 | 48.2 | 0.0% | 0.0% | no | "750f-6554c8e799cf3-gzip" / Sun, 28 Jun 2026 08 |
+| Publications | 200 | no | rss | yes | text/xml; charset=utf-8 | 22.7 KB (small) | 5.5 KB | gzip | 0.13 | 0.001 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | — / — |
+| Financial Conduct Authority (FCA) | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 65.2 KB (small) | 0.0 KB | gzip | 0.28 | 0.004 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 1.3 | 0.0% | 0.0% | no | "1786723349" / Fri, 14 Aug 2026 16 |
+| NCSC Alerts & Advisories | 200 | no | rss | yes | application/rss+xml | 119.3 KB (small) | 119.3 KB | identity | 0.25 | 0.004 | event-driven | yes | 225 | 0 | 0 | 225 | 0 | 0 | 24.7 | 1.8% | 1.8% | no | "6a7f18bb-1dd23" / Fri, 14 Aug 2026 13 |
+| All CISA Advisories | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 496.4 KB (review) | 59.5 KB | gzip | 0.25 | 0.004 | event-driven | yes | 30 | 0 | 0 | 30 | 0 | 0 | 2.2 | 16.7% | 0.0% | no | — / — |
+| Latest publications of type Security Advisories | 200 | no | rss | yes | text/xml; charset=utf-8 | 9.1 KB (small) | 9.1 KB | identity | 1.32 | 0.000 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 23.3 | 0.0% | 0.0% | no | — / — |
+| CERT-FR | 200 | no | rss | yes | application/xml | 25.5 KB (small) | 25.5 KB | identity | 0.11 | 0.001 | event-driven | yes | 40 | 0 | 0 | 40 | 0 | 0 | 24.7 | 0.0% | 0.0% | no | "0be3967825899f6c231265373e818eda" / Fri, 14 Aug 2026 13 |
+| News Feed | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 11.9 KB (small) | 0.0 KB | gzip | 0.11 | 0.001 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 11.2 | 0.0% | 0.0% | no | "1786716944" / Fri, 14 Aug 2026 14 |
+| All Feed | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 11.2 KB (small) | 0.0 KB | gzip | 0.12 | 0.001 | event-driven | yes | 20 | 0 | 0 | 20 | 0 | 0 | 2.2 | 0.0% | 0.0% | no | "1786716704" / Fri, 14 Aug 2026 14 |
+| BleepingComputer | 304 | yes | rss | yes | text/xml; charset=utf-8 | 12.7 KB (small) | 0.0 KB | gzip | 0.16 | 0.000 | standard | yes | 15 | 0 | 0 | 15 | 0 | 0 | 0.1 | 0.0% | 0.0% | no | fcf456ffc3f5037d3b188f7de5696263 / Sat, 15 Aug 2026 16 |
+| darkreading | 200 | no | rss | yes | text/xml; charset=utf-8 | 75.9 KB (small) | 11.9 KB | gzip | 0.48 | 0.001 | standard | yes | 50 | 0 | 0 | 50 | 0 | 0 | 0.9 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| Krebs on Security | 200 | no | rss | yes | text/html; charset=UTF-8 | 123.0 KB (small) | 36.5 KB | gzip | 0.17 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| SecurityWeek | 304 | yes | rss | yes | application/rss+xml; charset=UTF-8 | 11.5 KB (small) | 0.0 KB | gzip | 1.18 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.2 | 0.0% | 0.0% | no | "5475fad6b2cb90f7077ae22b49c53ca7" / Sat, 15 Aug 2026 13 |
+| The Record from Recorded Future News | 200 | no | rss | yes | text/xml | 5.2 KB (small) | 1.6 KB | gzip | 0.27 | 0.000 | standard | yes | 5 | 0 | 0 | 5 | 0 | 0 | 0.9 | 0.0% | 0.0% | no | — / — |
+| SANS Internet Storm Center, InfoCON: green | 200 | no | rss | yes | text/xml; charset=utf-8 | 149.7 KB (small) | 19.6 KB | gzip | 0.87 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.6 | 0.0% | 0.0% | no | W/"256df-65918c8bb7fd9" / Sat, 15 Aug 2026 16 |
+| CERT Recently Published Vulnerability Notes | 200 | no | feed | yes | application/atom+xml; charset=utf-8 | 164.9 KB (small) | 164.9 KB | identity | 0.19 | 0.001 | event-driven | yes | 15 | 0 | 0 | 15 | 0 | 0 | 4.1 | 0.0% | 0.0% | no | — / Fri, 14 Aug 2026 14 |
+| Cybersecurity Insights | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 42.3 KB (small) | 0.0 KB | gzip | 0.52 | 0.001 | event-driven | yes | 40 | 0 | 0 | 40 | 0 | 0 | 3.2 | 20.0% | 0.0% | no | "1786784497-gzip" / Sat, 15 Aug 2026 09 |
+| Threat Intelligence | 200 | no | rss | yes | text/xml; charset=utf-8 | 1.13 MB (large) | 197.4 KB | gzip | 0.52 | 0.006 | standard | yes | 20 | 0 | 0 | 20 | 0 | 0 | 9.1 | 0.0% | 0.0% | no | — / Sat, 15 Aug 2026 16 |
+| Microsoft Security Blog | 200 | no | rss | yes | application/rss+xml; charset=UTF-8 | 304.1 KB (review) | 78.9 KB | gzip | 0.29 | 0.001 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 5.0 | 0.0% | 0.0% | no | "c8f0c308c3fb485beed7fba1ccf23b95-gzip" / Fri, 14 Aug 2026 15 |
+| ICS Advisories | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 503.2 KB (review) | 45.4 KB | gzip | 0.14 | 0.004 | event-driven | yes | 30 | 0 | 0 | 30 | 0 | 0 | 2.2 | 0.0% | 0.0% | no | — / — |
 | Latest publications of type Threat Intelligence | 200 | no | rss | yes | text/xml; charset=utf-8 | 6.7 KB (small) | 6.7 KB | identity | 0.26 | 0.000 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 12.0 | 0.0% | 0.0% | no | — / — |
 | CERT-FR | 200 | no | rss | yes | application/xml | 22.5 KB (small) | 22.5 KB | identity | 0.12 | 0.001 | standard | yes | 40 | 0 | 0 | 40 | 0 | 0 | 1.7 | 0.0% | 0.0% | no | "429e4d18391ebaf51356530b95e062c4" / Fri, 14 Aug 2026 13 |
-| Cisco Security Advisory | 200 | no | rss | yes | application/xml;charset=utf-8 | 122.9 KB (small) | 122.9 KB | identity | 1.07 | 0.004 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 0.9 | 8.0% | 0.0% | no | — / — |
-| Cisco Talos Blog | 200 | no | rss | yes | application/rss+xml; charset=utf-8 | 981.6 KB (review) | 121.0 KB | gzip | 0.18 | 0.003 | standard | yes | 15 | 0 | 0 | 15 | 0 | 0 | 1.9 | 0.0% | 0.0% | no | W/"f566a-43WC8pKSSSvJqBg6WfxmrGK9oTU" / — |
-| Blog | 200 | no | rss | yes | application/rss+xml;charset=utf-8 | 5.1 KB (small) | 1.5 KB | gzip | 0.14 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 4.5 | 0.0% | 0.0% | no | "1497-6591043c7aaef-gzip" / Sat, 15 Aug 2026 06 |
-| Open Source Security Foundation | 200 | no | rss | yes | application/rss+xml; charset=UTF-8 | 219.1 KB (small) | 219.1 KB | identity | 0.29 | 0.001 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.0 | 0.0% | 0.0% | no | "6f40e5147e2f3af6911d158a3158edba" / Fri, 14 Aug 2026 17 |
+| Cisco Security Advisory | 200 | no | rss | yes | application/xml;charset=utf-8 | 122.9 KB (small) | 122.9 KB | identity | 0.99 | 0.004 | event-driven | yes | 50 | 0 | 0 | 50 | 0 | 0 | 0.9 | 8.0% | 0.0% | no | — / — |
+| Cisco Talos Blog | 304 | yes | rss | yes | application/rss+xml; charset=utf-8 | 981.6 KB (review) | 0.0 KB | gzip | 0.16 | 0.003 | standard | yes | 15 | 0 | 0 | 15 | 0 | 0 | 2.0 | 0.0% | 0.0% | no | W/"f566a-43WC8pKSSSvJqBg6WfxmrGK9oTU" / — |
+| Blog | 200 | no | rss | yes | application/rss+xml;charset=utf-8 | 5.1 KB (small) | 1.5 KB | gzip | 0.16 | 0.000 | standard | yes | 10 | 0 | 0 | 10 | 0 | 0 | 4.5 | 0.0% | 0.0% | no | "1497-65913e4ffd15c-gzip" / Sat, 15 Aug 2026 11 |
+| Open Source Security Foundation | 200 | no | rss | yes | application/rss+xml; charset=UTF-8 | 219.1 KB (small) | 219.1 KB | identity | 0.27 | 0.001 | event-driven | yes | 10 | 0 | 0 | 10 | 0 | 0 | 1.0 | 0.0% | 0.0% | no | "6f40e5147e2f3af6911d158a3158edba" / Fri, 14 Aug 2026 17 |
+
+## Cross-run drift review
+
+These advisory comparisons use the previous per-feed validation snapshot for this profile:
+- **Krebs on Security** — `warning` `content-type-changed`: server content-type label changed.
 
 ## Duplicate-story clusters detected
 
@@ -206,11 +213,11 @@ These warnings do not fail the bundle because the direct feed endpoints are HTTP
 ## Mobile refresh review
 
 These feeds exceed the advisory mobile threshold of 256 KB or took more than 2 seconds in this full-response audit. They are not failures; review them if refresh cost becomes noticeable on iPhone.
-- **All CISA Advisories** — body 496.4 KB; wire 59.5 KB; encoding `gzip`; fetch 0.24s; class `review`; cached 304 `False`.
-- **Threat Intelligence** — body 1.13 MB; wire 197.4 KB; encoding `gzip`; fetch 0.43s; class `large`; cached 304 `False`.
-- **Microsoft Security Blog** — body 304.2 KB; wire 78.9 KB; encoding `gzip`; fetch 0.55s; class `review`; cached 304 `False`.
-- **ICS Advisories** — body 503.2 KB; wire 45.4 KB; encoding `gzip`; fetch 0.17s; class `review`; cached 304 `False`.
-- **Cisco Talos Blog** — body 981.6 KB; wire 121.0 KB; encoding `gzip`; fetch 0.18s; class `review`; cached 304 `False`.
+- **All CISA Advisories** — body 496.4 KB; wire 59.5 KB; encoding `gzip`; fetch 0.25s; class `review`; cached 304 `False`.
+- **Threat Intelligence** — body 1.13 MB; wire 197.4 KB; encoding `gzip`; fetch 0.52s; class `large`; cached 304 `False`.
+- **Microsoft Security Blog** — body 304.1 KB; wire 78.9 KB; encoding `gzip`; fetch 0.29s; class `review`; cached 304 `False`.
+- **ICS Advisories** — body 503.2 KB; wire 45.4 KB; encoding `gzip`; fetch 0.14s; class `review`; cached 304 `False`.
+- **Cisco Talos Blog** — body 981.6 KB; wire 0.0 KB; encoding `gzip`; fetch 0.16s; class `review`; cached 304 `True`.
 
 ## Coverage audit
 

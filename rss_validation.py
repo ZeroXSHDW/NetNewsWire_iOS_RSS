@@ -295,6 +295,162 @@ def manifest_entries(path: str | Path) -> list[dict]:
     return list(data.get("feeds", []))
 
 
+def _snapshot_int(value: object) -> int | None:
+    try:
+        return int(float(str(value))) if value not in (None, "") else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _snapshot_float(value: object) -> float | None:
+    try:
+        return float(value) if value not in (None, "") else None
+    except (TypeError, ValueError):
+        return None
+
+
+def feed_snapshot(detail: dict[str, object]) -> dict[str, object]:
+    """Keep the stable, comparable subset of one live feed validation result."""
+
+    return {
+        "url": str(detail.get("url", "")),
+        "title": str(detail.get("feed_title", "") or ""),
+        "root": str(detail.get("root", "") or ""),
+        "http_code": str(detail.get("http_code", "") or ""),
+        "effective_url": str(detail.get("effective_url", "") or ""),
+        "passed": str(detail.get("passed", "") or ""),
+        "recent": str(detail.get("recent", "") or ""),
+        "staleness_policy": str(detail.get("staleness_policy", "") or ""),
+        "item_count": _snapshot_int(detail.get("item_count")),
+        "latest_age_days": _snapshot_float(detail.get("latest_age_days")),
+        "payload_bytes": _snapshot_int(detail.get("payload_bytes")),
+        "wire_bytes": _snapshot_int(detail.get("wire_bytes")),
+        "duplicate_title_rate": _snapshot_float(detail.get("duplicate_title_rate")) or 0.0,
+        "duplicate_link_rate": _snapshot_float(detail.get("duplicate_link_rate")) or 0.0,
+        "http_item_link_count": _snapshot_int(detail.get("http_item_link_count")) or 0,
+        "missing_item_link_count": _snapshot_int(detail.get("missing_item_link_count")) or 0,
+        "item_link_status": str(detail.get("item_link_status", "") or ""),
+        "content_type": str(detail.get("content_type", "") or ""),
+    }
+
+
+def compare_feed_snapshots(
+    previous: dict[str, dict[str, object]],
+    current: dict[str, dict[str, object]],
+    duplicate_rate_limit: float = 0.50,
+) -> list[dict[str, object]]:
+    """Report meaningful feed drift between two validation runs.
+
+    These are maintenance warnings, not a replacement for the current-run
+    hard validation gates. A transient failed fetch is still useful context,
+    while the current validator remains responsible for deciding pass/fail.
+    """
+
+    warnings: list[dict[str, object]] = []
+
+    def add(
+        url: str,
+        feed: str,
+        kind: str,
+        severity: str,
+        message: str,
+        old_value: object = None,
+        new_value: object = None,
+    ) -> None:
+        warning: dict[str, object] = {
+            "url": url,
+            "feed": feed or url,
+            "kind": kind,
+            "severity": severity,
+            "message": message,
+        }
+        if old_value is not None:
+            warning["previous"] = old_value
+        if new_value is not None:
+            warning["current"] = new_value
+        warnings.append(warning)
+
+    for url in sorted(set(previous) | set(current)):
+        old = previous.get(url)
+        new = current.get(url)
+        if old is None and new is not None:
+            add(url, str(new.get("title", "")), "feed-added", "warning", "feed appeared in the current profile")
+            continue
+        if new is None and old is not None:
+            add(url, str(old.get("title", "")), "feed-removed", "critical", "feed disappeared from the current profile")
+            continue
+        assert old is not None and new is not None
+        feed = str(new.get("title", "") or old.get("title", "") or url)
+
+        if old.get("passed") == "yes" and new.get("passed") != "yes":
+            add(
+                url,
+                feed,
+                "validation-regression",
+                "critical",
+                "feed no longer passes the current validation gates",
+                old.get("passed"),
+                new.get("passed"),
+            )
+
+        old_title = str(old.get("title", ""))
+        new_title = str(new.get("title", ""))
+        if old_title and new_title and normalize_title(old_title) != normalize_title(new_title):
+            add(url, feed, "feed-title-changed", "warning", f"feed title changed from {old_title!r} to {new_title!r}", old_title, new_title)
+
+        old_root = str(old.get("root", ""))
+        new_root = str(new.get("root", ""))
+        if old_root and new_root and old_root != new_root:
+            add(url, feed, "root-changed", "warning", f"document root changed from {old_root!r} to {new_root!r}", old_root, new_root)
+
+        old_effective = str(old.get("effective_url", ""))
+        new_effective = str(new.get("effective_url", ""))
+        if old_effective and new_effective and old_effective != new_effective:
+            add(url, feed, "redirect-target-changed", "warning", "redirect target changed", old_effective, new_effective)
+
+        old_items = _snapshot_int(old.get("item_count"))
+        new_items = _snapshot_int(new.get("item_count"))
+        if old_items is not None and new_items is not None and old_items > 0:
+            if new_items == 0:
+                add(url, feed, "item-count-collapse", "critical", "feed item count collapsed to zero", old_items, new_items)
+            elif old_items >= 10 and new_items < old_items * 0.50:
+                add(url, feed, "item-count-collapse", "warning", "feed item count fell by more than half", old_items, new_items)
+            elif old_items >= 10 and new_items > old_items * 2:
+                add(url, feed, "item-count-spike", "warning", "feed item count more than doubled", old_items, new_items)
+
+        old_recent = str(old.get("recent", ""))
+        new_recent = str(new.get("recent", ""))
+        if old_recent in {"yes", "event-driven"} and new_recent == "no":
+            add(url, feed, "freshness-regression", "warning", "feed moved from recent/allowed content to stale content", old_recent, new_recent)
+
+        old_payload = _snapshot_int(old.get("payload_bytes"))
+        new_payload = _snapshot_int(new.get("payload_bytes"))
+        if old_payload and new_payload and old_payload >= 64 * 1024 and new_payload > old_payload * 2:
+            add(url, feed, "payload-growth", "warning", "full feed body more than doubled", old_payload, new_payload)
+
+        old_transport = int(old.get("http_item_link_count") or 0) + int(old.get("missing_item_link_count") or 0)
+        new_transport = int(new.get("http_item_link_count") or 0) + int(new.get("missing_item_link_count") or 0)
+        if new_transport > old_transport:
+            add(url, feed, "item-link-transport-regression", "warning", "legacy or missing item links increased", old_transport, new_transport)
+
+        old_title_rate = float(old.get("duplicate_title_rate") or 0.0)
+        new_title_rate = float(new.get("duplicate_title_rate") or 0.0)
+        old_link_rate = float(old.get("duplicate_link_rate") or 0.0)
+        new_link_rate = float(new.get("duplicate_link_rate") or 0.0)
+        if old_title_rate <= duplicate_rate_limit < new_title_rate:
+            add(url, feed, "duplicate-title-threshold", "warning", "duplicate-title rate crossed the noise threshold", old_title_rate, new_title_rate)
+        if old_link_rate <= duplicate_rate_limit < new_link_rate:
+            add(url, feed, "duplicate-link-threshold", "warning", "duplicate-link rate crossed the noise threshold", old_link_rate, new_link_rate)
+
+        if str(old.get("content_type", "")).lower() != str(new.get("content_type", "")).lower():
+            if old.get("content_type") and new.get("content_type"):
+                add(url, feed, "content-type-changed", "warning", "server content-type label changed", old.get("content_type"), new.get("content_type"))
+
+    severity_order = {"critical": 0, "warning": 1}
+    warnings.sort(key=lambda item: (severity_order.get(str(item["severity"]), 9), str(item["url"]), str(item["kind"])))
+    return warnings
+
+
 def counter_rates(values: list[str]) -> tuple[int, int, float]:
     counts = Counter(value for value in values if value)
     repeated = sum(count for count in counts.values() if count > 1)
