@@ -20,8 +20,8 @@ The goal is complete when:
 - **Repository:** `ZeroXSHDW/NetNewsWire_iOS_RSS`
 - **Visibility:** public
 - **Default branch:** `main`
-- **Release branch:** `codex/github-release`
-- **Open review:** [draft pull request #1](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/pull/1)
+- **Released branch:** `main` (merged from `codex/github-release`)
+- **Merged review:** [pull request #1](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/pull/1)
 - **Remote:** `origin` points to the public repository
 - **Remaining ownership decision:** no license has been selected yet
 
