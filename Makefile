@@ -1,6 +1,19 @@
-.PHONY: generate package lint docs-check test compile syntax validate validate-lite validate-air check
+.DEFAULT_GOAL := help
+
+.PHONY: help generate package lint docs-check test compile syntax validate validate-lite validate-air validate-all check
 
 PYTHON ?= python3
+
+help:
+	@printf '%s\n' \
+		'NetNewsWire Finance + Cyber bundle' \
+		'  make package       Generate all profiles and refresh the AirDrop handoff' \
+		'  make check         Run offline generation, lint, docs checks and tests' \
+		'  make validate-all  Run live validation for Master, iPhone Lite and Air' \
+		'  make validate      Run live validation for the Master profile' \
+		'  make validate-lite Run live validation for iPhone Lite' \
+		'  make validate-air  Run live validation for iPhone Air' \
+		'  make generate      Regenerate OPML and source-table artifacts only'
 
 generate:
 	$(PYTHON) generate-bundle.py --manifest feed-manifest.json --all \
@@ -42,5 +55,10 @@ validate-air:
 	REPORT_MARKDOWN_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md \
 	REPORT_JSON_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json \
 	./validate-rss-bundle.sh NetNewsWire-Finance-Cyber-iPhone-Air.opml
+
+validate-all:
+	$(MAKE) validate
+	$(MAKE) validate-lite
+	$(MAKE) validate-air
 
 check: package lint docs-check compile test syntax

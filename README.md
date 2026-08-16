@@ -387,11 +387,12 @@ The generated `shortcut-digest.txt` is convenient for a Shortcut text action. Th
 ## Validate before sharing or publishing
 
 ```bash
-make check          # offline generation, lint, tests and syntax checks
-make validate       # live feed reachability and full-profile validation
-make validate-lite  # live iPhone Lite validation
-make validate-air   # live iPhone Air validation
+make help           # show the project commands
+make check          # offline generation, lint, docs, tests and syntax checks
+make validate-all   # live validation for Master, iPhone Lite and iPhone Air
 ```
+
+You can also run `make validate`, `make validate-lite` or `make validate-air` when you only need one profile.
 
 Validation checks include:
 
@@ -415,6 +416,7 @@ Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `
 | [`AirDrop/`](AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |
 | [Validation reports](NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
 | [`NetNewsWire-Finance-Cyber-CHANGELOG.md`](NetNewsWire-Finance-Cyber-CHANGELOG.md) | Feed-selection, maintenance and validation history |
+| [`.github/`](.github/) | CI, Dependabot, ownership and contribution workflows |
 | [`.github/workflows/rss-validation.yml`](.github/workflows/rss-validation.yml) | Deterministic CI and scheduled live validation |
 | [`SECURITY.md`](SECURITY.md) | Security reporting and sensitive-data handling |
 
