@@ -38,9 +38,9 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install zsh
@@ -64,15 +64,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install XML validator and zsh
         run: sudo apt-get update && sudo apt-get install --yes libxml2-utils zsh
       - name: Restore RSS cache and drift baseline
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: |
             .rss-validation-cache
@@ -96,7 +96,7 @@ jobs:
         run: make validate-air
       - name: Upload validation reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rss-validation-reports
           path: |
@@ -108,7 +108,7 @@ jobs:
             NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json
       - name: Save RSS cache and drift baseline
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: |
             .rss-validation-cache
