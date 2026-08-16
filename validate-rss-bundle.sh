@@ -4,6 +4,7 @@
 # Usage: ./validate-rss-bundle.sh [path/to/bundle.opml]
 
 set -u
+set -o pipefail
 
 script_dir="${0:A:h}"
 script_path="${0:A}"
@@ -13,9 +14,6 @@ manifest_file_path="${MANIFEST_FILE:-$script_dir/feed-manifest.json}"
 report_markdown_file="${REPORT_MARKDOWN_FILE:-$script_dir/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md}"
 report_json_file="${REPORT_JSON_FILE:-$script_dir/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json}"
 report_generator="$script_dir/generate-rss-validation-report.py"
-max_age_days="${MAX_AGE_DAYS:-180}"
-duplicate_title_rate_limit="${DUPLICATE_TITLE_RATE_LIMIT:-0.50}"
-min_items_for_noise="${MIN_ITEMS_FOR_NOISE:-10}"
 validation_profile="${VALIDATION_PROFILE:-master}"
 validation_cache_dir="${VALIDATION_CACHE_DIR:-$script_dir/.rss-validation-cache}"
 validation_history_file="${VALIDATION_HISTORY_FILE:-$script_dir/.validation-history.json}"
@@ -47,21 +45,80 @@ if [[ ! -f "$report_generator" ]]; then
   exit 2
 fi
 
-if ! xmllint --noout "$bundle_file" >/dev/null 2>&1; then
+if ! validation_config_line=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$manifest_file_path" <<'PY'
+import sys
+
+from bundle_config import load_manifest, validation_settings
+
+settings = validation_settings(load_manifest(sys.argv[1]))
+keys = (
+    "max_age_days",
+    "duplicate_title_rate_limit",
+    "min_items_for_noise",
+    "mobile_review_bytes",
+    "mobile_large_bytes",
+    "mobile_slow_seconds",
+    "max_response_bytes",
+)
+print("\t".join(str(settings[key]) for key in keys))
+PY
+); then
+  print -u2 "Invalid validation configuration in manifest: $manifest_file_path"
+  exit 2
+fi
+IFS=$'\t' read -r max_age_days duplicate_title_rate_limit min_items_for_noise mobile_review_bytes mobile_large_bytes mobile_slow_seconds max_response_bytes <<< "$validation_config_line"
+
+if ! xmllint --nonet --noout "$bundle_file" >/dev/null 2>&1; then
   print -u2 "Invalid OPML: $bundle_file"
   exit 1
 fi
 
 mkdir -p "$validation_cache_dir"
+validation_lock_dir="${validation_cache_dir}.lock"
+if ! mkdir "$validation_lock_dir" 2>/dev/null; then
+  existing_pid=''
+  [[ -f "$validation_lock_dir/pid" ]] && existing_pid="$(<"$validation_lock_dir/pid")"
+  if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null; then
+    print -u2 "Another RSS validation is using the shared cache/history: $validation_lock_dir (pid $existing_pid)"
+    exit 2
+  fi
+  print -u2 "Removing stale RSS validation lock: $validation_lock_dir"
+  rm -f "$validation_lock_dir/pid"
+  if ! rmdir "$validation_lock_dir" 2>/dev/null || ! mkdir "$validation_lock_dir" 2>/dev/null; then
+    print -u2 "Could not acquire RSS validation lock: $validation_lock_dir"
+    exit 2
+  fi
+fi
+print -r -- "$$" > "$validation_lock_dir/pid"
 
-temp_dir=$(mktemp -d -t nnw-rss-validation)
+temp_dir=''
 cleanup() {
-  for temp_file in "$temp_dir"/*.xml(N) "$temp_dir"/*.txt(N) "$temp_dir"/*.tsv(N); do
-    rm -f "$temp_file"
-  done
-  rmdir "$temp_dir" 2>/dev/null || true
+  if [[ -n "$temp_dir" && -d "$temp_dir" ]]; then
+    for temp_file in "$temp_dir"/*.xml(N) "$temp_dir"/*.txt(N) "$temp_dir"/*.tsv(N); do
+      rm -f "$temp_file"
+    done
+    for temp_file in "$temp_dir/report"/*(N); do
+      rm -f "$temp_file"
+    done
+    rmdir "$temp_dir/report" 2>/dev/null || true
+    rmdir "$temp_dir" 2>/dev/null || true
+  fi
+  if [[ -f "$validation_lock_dir/pid" && "$(<"$validation_lock_dir/pid")" == "$$" ]]; then
+    rm -f "$validation_lock_dir/pid"
+    rmdir "$validation_lock_dir" 2>/dev/null || true
+  fi
 }
+if ! temp_dir=$(mktemp -d -t nnw-rss-validation); then
+  print -u2 "Could not create RSS validation temporary directory"
+  rm -f "$validation_lock_dir/pid"
+  rmdir "$validation_lock_dir" 2>/dev/null || true
+  exit 2
+fi
 trap cleanup EXIT INT TERM
+
+cache_meta_safe() {
+  print -r -- "$1" | tr $'\t\r\n' ' '
+}
 
 opml_urls_file="$temp_dir/opml-urls.txt"
 manifest_file="$temp_dir/manifest.tsv"
@@ -69,23 +126,26 @@ field_separator=$'\t'
 
 # Parse OPML with XML so entities such as &amp; in query URLs are unescaped
 # before curl receives them. The second field records the explicit freshness
-# exception for official/event-driven feeds that may be quiet between releases.
-python3 - "$bundle_file" "$opml_urls_file" <<'PY'
+# exception for official/event-driven feeds that may be quiet between releases;
+# the third field carries any explicit item-link policy from the manifest.
+PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$bundle_file" "$opml_urls_file" <<'PY'
 import sys
-import xml.etree.ElementTree as ET
+
+from rss_validation import safe_xml_root
 
 source, destination = sys.argv[1:]
-root = ET.parse(source).getroot()
+root = safe_xml_root(source)
 urls = []
 for outline in root.iter():
     url = (outline.attrib.get("xmlUrl") or "").strip()
     if url:
         event_driven = (outline.attrib.get("eventDriven") or "").strip().lower() == "true"
-        urls.append((url, "event-driven" if event_driven else "standard"))
+        item_link_policy = (outline.attrib.get("itemLinkPolicy") or "default").strip().lower()
+        urls.append((url, "event-driven" if event_driven else "standard", item_link_policy))
 
 with open(destination, "w", encoding="utf-8") as handle:
-    for url, freshness_policy in urls:
-        handle.write(f"{url}\t{freshness_policy}\n")
+    for url, freshness_policy, item_link_policy in urls:
+        handle.write(f"{url}\t{freshness_policy}\t{item_link_policy}\n")
 
 if not urls:
     raise SystemExit("OPML contains no xmlUrl feed elements")
@@ -96,8 +156,9 @@ passed=0
 failed=0
 structured_alert_exceptions=0
 
-while IFS=$'\t' read -r feed_url freshness_policy; do
+while IFS=$'\t' read -r feed_url freshness_policy item_link_policy; do
   freshness_policy="${freshness_policy:-standard}"
+  item_link_policy="${item_link_policy:-default}"
   total=$((total + 1))
   feed_file="$temp_dir/feed-$total.xml"
   headers_file="$temp_dir/headers-$total.txt"
@@ -123,7 +184,10 @@ while IFS=$'\t' read -r feed_url freshness_policy; do
     [[ -n "$cached_etag" ]] && curl_headers+=(-H "If-None-Match: $cached_etag")
     [[ -n "$cached_last_modified" ]] && curl_headers+=(-H "If-Modified-Since: $cached_last_modified")
   fi
-  curl_metadata=$(curl -L --compressed -sS --max-time 25 \
+  curl_metadata=$(curl -L --proto '=https' --proto-redir '=https' --compressed -sS \
+    --connect-timeout 10 --max-time 25 --retry 2 --retry-delay 1 --retry-max-time 60 \
+    --max-filesize "$max_response_bytes" \
+    -H 'Accept: application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.8' \
     -A 'NetNewsWire RSS validation' \
     "${curl_headers[@]}" \
     -D "$headers_file" \
@@ -148,6 +212,12 @@ while IFS=$'\t' read -r feed_url freshness_policy; do
     cache_hit='yes'
   fi
   payload_bytes=$(wc -c < "$feed_file" 2>/dev/null | tr -d ' ' || print 0)
+  response_size_status='within-limit'
+  if (( payload_bytes > max_response_bytes )); then
+    response_size_status='too-large'
+    rm -f "$feed_file"
+    payload_bytes=0
+  fi
   content_type=$(awk -F': *' 'tolower($1)=="content-type" {value=$2} END {gsub(/\r/, "", value); print value}' "$headers_file" 2>/dev/null)
   etag=$(awk -F': *' 'tolower($1)=="etag" {value=$2} END {gsub(/\r/, "", value); print value}' "$headers_file" 2>/dev/null)
   last_modified=$(awk -F': *' 'tolower($1)=="last-modified" {value=$2} END {gsub(/\r/, "", value); print value}' "$headers_file" 2>/dev/null)
@@ -163,18 +233,18 @@ while IFS=$'\t' read -r feed_url freshness_policy; do
     *text/html*) content_type_status='mislabelled-xml' ;;
   esac
 
-  feed_root=$(xmllint --xpath 'name(/*)' "$feed_file" 2>/dev/null)
+  feed_root=$(xmllint --nonet --xpath 'name(/*)' "$feed_file" 2>/dev/null)
   secure_transport='no'
   [[ "$feed_url" == https://* ]] && secure_transport='yes'
   effective_secure_transport='no'
   [[ "$effective_url" == https://* ]] && effective_secure_transport='yes'
-  feed_title=$(xmllint --xpath \
+  feed_title=$(xmllint --nonet --xpath \
     'normalize-space(string((/*[local-name()="rss"]/*[local-name()="channel"]/*[local-name()="title"] | /*[local-name()="feed"]/*[local-name()="title"] | /*[local-name()="RDF"]/*[local-name()="channel"]/*[local-name()="title"])[1]))' \
     "$feed_file" 2>/dev/null)
-  item_link=$(xmllint --xpath \
+  item_link=$(xmllint --nonet --xpath \
     'normalize-space(string((//*[local-name()="item"]/*[local-name()="link"][1] | /*[local-name()="feed"]//*[local-name()="entry"][1]/*[local-name()="link"][@href][1]/@href)[1]))' \
     "$feed_file" 2>/dev/null)
-  item_title=$(xmllint --xpath \
+  item_title=$(xmllint --nonet --xpath \
     'normalize-space(string((//*[local-name()="item"][1]/*[local-name()="title"] | /*[local-name()="feed"]//*[local-name()="entry"][1]/*[local-name()="title"])[1]))' \
     "$feed_file" 2>/dev/null)
   feed_inspection=$(python3 "$script_dir/rss_validation.py" inspect "$feed_file" 2>/dev/null || true)
@@ -206,18 +276,18 @@ PY
   [[ "$item_link" == http://* || "$item_link" == https://* ]] && valid_item_link='yes'
   # Nasdaq's trade-halt RSS is a structured alert stream: its entries have
   # halt fields and a title but intentionally do not expose per-item URLs.
-  if [[ "$valid_item_link" == 'no' && "$feed_url" == 'https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts' && -n "$item_title" ]]; then
+  if [[ "$valid_item_link" == 'no' && "$item_link_policy" == 'structured-alert' && -n "$item_title" ]]; then
     valid_item_link='structured-alert'
     structured_alert_exceptions=$((structured_alert_exceptions + 1))
   fi
 
-  if [[ "$http_code" == '200' && -s "$feed_file" && ( "$feed_root" == 'rss' || "$feed_root" == 'feed' || "$feed_root" == 'rdf:RDF' || "$feed_root" == 'RDF' ) ]] && xmllint --noout "$feed_file" >/dev/null 2>&1; then
+  if [[ "$http_code" == '200' && -s "$feed_file" && ( "$feed_root" == 'rss' || "$feed_root" == 'feed' || "$feed_root" == 'rdf:RDF' || "$feed_root" == 'RDF' ) ]] && xmllint --nonet --noout "$feed_file" >/dev/null 2>&1; then
     cp "$feed_file" "$cache_body"
-    print -r -- "${feed_url}${field_separator}${etag}${field_separator}${last_modified}${field_separator}${content_type}${field_separator}${content_encoding}${field_separator}${effective_url}" > "$cache_meta"
+    print -r -- "$(cache_meta_safe "$feed_url")${field_separator}$(cache_meta_safe "$etag")${field_separator}$(cache_meta_safe "$last_modified")${field_separator}$(cache_meta_safe "$content_type")${field_separator}$(cache_meta_safe "$content_encoding")${field_separator}$(cache_meta_safe "$effective_url")" > "$cache_meta"
   fi
 
   passed_flag='no'
-  if [[ ( "$http_code" == '200' || "$cache_hit" == 'yes' ) ]] && xmllint --noout "$feed_file" >/dev/null 2>&1 \
+  if [[ ( "$http_code" == '200' || "$cache_hit" == 'yes' ) ]] && xmllint --nonet --noout "$feed_file" >/dev/null 2>&1 \
     && [[ "$secure_transport" == 'yes' ]] \
     && [[ "$effective_secure_transport" == 'yes' ]] \
     && [[ "$content_type_status" == 'safe' || "$content_type_status" == 'mislabelled-xml' ]] \
@@ -233,16 +303,20 @@ PY
     print "FAIL  $feed_url    http=$http_code    root=${feed_root:-unavailable}    https=$secure_transport    final_https=$effective_secure_transport    content_type=$content_type_status    freshness=$freshness_policy    title=$([[ -n "$feed_title" ]] && print yes || print no)    item_link=$valid_item_link    age_days=${age_days:-unavailable}    recent=${recent_content:-no}    latest=${latest_date:-unavailable}"
   fi
 
-  print -r -- "${total}${field_separator}${feed_url}${field_separator}${feed_file}${field_separator}${http_code}${field_separator}${effective_url}${field_separator}${secure_transport}${field_separator}${feed_root}${field_separator}${freshness_policy}${field_separator}${valid_item_link}${field_separator}${recent_content}${field_separator}${age_days}${field_separator}${latest_date}${field_separator}${passed_flag}${field_separator}${content_type}${field_separator}${etag}${field_separator}${last_modified}${field_separator}${payload_bytes}${field_separator}${transfer_seconds}${field_separator}${wire_bytes}${field_separator}${content_encoding}${field_separator}${parse_seconds}${field_separator}${not_modified}" >> "$manifest_file"
+  print -r -- "${total}${field_separator}${feed_url}${field_separator}${feed_file}${field_separator}${http_code}${field_separator}${effective_url}${field_separator}${secure_transport}${field_separator}${feed_root}${field_separator}${freshness_policy}${field_separator}${valid_item_link}${field_separator}${recent_content}${field_separator}${age_days}${field_separator}${latest_date}${field_separator}${passed_flag}${field_separator}${content_type}${field_separator}${etag}${field_separator}${last_modified}${field_separator}${payload_bytes}${field_separator}${transfer_seconds}${field_separator}${wire_bytes}${field_separator}${content_encoding}${field_separator}${parse_seconds}${field_separator}${not_modified}${field_separator}${response_size_status}" >> "$manifest_file"
 done < "$opml_urls_file"
 
 report_status=0
+report_candidate_dir="$temp_dir/report"
+mkdir -p "$report_candidate_dir"
+report_candidate_markdown="$report_candidate_dir/report.md"
+report_candidate_json="$report_candidate_dir/report.json"
 python3 "$report_generator" \
   "$bundle_file" \
   "$source_table_file" \
   "$manifest_file" \
-  "$report_markdown_file" \
-  "$report_json_file" \
+  "$report_candidate_markdown" \
+  "$report_candidate_json" \
   "$max_age_days" \
   "$duplicate_title_rate_limit" \
   "$min_items_for_noise" \
@@ -251,11 +325,27 @@ python3 "$report_generator" \
   "$validation_profile" \
   "$validation_history_file" || report_status=$?
 
-python3 "$script_dir/record-validation-result.py" \
-  --report "$report_json_file" \
-  --history "$validation_history_file" \
-  --profile "$validation_profile" \
-  --healthy "$([[ "$report_status" == '0' ]] && print yes || print no)" || true
+report_ready='no'
+if [[ -s "$report_candidate_markdown" && -s "$report_candidate_json" ]]; then
+  mv "$report_candidate_markdown" "$report_markdown_file"
+  mv "$report_candidate_json" "$report_json_file"
+  report_ready='yes'
+else
+  print -u2 "Validation report generation did not produce a complete current report; preserving the previous report files."
+  [[ "$report_status" == '0' ]] && report_status=2
+fi
 
-print "summary profile=$validation_profile total=$total passed=$passed failed=$failed structured_alert_exceptions=$structured_alert_exceptions max_age_days=$max_age_days"
-(( failed == 0 && report_status == 0 ))
+record_status=0
+if [[ "$report_ready" == 'yes' ]]; then
+  python3 "$script_dir/record-validation-result.py" \
+    --report "$report_json_file" \
+    --history "$validation_history_file" \
+    --profile "$validation_profile" \
+    --current-run \
+    --healthy "$([[ "$report_status" == '0' ]] && print yes || print no)" || record_status=$?
+else
+  record_status=2
+fi
+
+print "summary profile=$validation_profile total=$total passed=$passed failed=$failed structured_alert_exceptions=$structured_alert_exceptions max_age_days=$max_age_days max_response_bytes=$max_response_bytes"
+(( failed == 0 && report_status == 0 && record_status == 0 ))

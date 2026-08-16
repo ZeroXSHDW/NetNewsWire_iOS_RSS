@@ -1,14 +1,17 @@
 {
-  "manifest_version": 1,
+  "schema_version": 2,
+  "manifest_version": 2,
   "profiles": {
     "master": {
       "label": "Master",
-      "feed_count": 51,
+      "feed_count": 62,
+      "recommended": false,
+      "device_budget": {},
       "notification_counts": {
         "on": 4,
-        "optional": 10,
+        "optional": 12,
         "optional-french": 1,
-        "off": 36
+        "off": 45
       },
       "feed_ids": [
         "finance-01-core-market-trading-nasdaq-trader-trade-halts",
@@ -21,11 +24,15 @@
         "finance-01-core-market-trading-the-wall-street-journal-markets",
         "finance-02-core-official-macro-central-bank-of-ireland-news",
         "finance-02-core-official-macro-european-central-bank-press",
+        "finance-02-core-official-macro-european-banking-authority-news",
+        "finance-02-core-official-macro-european-systemic-risk-board-press",
+        "finance-02-core-official-macro-amla-news-press",
         "finance-02-core-official-macro-bank-of-england-news",
         "finance-02-core-official-macro-hm-treasury-news-communications",
         "finance-02-core-official-macro-federal-reserve-monetary-policy",
         "finance-02-core-official-macro-sec-press-releases",
         "finance-02-core-official-macro-cftc-general-press-releases",
+        "finance-02-core-official-macro-cftc-enforcement",
         "finance-02-core-official-macro-ecb-market-operations",
         "finance-02-core-official-macro-federal-reserve-speeches",
         "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
@@ -38,7 +45,9 @@
         "finance-04-optional-global-data-research-bis-statistical-releases",
         "finance-04-optional-global-data-research-bis-press-releases",
         "finance-04-optional-global-data-research-bank-of-england-publications",
-        "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
+        "finance-05-optional-uk-regulation-warnings-fca-news",
+        "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
+        "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
@@ -48,6 +57,7 @@
         "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
         "cyber-security-02-core-news-incident-reporting-dark-reading",
         "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+        "cyber-security-02-core-news-incident-reporting-cyberscoop",
         "cyber-security-02-core-news-incident-reporting-securityweek",
         "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
         "cyber-security-03-core-technical-research-sans-internet-storm-center",
@@ -55,10 +65,14 @@
         "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
         "cyber-security-03-core-technical-research-google-threat-intelligence-mandiant",
         "cyber-security-03-core-technical-research-microsoft-security-blog",
+        "cyber-security-03-core-technical-research-unit-42-threat-research",
+        "cyber-security-03-core-technical-research-github-security-blog",
         "cyber-security-04-optional-specialist-alerts-research-cisa-ics-advisories",
+        "cyber-security-04-optional-specialist-alerts-research-aws-security-bulletins",
         "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
         "cyber-security-04-optional-specialist-alerts-research-cert-fr-security-advisories-french",
         "cyber-security-04-optional-specialist-alerts-research-cisco-psirt-security-advisories",
+        "cyber-security-04-optional-specialist-alerts-research-schneier-on-security",
         "cyber-security-04-optional-specialist-alerts-research-cisco-talos",
         "cyber-security-04-optional-specialist-alerts-research-crowdstrike-cybersecurity-research",
         "cyber-security-04-optional-specialist-alerts-research-openssf-supply-chain-security"
@@ -66,12 +80,20 @@
     },
     "iphone-lite": {
       "label": "iPhone Lite",
-      "feed_count": 30,
+      "feed_count": 39,
+      "recommended": false,
+      "device_budget": {
+        "max_feeds": 40,
+        "max_total_payload_bytes": 4194304,
+        "max_single_payload_bytes": 614400,
+        "max_review_feeds": 6,
+        "max_notifications_on": 4
+      },
       "notification_counts": {
         "on": 4,
-        "optional": 8,
+        "optional": 9,
         "optional-french": 1,
-        "off": 17
+        "off": 25
       },
       "feed_ids": [
         "finance-01-core-market-trading-nasdaq-trader-trade-halts",
@@ -81,16 +103,22 @@
         "finance-01-core-market-trading-rte-business",
         "finance-02-core-official-macro-central-bank-of-ireland-news",
         "finance-02-core-official-macro-european-central-bank-press",
+        "finance-02-core-official-macro-european-banking-authority-news",
+        "finance-02-core-official-macro-european-systemic-risk-board-press",
+        "finance-02-core-official-macro-amla-news-press",
         "finance-02-core-official-macro-bank-of-england-news",
         "finance-02-core-official-macro-hm-treasury-news-communications",
         "finance-02-core-official-macro-federal-reserve-monetary-policy",
         "finance-02-core-official-macro-sec-press-releases",
         "finance-02-core-official-macro-cftc-general-press-releases",
+        "finance-02-core-official-macro-cftc-enforcement",
         "finance-02-core-official-macro-ecb-market-operations",
         "finance-02-core-official-macro-federal-reserve-speeches",
         "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+        "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
+        "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
@@ -99,11 +127,84 @@
         "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
         "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
         "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+        "cyber-security-02-core-news-incident-reporting-cyberscoop",
         "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
         "cyber-security-03-core-technical-research-sans-internet-storm-center",
         "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
         "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
-        "cyber-security-03-core-technical-research-microsoft-security-blog"
+        "cyber-security-03-core-technical-research-microsoft-security-blog",
+        "cyber-security-03-core-technical-research-unit-42-threat-research",
+        "cyber-security-03-core-technical-research-github-security-blog"
+      ]
+    },
+    "iphone-air": {
+      "label": "iPhone Air",
+      "feed_count": 50,
+      "recommended": true,
+      "device_budget": {
+        "max_feeds": 50,
+        "max_total_payload_bytes": 4194304,
+        "max_single_payload_bytes": 614400,
+        "max_review_feeds": 6,
+        "max_notifications_on": 4
+      },
+      "notification_counts": {
+        "on": 4,
+        "optional": 9,
+        "optional-french": 1,
+        "off": 36
+      },
+      "feed_ids": [
+        "finance-01-core-market-trading-nasdaq-trader-trade-halts",
+        "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
+        "finance-01-core-market-trading-bbc-business",
+        "finance-01-core-market-trading-bloomberg-markets",
+        "finance-01-core-market-trading-financial-times-markets",
+        "finance-01-core-market-trading-rte-business",
+        "finance-02-core-official-macro-central-bank-of-ireland-news",
+        "finance-02-core-official-macro-european-central-bank-press",
+        "finance-02-core-official-macro-european-banking-authority-news",
+        "finance-02-core-official-macro-european-systemic-risk-board-press",
+        "finance-02-core-official-macro-amla-news-press",
+        "finance-02-core-official-macro-bank-of-england-news",
+        "finance-02-core-official-macro-hm-treasury-news-communications",
+        "finance-02-core-official-macro-federal-reserve-monetary-policy",
+        "finance-02-core-official-macro-sec-press-releases",
+        "finance-02-core-official-macro-cftc-general-press-releases",
+        "finance-02-core-official-macro-cftc-enforcement",
+        "finance-02-core-official-macro-ecb-market-operations",
+        "finance-02-core-official-macro-federal-reserve-speeches",
+        "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
+        "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
+        "finance-03-optional-data-ireland-eu-uk-central-bank-of-ireland-markets-update",
+        "finance-03-optional-data-ireland-eu-uk-eurostat-economy-finance-releases",
+        "finance-03-optional-data-ireland-eu-uk-european-commission-sanctions-guidance",
+        "finance-03-optional-data-ireland-eu-uk-uk-ons-release-calendar",
+        "finance-04-optional-global-data-research-bis-statistical-releases",
+        "finance-04-optional-global-data-research-bank-of-england-publications",
+        "finance-05-optional-uk-regulation-warnings-fca-news",
+        "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
+        "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
+        "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cisa-all-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-eu-security-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
+        "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
+        "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
+        "cyber-security-02-core-news-incident-reporting-krebs-on-security",
+        "cyber-security-02-core-news-incident-reporting-cyberscoop",
+        "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
+        "cyber-security-03-core-technical-research-sans-internet-storm-center",
+        "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
+        "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
+        "cyber-security-03-core-technical-research-microsoft-security-blog",
+        "cyber-security-03-core-technical-research-unit-42-threat-research",
+        "cyber-security-03-core-technical-research-github-security-blog",
+        "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
+        "cyber-security-04-optional-specialist-alerts-research-crowdstrike-cybersecurity-research",
+        "cyber-security-04-optional-specialist-alerts-research-openssf-supply-chain-security"
       ]
     }
   },
@@ -119,7 +220,8 @@
       "signal_type": "alert",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -133,7 +235,8 @@
       "signal_type": "regulatory/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -147,7 +250,8 @@
       "signal_type": "context",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -161,7 +265,8 @@
       "signal_type": "market",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -175,7 +280,8 @@
       "signal_type": "market/research",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -189,7 +295,8 @@
       "signal_type": "market",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -203,7 +310,8 @@
       "signal_type": "context",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -217,7 +325,8 @@
       "signal_type": "market",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -231,7 +340,8 @@
       "signal_type": "policy/regulatory",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -245,7 +355,53 @@
       "signal_type": "policy/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-european-banking-authority-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Banking Authority — News",
+      "url": "https://www.eba.europa.eu/news-press/news/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-european-systemic-risk-board-press",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Systemic Risk Board — Press",
+      "url": "https://www.esrb.europa.eu/rss/press.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "macroprudential/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-amla-news-press",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "AMLA — News & Press",
+      "url": "https://www.amla.europa.eu/node/19/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "aml/enforcement/regulatory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -259,7 +415,8 @@
       "signal_type": "policy/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -273,7 +430,8 @@
       "signal_type": "policy/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -287,7 +445,8 @@
       "signal_type": "policy/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -301,7 +460,8 @@
       "signal_type": "regulatory/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -315,7 +475,23 @@
       "signal_type": "regulatory/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-cftc-enforcement",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "CFTC — Enforcement",
+      "url": "https://www.cftc.gov/RSS/RSSENF/rssenf.xml",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "enforcement/regulatory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -329,7 +505,8 @@
       "signal_type": "market-data/event",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -343,7 +520,8 @@
       "signal_type": "policy/research",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -357,7 +535,8 @@
       "signal_type": "daily-data",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -371,7 +550,8 @@
       "signal_type": "daily-data",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -385,7 +565,8 @@
       "signal_type": "data/event",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -399,7 +580,8 @@
       "signal_type": "regulatory/event",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -413,7 +595,8 @@
       "signal_type": "data/event",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -427,7 +610,8 @@
       "signal_type": "regulatory/event",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -441,7 +625,8 @@
       "signal_type": "calendar/data",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -455,7 +640,8 @@
       "signal_type": "data/research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -469,7 +655,8 @@
       "signal_type": "policy/research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -483,21 +670,53 @@
       "signal_type": "research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
-      "id": "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
+      "id": "finance-05-optional-uk-regulation-warnings-fca-news",
       "section": "Finance",
       "folder": "05 — Optional — UK Regulation & Warnings",
-      "title": "FCA — News & Warnings",
+      "title": "FCA — News",
       "url": "https://www.fca.org.uk/news/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regulatory/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "FCA — Scam Warnings",
+      "url": "https://www.fca.org.uk/news/warnings/rss.xml",
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "regulatory/alert",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "OFSI — Financial Sanctions Blog",
+      "url": "https://ofsi.blog.gov.uk/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "sanctions/policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -511,7 +730,8 @@
       "signal_type": "alert",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -525,7 +745,8 @@
       "signal_type": "advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -539,7 +760,8 @@
       "signal_type": "advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -553,7 +775,8 @@
       "signal_type": "alert/advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -567,7 +790,8 @@
       "signal_type": "alert/news",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -581,7 +805,8 @@
       "signal_type": "alert/context",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -595,7 +820,8 @@
       "signal_type": "news",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -609,7 +835,8 @@
       "signal_type": "news",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -623,7 +850,23 @@
       "signal_type": "news/research",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "cyber-security-02-core-news-incident-reporting-cyberscoop",
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "CyberScoop",
+      "url": "https://cyberscoop.com/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news/policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -637,7 +880,8 @@
       "signal_type": "news",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -651,7 +895,8 @@
       "signal_type": "news",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -659,13 +904,14 @@
       "section": "Cyber Security",
       "folder": "03 — Core — Technical Research",
       "title": "SANS Internet Storm Center",
-      "url": "https://isc.sans.edu/rssfeed_full.xml",
+      "url": "https://isc.sans.edu/rssfeed.xml",
       "notification": "optional",
       "notification_display": "Optional on",
       "signal_type": "research/alert",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -679,7 +925,8 @@
       "signal_type": "advisory/research",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -693,7 +940,8 @@
       "signal_type": "research/guidance",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -707,7 +955,8 @@
       "signal_type": "research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -721,7 +970,38 @@
       "signal_type": "research/advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": true
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-unit-42-threat-research",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Unit 42 — Threat Research",
+      "url": "https://unit42.paloaltonetworks.com/feed/atom/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "cyber-security-03-core-technical-research-github-security-blog",
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "GitHub Security Blog",
+      "url": "https://github.blog/security/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research/advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -735,7 +1015,23 @@
       "signal_type": "advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-aws-security-bulletins",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "AWS Security Bulletins",
+      "url": "https://aws.amazon.com/security/security-bulletins/rss/feed/",
+      "notification": "optional",
+      "notification_display": "Optional on",
+      "signal_type": "advisory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -749,7 +1045,8 @@
       "signal_type": "research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -763,7 +1060,8 @@
       "signal_type": "advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -777,7 +1075,23 @@
       "signal_type": "advisory",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-schneier-on-security",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Schneier on Security",
+      "url": "https://www.schneier.com/feed/atom/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "research/context",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -791,7 +1105,8 @@
       "signal_type": "research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -805,7 +1120,8 @@
       "signal_type": "research",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -819,7 +1135,8 @@
       "signal_type": "research/guidance",
       "profiles": {
         "master": true,
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     }
   ]

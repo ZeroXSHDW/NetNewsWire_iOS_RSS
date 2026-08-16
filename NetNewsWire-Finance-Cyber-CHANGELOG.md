@@ -1,6 +1,205 @@
 # NetNewsWire Finance + Cyber Changelog
 
-Checked: 15 August 2026 (Europe/Dublin)
+Checked: 16 August 2026 (Europe/Dublin)
+
+## Current final state
+
+- **62 master feeds / 50 iPhone Air feeds / 39 iPhone-lite feeds**; 34 Finance and 28 Cyber Security sources in the master set.
+- Latest live audit on **16 August 2026**: **62/62** master, **50/50** iPhone Air and **39/39** iPhone-lite passed, with zero failed feeds, zero noisy feeds, zero metadata mismatches, zero fuzzy duplicate-story clusters and no phone-profile feed over 1 MB.
+- The iPhone Air profile is the recommended daily setup: 2.70 MB of full feed bodies, 1.13 MB of measured wire bytes, two advisory body-size review entries, no slow-fetch observations in the final run and zero device-budget failures. It inherits the Lite core and adds compact market, Ireland/EU/global data, UK conduct and supply-chain/threat-intelligence coverage.
+- The latest audit has zero cross-run drift warnings; the earlier post-addition `feed-added` notice for the FCA URL was non-critical and is retained only in the historical report record.
+- The recent high-value additions in the completed passes are FCA Scam Warnings, EBA, ESRB, GitHub Security Blog and AMLA; all are in iPhone-lite with notifications off.
+- Apple Intelligence remains an explicit Shortcut layer using selected Share Sheet items or prepared JSON/plain-text digest handoffs; NetNewsWire itself is not treated as a bulk unread exporter.
+
+## Today’s import-readiness verification — 16 August 2026
+
+- Refreshed every manifest validation date to **2026-08-16** after the live master, Air and Lite audits; regenerated all OPML, source-table and notification artifacts.
+- Confirmed OPML 2.0 XML validity and profile sizes of **62 / 50 / 39** feeds with unique HTTPS feed URLs and matching manifest/source-table order.
+- Confirmed the import path is additive: import exactly one profile into the intended NetNewsWire account, then apply the four urgent notification settings manually.
+- Confirmed the direct Apple Intelligence path: NetNewsWire **Today/All Unread → Share Sheet → `Daily Finance + Cyber Digest` Shortcut → supplied input → `Use Model` → dated Apple Note**. A prepared `shortcut-digest.txt` remains the preferred bulk handoff.
+- Replaced the unstable SANS full-text endpoint with SANS’s official title-only RSS endpoint (`https://isc.sans.edu/rssfeed.xml`), which returned valid current RSS during the final audit; this keeps article links and removes the HTML masquerading as XML failure.
+
+## This maintenance pass — Air-sized digest handoff
+
+### Added
+
+- Profile-specific digest budgets now live beside the device budgets: Air allows 30 items, 6,000 characters per item and 90,000 total text characters; Lite allows 24 items, 5,000 per item and 75,000 total.
+- `prepare-rss-digest-input.py --profile iphone-air` filters recognized exported articles to Air membership, records profile skips and preserves the selected budget in package telemetry.
+- `--shortcut-output` writes a compact plain-text, link-preserving handoff for an iPhone Shortcut or clipboard, while the existing JSON package remains available.
+
+### Operating effect
+
+- The recommended Air workflow now has a defined feed budget and a defined Apple Intelligence input budget, reducing oversized handoffs without changing the four-feed interrupting notification policy.
+
+## This maintenance pass — iPhone Air profile and enforceable device budgets
+
+### Added
+
+- **iPhone Air profile** — a 50-feed daily layer inherited from the 39-feed Lite core, adding Bloomberg Markets, ECB/Irish/EU/global data, FCA News, CERT-EU Threat Intelligence, CrowdStrike research and OpenSSF supply-chain coverage.
+- Explicit profile inheritance in `bundle_config.py`, so the Air profile does not duplicate 39 feed flags in the manifest and digest enrichment still reports Air membership correctly.
+- Device-budget validation for profiles that opt in: maximum feed count, total and single-feed full-body payload, mobile-review count and interrupting notification count. Air is capped at 50 feeds, 4 MB total, 600 KB per feed, six review feeds and four interrupting feeds.
+- `make validate-air`, scheduled CI validation and committed Air OPML, source table, notification matrix and live reports.
+
+### Selection effect
+
+- Master remains **62** feeds; the recommended iPhone Air profile is **50** feeds; Lite remains **39** feeds for constrained connections. The largest specialist payloads remain Master-only.
+
+### Verification
+
+- Air: **50/50** HTTP/XML/integrity pass, 0 noisy feeds, 0 metadata mismatches, 0 stale-review failures, 0 budget failures, 2.70 MB full-body payload, 1.13 MB measured wire bytes and 0 feeds over 1 MB.
+- Lite: **39/39** pass and remains within the same 4 MB/600 KB device limits.
+- Master: **62/62** pass; its larger 6.07 MB full-body payload is intentionally not the default phone profile.
+
+## This maintenance pass — manifest contract, report portability and state safety
+
+### Added
+
+- Centralized manifest structure, profile, URL, notification, policy, threshold and date validation in `bundle_config.py`; generator, lint, live reporting and digest preparation now share the same contract.
+- Refactored the validation report generator behind an argparse-backed `main()` entry point with import-safe behavior, controlled CLI failures and repository-relative report paths.
+- Added atomic text writes and advisory lock metadata for digest state, validation history and generated reports. The zsh validator now detects active versus stale cache locks and protects cleanup from removing another run’s lock.
+- Replaced hard-coded feed-count assertions with manifest-derived profile counts and added deterministic tests for malformed configuration, report portability, invalid digest budgets, invalid dates and corrupt state.
+- Added Python compilation to `make check` and a Python 3.11/3.12 deterministic CI matrix.
+
+### Selection effect
+
+- No feeds were added or removed. Coverage remains 62 master feeds and 39 iPhone-lite feeds; this pass improves reliability and maintainability without increasing feed volume.
+
+### Verification
+
+- `manifest-lint` passes, deterministic tests pass, Python compilation passes and zsh syntax validation passes. Live validation remains the network-dependent final check after generated reports are refreshed.
+
+## This research pass — FCA Warning List coverage
+
+### Added
+
+- **FCA — Scam Warnings** — `https://www.fca.org.uk/news/warnings/rss.xml`
+  - Adds the FCA’s dedicated Warning List stream for unauthorised firms, clone firms and investment-scam warnings; it is distinct from the existing general FCA news feed.
+  - Live candidate check: HTTP 200, RSS/XML, 20 dated items through 14 August 2026, 60.1 KB body, 5.4 KB wire response, 0.12 s fetch and zero exact title/link overlap with the existing FCA stream.
+  - Included in iPhone-lite with notifications off; the feed is high-signal but too frequent for interruption-based alerts.
+
+### Selection effect
+
+- Master: **62** feeds; iPhone-lite: **39** feeds. The addition fills a concrete UK financial-fraud warning gap without adding a duplicate general-news feed.
+
+## This research pass — EU banking supervision and systemic-risk coverage
+
+### Added
+
+- **European Banking Authority — News** — `https://www.eba.europa.eu/news-press/news/rss.xml`
+  - Adds official EU banking-supervision coverage across prudential regulation, AML, DORA/ICT risk and financial-sector resilience.
+  - Live candidate check: HTTP 200, RSS/XML, 10 dated items from 17 July through 6 August 2026, 11.4 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off.
+- **European Systemic Risk Board — Press** — `https://www.esrb.europa.eu/rss/press.xml`
+  - Adds official EU macroprudential coverage across systemic risk, financial stability and cyber-resilience context.
+  - Live candidate check: HTTP 200, XML, 15 dated items from 20 October 2025 through 7 July 2026, 6.1 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off; event-driven stale review is permitted by the manifest.
+
+### Selection effect
+
+- Master: **60** feeds; iPhone-lite: **37** feeds. Both additions are compact, current, non-duplicative and default notification-off.
+
+## This research pass — EU AML authority coverage
+
+### Added
+
+- **AMLA — News & Press** — `https://www.amla.europa.eu/node/19/rss_en`
+  - Adds the official EU Anti-Money Laundering Authority stream for AML/CFT supervision, FIU cooperation, reporting standards and financial-crime policy.
+  - Live candidate check: HTTP 200, RSS/XML, 30 dated items through 6 August 2026, 40.5 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off; the feed is compact and directly addresses the post-2026 EU AML authority gap.
+
+### Selection effect
+
+- Master: **61** feeds; iPhone-lite: **38** feeds. AMLA is core-phone coverage; all notifications remain off so the daily digest carries the context.
+
+## This research pass — GitHub software-supply-chain coverage
+
+### Added
+
+- **GitHub Security Blog** — `https://github.blog/security/feed/`
+  - Adds official GitHub coverage of open-source supply-chain attacks, CI/CD, Dependabot and developer-platform security.
+  - Live candidate check: HTTP 200, RSS/XML, 10 dated items through 13 August 2026, 179.1 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off; it remains below the 256 KB advisory mobile-review threshold.
+
+### Rejected or retained as web/data-only
+
+- Center for Internet Security advisory RSS is valid but broad and archive-heavy (50 items in the tested response); CISA, CERT-EU, NIST and CERT/CC already provide stronger official advisory coverage for this bundle.
+- GitHub Security Lab’s direct feed is currently empty, so it was not substituted for the maintained GitHub Security Blog feed.
+
+## This research pass — threat research and cloud-bulletin coverage
+
+### Added
+
+- **Unit 42 — Threat Research** — `https://unit42.paloaltonetworks.com/feed/atom/`
+  - Adds current Palo Alto Networks threat research covering malware, vulnerabilities, cloud, identity and incident analysis.
+  - Live candidate check: HTTP 200, Atom/XML, 15 dated items through 11 August 2026, 24.2 KB payload, 1.70 s fetch, no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off.
+- **AWS Security Bulletins** — `https://aws.amazon.com/security/security-bulletins/rss/feed/`
+  - Adds official AWS service and cloud-component vulnerability bulletins as a distinct alert source.
+  - Live candidate check: HTTP 200, RSS/XML, 100 dated items through 13 August 2026, 166.2 KB payload, no exact or fuzzy title/link overlap in the comparison window.
+  - Master-only because the archive is useful for deeper research but unnecessarily broad for the default phone profile; optional notification for AWS-dependent work.
+- **OFSI — Financial Sanctions Blog** — `https://ofsi.blog.gov.uk/feed/`
+  - Adds official UK sanctions-policy, licensing and financial-crime context beside HM Treasury and FCA coverage.
+  - Live candidate check: HTTP 200, Atom/XML, 10 dated items through 23 June 2026, 99.8 KB payload, no exact or fuzzy title/link overlap in the comparison window.
+  - Included in iPhone-lite, notification-off; designation changes should be followed through the official UK sanctions-list/e-alert channels.
+
+### Rejected or retained as web/data-only
+
+- AWS Security Blog is current and valid, but its broader product/how-to/compliance stream adds less marginal value than the focused bulletin feed.
+- Google Security Blog is structurally valid but its current RSS response stops at 23 April 2026; it was not retained as a current phone source.
+- Cloudflare Security, Rapid7 and GitHub Security Lab tag feeds were valid but broader or less current than the retained research set.
+- FINRA’s official RSS endpoints remain HTTP-only; CFPB Newsroom RSS is current but returns HTTP 403 to the validator-compatible request. Neither was imported under the HTTPS/reproducibility policy.
+
+### Selection effect
+
+- Master: **59** feeds; iPhone-lite: **36** feeds. Unit 42, OFSI, EBA and ESRB are the new default-phone sources; AWS Security Bulletins and Schneier remain master-only.
+- The new feeds are intentionally notification-off/optional. They feed the daily digest rather than increasing interruption volume.
+
+### Final live validation result
+
+- Master: **61/61** feeds passed, **0** failed, **0** noisy and **0** metadata mismatches; 1,598 dated items, 5.73 MB total bodies, 1.71 MB wire bytes, nine advisory mobile/slow-fetch review entries, one large feed and a 6.77-second slowest fetch.
+- iPhone-lite: **38/38** feeds passed, **0** failed, **0** noisy and **0** metadata mismatches; 963 dated items, 2.24 MB total bodies, 906.1 KB wire bytes, three advisory mobile/slow-fetch review entries, no large feeds and a 2.68-second slowest fetch.
+- Manifest, OPML and source-table URL order match exactly; Unit 42, AWS Security Bulletins, OFSI, EBA, ESRB, GitHub Security Blog and AMLA all passed HTTPS, XML, title, date, link and freshness checks. The two non-critical drift warnings in each profile are Krebs’ MIME-label change (still valid XML) and AMLA’s feed-added notice.
+
+## This research pass — US enforcement and cyber-policy coverage
+
+### Added
+
+- **CFTC — Enforcement** — `https://www.cftc.gov/RSS/RSSENF/rssenf.xml`
+  - Adds distinct fraud, manipulation, AML, supervision and enforcement releases beside the existing general CFTC stream.
+  - Live check: HTTP 200, RSS/XML, 10 dated items, 4.5 KB body, 1.2 KB wire response, 0.18 s fetch, no duplicate links or titles in the current general CFTC window.
+  - Optional notification; keep off by default and summarize with finance/regulatory context.
+- **CyberScoop** — `https://cyberscoop.com/feed/`
+  - Adds current US cyber-policy, government, national-security and incident reporting not present as a dedicated source in the existing bundle.
+  - Live check: HTTP 200, RSS/XML, 10 dated items, 67.7 KB body, 22.5 KB wire response, 0.15 s fetch, no duplicate links or titles in the comparison window.
+  - Included in iPhone-lite, notification-off.
+- **Schneier on Security** — `https://www.schneier.com/feed/atom/`
+  - Adds independent privacy, cryptography and security analysis as optional long-form context.
+  - Live check: HTTP 200, Atom/XML, 10 dated items, 51.3 KB body, 14.1 KB wire response, 0.80 s fetch, no duplicate links or titles in the comparison window.
+  - Master-only, notification-off because the feed also contains occasional general technology and speaking items.
+
+### Rejected or retained as web/data-only
+
+- **BLS — Latest Numbers** passed a browser-like request but returned HTTP 403 to the validator-compatible NetNewsWire fetch, so it was not imported.
+- **MSRC Security Update Guide** was valid but returned about 2.54 MB with 5,014 items; it is too broad and expensive for an iPhone RSS bundle.
+- SEC Trading Suspensions, Litigation Releases and Administrative Proceedings RSS endpoints returned HTTP 403 to the live validator; the existing SEC Press Releases feed remains the retained SEC stream.
+
+### Validation result
+
+- Master: **54/54** feeds passed, **0** failed, **0** noisy, **0** metadata mismatches; **1,408** dated items; 5.48 MB total body payload, 1.42 MB wire bytes, 1.42 s slowest fetch.
+- iPhone-lite: **32/32** feeds passed, **0** failed, **0** noisy; 1.99 MB total body payload, 0.72 MB wire bytes, 0.93 s slowest fetch.
+- The OPML, source tables and manifest URL order match exactly.
+
+## This maintenance pass — safe digest state and hardened validation
+
+### Added
+
+- Digest state no longer uses its last-run timestamp as an implicit publication cursor, so partial exports cannot permanently skip unprocessed articles.
+- Digest packages now have a schema version, HTML-safe text extraction, bounded seen-state retention, explicit date-quality and ambiguous-source telemetry, and publication-window-aware duplicate grouping.
+- Validation thresholds, response-size limits and item-link exceptions are sourced from the manifest; the structured-alert policy is carried into generated OPML metadata.
+- Profile labels, notes, artifact paths and inclusion rules now live in the manifest; generation, linting, notification output and digest enrichment consume that profile definition instead of maintaining a second hard-coded profile list.
+- XML validation rejects DTD/entity-bearing or oversized local documents, curl follows HTTPS-only redirects with bounded retries, and validation runs serialize access to shared cache/history state.
+- Baseline recording now accepts only a complete current report, preventing a failed report generation from reusing an older JSON report.
+- CI now runs deterministic checks on pushes and pull requests, uses a pinned Python major/minor version, enforces timeouts/concurrency and checks zsh syntax.
 
 ## This maintenance pass — manifest linting and digest story grouping
 

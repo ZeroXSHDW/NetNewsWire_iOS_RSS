@@ -6,7 +6,7 @@
   <body>
     <outline text="Finance" title="Finance">
       <outline text="01 — Core — Market &amp; Trading" title="01 — Core — Market &amp; Trading">
-        <outline type="rss" text="Nasdaq Trader — Trade Halts" title="Nasdaq Trader — Trade Halts" xmlUrl="https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts" htmlUrl="https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltRSS" />
+        <outline type="rss" text="Nasdaq Trader — Trade Halts" title="Nasdaq Trader — Trade Halts" xmlUrl="https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts" htmlUrl="https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltRSS" itemLinkPolicy="structured-alert" />
         <outline type="rss" text="Nasdaq Trader — Equity Trader Alerts" title="Nasdaq Trader — Equity Trader Alerts" xmlUrl="https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&amp;categorylist=2" htmlUrl="https://www.nasdaqtrader.com/Trader.aspx?id=NewsRSS" eventDriven="true" />
         <outline type="rss" text="BBC — Business" title="BBC — Business" xmlUrl="https://feeds.bbci.co.uk/news/business/rss.xml" htmlUrl="https://www.bbc.com/news/business" />
         <outline type="rss" text="Bloomberg — Markets" title="Bloomberg — Markets" xmlUrl="https://www.bloomberg.com/feeds/markets/news.rss" htmlUrl="https://www.bloomberg.com/markets" />
@@ -18,11 +18,15 @@
       <outline text="02 — Core — Official &amp; Macro" title="02 — Core — Official &amp; Macro">
         <outline type="rss" text="Central Bank of Ireland — News" title="Central Bank of Ireland — News" xmlUrl="https://www.centralbank.ie/feeds/news-media-feed" htmlUrl="https://www.centralbank.ie/news-media/press-releases" eventDriven="true" />
         <outline type="rss" text="European Central Bank — Press" title="European Central Bank — Press" xmlUrl="https://www.ecb.europa.eu/rss/press.xml" htmlUrl="https://www.ecb.europa.eu/press/html/index.en.html" eventDriven="true" />
+        <outline type="rss" text="European Banking Authority — News" title="European Banking Authority — News" xmlUrl="https://www.eba.europa.eu/news-press/news/rss.xml" htmlUrl="https://www.eba.europa.eu/news-press" eventDriven="true" />
+        <outline type="rss" text="European Systemic Risk Board — Press" title="European Systemic Risk Board — Press" xmlUrl="https://www.esrb.europa.eu/rss/press.xml" htmlUrl="https://www.esrb.europa.eu/home/html/rss.en.html" eventDriven="true" />
+        <outline type="rss" text="AMLA — News &amp; Press" title="AMLA — News &amp; Press" xmlUrl="https://www.amla.europa.eu/node/19/rss_en" htmlUrl="https://www.amla.europa.eu/news-media_en" eventDriven="true" />
         <outline type="rss" text="Bank of England — News" title="Bank of England — News" xmlUrl="https://www.bankofengland.co.uk/rss/news" htmlUrl="https://www.bankofengland.co.uk/news/latest-and-upcoming" eventDriven="true" />
         <outline type="rss" text="HM Treasury — News &amp; Communications" title="HM Treasury — News &amp; Communications" xmlUrl="https://www.gov.uk/search/news-and-communications.atom?organisations%5B%5D=hm-treasury" htmlUrl="https://www.gov.uk/search/news-and-communications?organisations%5B%5D=hm-treasury&amp;parent=hm-treasury" eventDriven="true" />
         <outline type="rss" text="Federal Reserve — Monetary Policy" title="Federal Reserve — Monetary Policy" xmlUrl="https://www.federalreserve.gov/feeds/press_monetary.xml" htmlUrl="https://www.federalreserve.gov/monetarypolicy.htm" eventDriven="true" />
         <outline type="rss" text="SEC — Press Releases" title="SEC — Press Releases" xmlUrl="https://www.sec.gov/news/pressreleases.rss" htmlUrl="https://www.sec.gov/news/pressreleases" eventDriven="true" />
         <outline type="rss" text="CFTC — General Press Releases" title="CFTC — General Press Releases" xmlUrl="https://www.cftc.gov/RSS/RSSGP/rssgp.xml" htmlUrl="https://www.cftc.gov/PressRoom/PressReleases" eventDriven="true" />
+        <outline type="rss" text="CFTC — Enforcement" title="CFTC — Enforcement" xmlUrl="https://www.cftc.gov/RSS/RSSENF/rssenf.xml" htmlUrl="https://www.cftc.gov/PressRoom/PressReleases" eventDriven="true" />
         <outline type="rss" text="ECB — Market Operations" title="ECB — Market Operations" xmlUrl="https://www.ecb.europa.eu/rss/operations.html" htmlUrl="https://www.ecb.europa.eu/mopo/implement/omo/html/index.en.html" eventDriven="true" />
         <outline type="rss" text="Federal Reserve — Speeches" title="Federal Reserve — Speeches" xmlUrl="https://www.federalreserve.gov/feeds/speeches.xml" htmlUrl="https://www.federalreserve.gov/newsevents/speeches.htm" eventDriven="true" />
       </outline>
@@ -41,7 +45,9 @@
         <outline type="rss" text="Bank of England — Publications" title="Bank of England — Publications" xmlUrl="https://www.bankofengland.co.uk/rss/publications" htmlUrl="https://www.bankofengland.co.uk/rss" eventDriven="true" />
       </outline>
       <outline text="05 — Optional — UK Regulation &amp; Warnings" title="05 — Optional — UK Regulation &amp; Warnings">
-        <outline type="rss" text="FCA — News &amp; Warnings" title="FCA — News &amp; Warnings" xmlUrl="https://www.fca.org.uk/news/rss.xml" htmlUrl="https://www.fca.org.uk/what-we-publish" eventDriven="true" />
+        <outline type="rss" text="FCA — News" title="FCA — News" xmlUrl="https://www.fca.org.uk/news/rss.xml" htmlUrl="https://www.fca.org.uk/what-we-publish" eventDriven="true" />
+        <outline type="rss" text="FCA — Scam Warnings" title="FCA — Scam Warnings" xmlUrl="https://www.fca.org.uk/news/warnings/rss.xml" htmlUrl="https://www.fca.org.uk/news/warnings" eventDriven="true" />
+        <outline type="rss" text="OFSI — Financial Sanctions Blog" title="OFSI — Financial Sanctions Blog" xmlUrl="https://ofsi.blog.gov.uk/feed/" htmlUrl="https://ofsi.blog.gov.uk/" eventDriven="true" />
       </outline>
     </outline>
     <outline text="Cyber Security" title="Cyber Security">
@@ -57,21 +63,26 @@
         <outline type="rss" text="BleepingComputer" title="BleepingComputer" xmlUrl="https://www.bleepingcomputer.com/feed/" htmlUrl="https://www.bleepingcomputer.com/" />
         <outline type="rss" text="Dark Reading" title="Dark Reading" xmlUrl="https://www.darkreading.com/rss.xml" htmlUrl="https://www.darkreading.com/" />
         <outline type="rss" text="Krebs on Security" title="Krebs on Security" xmlUrl="https://krebsonsecurity.com/feed/" htmlUrl="https://krebsonsecurity.com/" />
+        <outline type="rss" text="CyberScoop" title="CyberScoop" xmlUrl="https://cyberscoop.com/feed/" htmlUrl="https://cyberscoop.com/news/" />
         <outline type="rss" text="SecurityWeek" title="SecurityWeek" xmlUrl="https://www.securityweek.com/feed/" htmlUrl="https://www.securityweek.com/" />
         <outline type="rss" text="The Record — Cybersecurity News" title="The Record — Cybersecurity News" xmlUrl="https://therecord.media/feed" htmlUrl="https://therecord.media/" />
       </outline>
       <outline text="03 — Core — Technical Research" title="03 — Core — Technical Research">
-        <outline type="rss" text="SANS Internet Storm Center" title="SANS Internet Storm Center" xmlUrl="https://isc.sans.edu/rssfeed_full.xml" htmlUrl="https://isc.sans.edu/" />
+        <outline type="rss" text="SANS Internet Storm Center" title="SANS Internet Storm Center" xmlUrl="https://isc.sans.edu/rssfeed.xml" htmlUrl="https://isc.sans.edu/" />
         <outline type="rss" text="CERT/CC — Vulnerability Notes" title="CERT/CC — Vulnerability Notes" xmlUrl="https://www.kb.cert.org/vuls/atomfeed/" htmlUrl="https://www.kb.cert.org/vuls/" eventDriven="true" />
         <outline type="rss" text="NIST — Cybersecurity Insights" title="NIST — Cybersecurity Insights" xmlUrl="https://www.nist.gov/blogs/cybersecurity-insights/rss.xml" htmlUrl="https://www.nist.gov/blogs/cybersecurity-insights" eventDriven="true" />
         <outline type="rss" text="Google Threat Intelligence — Mandiant" title="Google Threat Intelligence — Mandiant" xmlUrl="https://feeds.feedburner.com/threatintelligence/pvexyqv7v0v" htmlUrl="https://cloud.google.com/blog/topics/threat-intelligence" />
         <outline type="rss" text="Microsoft Security Blog" title="Microsoft Security Blog" xmlUrl="https://www.microsoft.com/en-us/security/blog/feed/" htmlUrl="https://www.microsoft.com/en-us/security/blog/" />
+        <outline type="rss" text="Unit 42 — Threat Research" title="Unit 42 — Threat Research" xmlUrl="https://unit42.paloaltonetworks.com/feed/atom/" htmlUrl="https://unit42.paloaltonetworks.com/" />
+        <outline type="rss" text="GitHub Security Blog" title="GitHub Security Blog" xmlUrl="https://github.blog/security/feed/" htmlUrl="https://github.blog/security/" />
       </outline>
       <outline text="04 — Optional — Specialist Alerts &amp; Research" title="04 — Optional — Specialist Alerts &amp; Research">
         <outline type="rss" text="CISA — ICS Advisories" title="CISA — ICS Advisories" xmlUrl="https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml" htmlUrl="https://www.cisa.gov/news-events/cybersecurity-advisories/ics-advisories" eventDriven="true" />
+        <outline type="rss" text="AWS Security Bulletins" title="AWS Security Bulletins" xmlUrl="https://aws.amazon.com/security/security-bulletins/rss/feed/" htmlUrl="https://aws.amazon.com/security/security-bulletins/" eventDriven="true" />
         <outline type="rss" text="CERT-EU — Threat Intelligence" title="CERT-EU — Threat Intelligence" xmlUrl="https://cert.europa.eu/publications/threat-intelligence-rss" htmlUrl="https://cert.europa.eu/publications/threat-intelligence" eventDriven="true" />
         <outline type="rss" text="CERT-FR — Security Advisories (French)" title="CERT-FR — Security Advisories (French)" xmlUrl="https://www.cert.ssi.gouv.fr/feed/" htmlUrl="https://www.cert.ssi.gouv.fr/avis/" />
         <outline type="rss" text="Cisco PSIRT — Security Advisories" title="Cisco PSIRT — Security Advisories" xmlUrl="https://sec.cloudapps.cisco.com/security/center/psirtrss20/CiscoSecurityAdvisory.xml" htmlUrl="https://sec.cloudapps.cisco.com/security/center/publicationListing.x" eventDriven="true" />
+        <outline type="rss" text="Schneier on Security" title="Schneier on Security" xmlUrl="https://www.schneier.com/feed/atom/" htmlUrl="https://www.schneier.com/blog/" />
         <outline type="rss" text="Cisco Talos" title="Cisco Talos" xmlUrl="https://blog.talosintelligence.com/rss/" htmlUrl="https://blog.talosintelligence.com/" />
         <outline type="rss" text="CrowdStrike — Cybersecurity Research" title="CrowdStrike — Cybersecurity Research" xmlUrl="https://www.crowdstrike.com/en-us/blog/feed" htmlUrl="https://www.crowdstrike.com/en-us/blog/" />
         <outline type="rss" text="OpenSSF — Supply Chain Security" title="OpenSSF — Supply Chain Security" xmlUrl="https://openssf.org/feed/" htmlUrl="https://openssf.org/blog/" eventDriven="true" />

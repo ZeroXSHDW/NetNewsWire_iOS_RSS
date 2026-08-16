@@ -2,6 +2,10 @@
 
 Use this prompt when summarizing a selected batch of unread NetNewsWire items. The RSS feeds are a source of articles and official alerts; they are not live market-data or incident-response systems.
 
+## Input contract
+
+Pass the prepared `shortcut-digest.txt` text, or the prepared JSON package read as text, into the **Use Model** action as its input variable. Treat only the supplied material as evidence: do not browse for missing articles, infer facts from headlines or pretend that NetNewsWire supplied an item that is absent. If the supplied batch is empty, return `no material change` and say that no source items were provided.
+
 ## General rules
 
 - Group articles that describe the same event into one summary.
@@ -20,7 +24,7 @@ Use this prompt when summarizing a selected batch of unread NetNewsWire items. T
 
 ## Daily digest mode
 
-Use this mode once per day with the selected or unread NetNewsWire articles. The prompt does not schedule the digest; it defines a consistent daily output for Apple Intelligence.
+Use this mode once per day with selected NetNewsWire articles or a prepared external export. The prompt does not schedule the digest or create a bulk unread export; it defines a consistent daily output for Apple Intelligence.
 
 Begin with:
 

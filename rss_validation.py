@@ -23,9 +23,28 @@ TRACKING_QUERY_KEYS = {
     "gclid",
     "mc_cid",
     "mc_eid",
-    "ref",
-    "ref_",
 }
+
+MAX_SAFE_XML_BYTES = 32 * 1024 * 1024
+
+
+def safe_xml_root(path: str | Path) -> ET.Element:
+    """Parse a local feed while rejecting oversized or DTD-bearing XML.
+
+    HTML article bodies are commonly embedded in RSS CDATA and may contain
+    their own ``<!DOCTYPE>`` text.  Strip CDATA sections only for the
+    pre-parse declaration scan so those literals are not confused with an
+    XML document-level DTD; real declarations outside CDATA remain blocked.
+    """
+
+    raw = Path(path).read_bytes()
+    if len(raw) > MAX_SAFE_XML_BYTES:
+        raise ValueError(f"XML document exceeds safe parser limit: {path}")
+    declaration_scan = re.sub(rb"<!\[CDATA\[.*?\]\]>", b"", raw, flags=re.DOTALL)
+    lowered = declaration_scan.lower()
+    if b"<!doctype" in lowered or b"<!entity" in lowered:
+        raise ValueError(f"DTD/entity declarations are not allowed: {path}")
+    return ET.fromstring(raw)
 
 
 def local_name(tag: str) -> str:
@@ -195,10 +214,18 @@ def extract_feed(root: ET.Element) -> tuple[str, list[dict[str, object]]]:
     if not feed_title:
         feed_title = child_text(root, {"title"})
 
+    if root_name == "rss":
+        channel = next((child for child in list(root) if local_name(child.tag) == "channel"), None)
+        item_elements = [child for child in list(channel) if local_name(child.tag) == "item"] if channel is not None else []
+    elif root_name == "RDF":
+        item_elements = [child for child in list(root) if local_name(child.tag) == "item"]
+    elif root_name == "feed":
+        item_elements = [child for child in list(root) if local_name(child.tag) == "entry"]
+    else:
+        item_elements = [element for element in root.iter() if local_name(element.tag) in {"item", "entry"}]
+
     items: list[dict[str, object]] = []
-    for element in root.iter():
-        if local_name(element.tag) not in {"item", "entry"}:
-            continue
+    for element in item_elements:
         title = child_text(element, {"title"})
         link = child_link(element)
         date = parse_date(item_date_raw(element))
@@ -264,7 +291,7 @@ def source_table_entries(path: str | Path) -> list[dict[str, str]]:
 
 
 def opml_entries(path: str | Path) -> list[dict[str, str | bool]]:
-    root = ET.parse(path).getroot()
+    root = safe_xml_root(path)
     body = next((child for child in list(root) if local_name(child.tag) == "body"), None)
     if body is None:
         return []
@@ -285,6 +312,7 @@ def opml_entries(path: str | Path) -> list[dict[str, str | bool]]:
                         "url": url,
                         "html_url": (outline.attrib.get("htmlUrl") or "").strip(),
                         "event_driven": outline.attrib.get("eventDriven", "").lower() == "true",
+                        "item_link_policy": (outline.attrib.get("itemLinkPolicy") or "default").strip().lower(),
                     }
                 )
     return entries
@@ -463,7 +491,7 @@ def _cli() -> int:
         return 2
     operation, value = sys.argv[1:3]
     if operation == "latest-date":
-        root = ET.parse(value).getroot()
+        root = safe_xml_root(value)
         dates = [
             item["date"]
             for element in root.iter()
@@ -477,7 +505,7 @@ def _cli() -> int:
         return 1
     if operation == "inspect":
         started = time.perf_counter()
-        root = ET.parse(value).getroot()
+        root = safe_xml_root(value)
         _, items = extract_feed(root)
         dates = [item["date"] for item in items if item["date"] is not None]
         latest = max(dates).isoformat() if dates else ""

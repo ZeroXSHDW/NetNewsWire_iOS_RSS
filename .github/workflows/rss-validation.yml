@@ -1,18 +1,74 @@
 name: Validate RSS bundles
 
 on:
+  push:
+    paths:
+      - "**/*.py"
+      - "**/*.sh"
+      - "**/*.json"
+      - "**/*.opml"
+      - "Makefile"
+      - ".github/workflows/rss-validation.yml"
+  pull_request:
+    paths:
+      - "**/*.py"
+      - "**/*.sh"
+      - "**/*.json"
+      - "**/*.opml"
+      - "Makefile"
+      - ".github/workflows/rss-validation.yml"
   workflow_dispatch:
   schedule:
     - cron: "17 6 1 * *"
+
+concurrency:
+  group: rss-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  validate:
+  deterministic:
+    if: ${{ github.event_name != 'schedule' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install --yes zsh
+      - name: Run deterministic checks
+        run: make check
+      - name: Ensure generated artifacts are committed
+        run: |
+          git diff --exit-code -- \
+            AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
+            NetNewsWire-Finance-Cyber.opml \
+            NetNewsWire-Finance-Cyber-Source-Table.md \
+            NetNewsWire-Finance-Cyber-iPhone-Lite.opml \
+            NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
+            NetNewsWire-Finance-Cyber-iPhone-Air.opml \
+            NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
+            NetNewsWire-Notification-Profile.md \
+            NetNewsWire-Notification-Profile.json
+  validate:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: Install XML validator and zsh
         run: sudo apt-get update && sudo apt-get install --yes libxml2-utils zsh
       - name: Restore RSS cache and drift baseline
@@ -27,7 +83,7 @@ jobs:
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
-        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
+        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Air.opml NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
       - name: Lint manifest and generated artifacts
         run: make lint
       - name: Run deterministic tests
@@ -36,6 +92,8 @@ jobs:
         run: make validate
       - name: Validate iPhone-lite bundle
         run: make validate-lite
+      - name: Validate iPhone Air bundle
+        run: make validate-air
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -46,6 +104,8 @@ jobs:
             NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
             NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md
             NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json
+            NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md
+            NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json
       - name: Save RSS cache and drift baseline
         if: always()
         uses: actions/cache/save@v4

@@ -3,7 +3,7 @@
 Copy and use the prompt below whenever you want to search for new Finance or Cyber Security feeds to add to the current NetNewsWire bundle.
 
 ```text
-Goal: Find and add only high-signal RSS or Atom feeds that genuinely improve my existing NetNewsWire Finance and Cyber Security system on iPhone.
+Goal: Build and maintain the most useful practical Finance + Cyber Security RSS system for my iPhone, starting from the current NetNewsWire bundle. Search broadly and repeatedly until the search space is saturated, but promote only feeds that pass every quality gate.
 
 Act as a senior RSS curator, financial-news researcher and cyber-threat-intelligence analyst. Work from the current workspace and the live web. Inspect the existing files before searching:
 
@@ -23,11 +23,27 @@ User context:
 - Regions: Ireland first, then EU, UK and US.
 - Finance interests: market news, exchange and trading notices, official halts, market-opening context, macroeconomic policy, central banks, exchange rates, financial regulation and serious independent journalism.
 - Cyber interests: Ireland, EU, UK and US alerts; vulnerabilities; exploitation status; incident reporting; technical research; product advisories; supply-chain security; and defensive guidance.
-- Apple Intelligence will summarize the selected unread articles every day. RSS is not a live market-data, broker-execution or incident-response system.
+- Apple Intelligence will summarize article text supplied by a Shortcut or share-sheet workflow. NetNewsWire itself is the RSS reader; do not claim that it natively creates Apple Intelligence summaries or schedules them. RSS is not a live market-data, broker-execution or incident-response system.
 
 Core rule:
 
 Do not add a feed merely because it is authoritative, popular or easy to find. Add it only when it fills a documented coverage gap, adds information that is materially different from the current bundle, and passes every live feed-quality gate. A larger feed count is not an improvement.
+
+## Continuous research mode — do not stop early
+
+Run this as a multi-pass research loop, not a one-page recommendation:
+
+1. Maintain two separate outputs:
+   - **Candidate universe:** every plausible feed discovered, including rejected candidates with evidence and the exact reason for rejection.
+   - **Retained bundle:** only feeds that pass all hard gates and add material, non-duplicative value.
+2. Search the full region/topic matrix below in separate passes. Do not stop because the first search results look good.
+3. After each pass, compare new candidates with the OPML, source table, rejection log and prior search results; canonicalize URLs and remove duplicates before validation.
+4. Re-test promising candidates with a live fetch and compare their current item links/titles with retained feeds. Do not promote a feed based on a directory listing, a search snippet or a remembered URL.
+5. Continue until all region/topic cells have been searched and **three consecutive passes** produce no new candidate that both passes every hard gate and scores at least 4/5 for uniqueness or coverage-gap value. If a cell is web-only or has no public RSS/Atom endpoint, record that result and move on.
+6. If the retained master bundle becomes large, keep it broad only when the feeds remain high-signal. Maintain an iPhone Air profile as the default daily layer, an iPhone-lite profile for constrained connections, and the master profile for research. Never pad any profile to reach an arbitrary number; each device profile must stay within its declared payload and notification budget.
+7. At completion, report saturation evidence: passes completed, search cells covered, new candidates found, candidates rejected, feeds retained, remaining web-only gaps and the date when each candidate was last tested.
+
+The word “massive” means a large, evidence-backed candidate universe and comprehensive coverage—not an unbounded OPML full of duplicates, stale feeds, HTML pages or noisy aggregators. Optimize for signal, coverage and reliable daily summaries rather than raw feed count.
 
 ## 1. Establish the current baseline
 
@@ -188,6 +204,8 @@ The OPML must be easy to scan on an iPhone and must preserve a deterministic ord
 ## 8. Apple Intelligence daily summary mode
 
 When the user provides the day’s selected or unread NetNewsWire articles, summarize them as one daily digest for Europe/Dublin. Do not pretend that the prompt itself schedules an automatic digest; it defines the format to use each day.
+
+If the user asks for automation, design an iPhone Shortcuts workflow around data that is actually available: NetNewsWire’s share extension, shared article text/links, copied unread items, or a prepared JSON/text export. Specify the exact input and fallback when NetNewsWire exposes no direct Shortcut action. A suggested schedule may be morning, midday and end-of-day Europe/Dublin, but never claim that a schedule exists until the user creates and enables it. Apple Intelligence may summarize supplied text through Shortcuts; it must not be treated as an independent live-news crawler. Use live web research or another explicitly connected source for current facts, then pass the source material into the summary step.
 
 Start with:
 
