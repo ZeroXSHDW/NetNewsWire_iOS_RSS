@@ -6,7 +6,7 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 - **62 master feeds / 50 iPhone Air feeds / 39 iPhone-lite feeds**; 34 Finance and 28 Cyber Security sources in the master set.
 - Latest live audit on **16 August 2026**: **62/62** master, **50/50** iPhone Air and **39/39** iPhone-lite passed, with zero failed feeds, zero noisy feeds, zero metadata mismatches, zero fuzzy duplicate-story clusters and no phone-profile feed over 1 MB.
-- The iPhone Air profile is the recommended daily setup: 2.70 MB of full feed bodies, 1.13 MB of measured wire bytes, two advisory body-size review entries, no slow-fetch observations in the final run and zero device-budget failures. It inherits the Lite core and adds compact market, Ireland/EU/global data, UK conduct and supply-chain/threat-intelligence coverage.
+- The iPhone Air profile is the recommended daily setup: 2.57 MB of full feed bodies, 1.07 MB of measured wire bytes, four advisory body-size review entries, two fetches over two seconds and zero device-budget failures. It inherits the Lite core and adds compact market, Ireland/EU/global data, UK conduct and supply-chain/threat-intelligence coverage.
 - The latest audit has zero cross-run drift warnings; the earlier post-addition `feed-added` notice for the FCA URL was non-critical and is retained only in the historical report record.
 - The recent high-value additions in the completed passes are FCA Scam Warnings, EBA, ESRB, GitHub Security Blog and AMLA; all are in iPhone-lite with notifications off.
 - Apple Intelligence remains an explicit Shortcut layer using selected Share Sheet items or prepared JSON/plain-text digest handoffs; NetNewsWire itself is not treated as a bulk unread exporter.
@@ -57,9 +57,9 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 ### Verification
 
-- Air: **50/50** HTTP/XML/integrity pass, 0 noisy feeds, 0 metadata mismatches, 0 stale-review failures, 0 budget failures, 2.70 MB full-body payload, 1.13 MB measured wire bytes and 0 feeds over 1 MB.
+- Air: **50/50** HTTP/XML/integrity pass, 0 noisy feeds, 0 metadata mismatches, 0 stale-review failures, 0 budget failures, 2.57 MB full-body payload, 1.07 MB measured wire bytes and 0 feeds over 1 MB.
 - Lite: **39/39** pass and remains within the same 4 MB/600 KB device limits.
-- Master: **62/62** pass; its larger 6.07 MB full-body payload is intentionally not the default phone profile.
+- Master: **62/62** pass; its larger 5.65 MB full-body payload is intentionally not the default phone profile.
 
 ## This maintenance pass — manifest contract, report portability and state safety
 
