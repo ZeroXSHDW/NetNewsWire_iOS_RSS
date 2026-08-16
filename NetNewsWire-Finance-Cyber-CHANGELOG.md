@@ -17,6 +17,7 @@ Checked: 16 August 2026 (Europe/Dublin)
 - Added a manifest-backed profile coverage matrix and per-feed Air/Lite/notification table, plus a clearer AirDrop quick-start note.
 - Added a safe `make help` default, a sequential `make validate-all` command, Dependabot updates for GitHub Actions and a `CODEOWNERS` review owner.
 - Added a manifest-backed README check that validates local links, all 62 feed names and every profile count before a change can pass `make check`.
+- Added a tracked-file hygiene gate for credentials, machine-specific paths and local runtime state, and documented the `curl`/`xmllint` requirements for live audits.
 - Added an AirDrop handoff comparison so the ready-to-send iPhone Air OPML cannot drift from the generated root artifact.
 - Fixed validation-report temporary-output naming so each Markdown report links to its real committed JSON companion.
 - Updated CI to run the deterministic gate when Markdown documentation changes, and added public pull-request, feed-request, validation-failure and security-reporting workflows.

@@ -742,5 +742,37 @@ class ValidationHistoryTest(unittest.TestCase):
             self.assertFalse(history_path.exists())
 
 
+class RepositoryHygieneTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        module_path = ROOT / "check-repository-hygiene.py"
+        spec = importlib.util.spec_from_file_location("repository_hygiene", module_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot load hygiene checker: {module_path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        cls.hygiene = module
+
+    def test_hygiene_gate_passes_the_repository(self) -> None:
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "check-repository-hygiene.py"), "--root", str(ROOT)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
+        self.assertIn("hygiene-check passed", result.stdout)
+
+    def test_hygiene_patterns_detect_secret_and_machine_path(self) -> None:
+        fake_token = b"gh" + b"p_" + b"A" * 24
+        findings = self.hygiene.content_findings(
+            b"token=" + fake_token + b"\npath=/Users/" + b"alice/project\n"
+        )
+        labels = {label for label, _line in findings}
+        self.assertIn("GitHub token", labels)
+        self.assertIn("macOS absolute user path", labels)
+        self.assertIn("tracked runtime state", self.hygiene.path_findings(Path(".digest-state.json")))
+
+
 if __name__ == "__main__":
     unittest.main()

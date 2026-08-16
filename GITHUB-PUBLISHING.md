@@ -8,7 +8,7 @@ Prepare and publish a clean, reproducible GitHub repository for the NetNewsWire 
 
 The goal is complete when:
 
-- `make check` and `git diff --check` pass.
+- `make check`, `make hygiene` and `git diff --check` pass.
 - `make validate`, `make validate-lite` and `make validate-air` pass when live network validation is run.
 - The generated OPML, source tables, notification matrix and AirDrop handoff match the manifest.
 - README, contributing and publishing instructions explain the project without relying on local machine paths.
@@ -37,7 +37,7 @@ Objective: prepare and publish this NetNewsWire Finance + Cyber RSS bundle as [P
 Before writing anything:
 1. Inspect git status, the current branch, the full diff, the repository files, and the configured remotes.
 2. Treat feed-manifest.json as the source of truth. Regenerate all OPML, source-table, notification-matrix and AirDrop artifacts from it.
-3. Run make check, git diff --check, and the three live audits when network access is available.
+3. Run make check, make hygiene, git diff --check, and the three live audits when network access is available.
 4. Check for credentials, personal paths, caches, digest state, validation history, lock files and temporary files. Do not publish any of them.
 5. Confirm the GitHub owner/repository, visibility, base branch and license before creating or using a remote. For this project, the known target is `ZeroXSHDW/NetNewsWire_iOS_RSS`, public, with `main` as the default branch. Do not infer a license.
 
@@ -59,6 +59,7 @@ After the owner, repository name, visibility and license are confirmed, and afte
 ```sh
 git status -sb
 make check
+make hygiene
 git diff --check
 git remote -v
 git switch -c codex/github-release  # only when the release branch does not exist

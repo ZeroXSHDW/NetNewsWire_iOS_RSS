@@ -23,6 +23,8 @@ make check
 git diff --check
 ```
 
+`make check` includes the repository hygiene gate. It scans tracked files for runtime state, high-confidence credentials and machine-specific absolute paths before a change is published.
+
 When network access is available, run all live profile audits as well:
 
 ```sh
@@ -32,6 +34,8 @@ make validate-air
 ```
 
 Live reports are Dublin-time snapshots. Review failed feeds, metadata mismatches, stale-review deadlines, future-dated items, noisy feeds, drift warnings and device-budget failures before committing refreshed reports.
+
+Live validation also requires `curl` and `xmllint` from libxml2. The offline `make check` gate does not need network access or those live-fetch tools.
 
 ## Adding or changing a feed
 

@@ -26,7 +26,8 @@ The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Fou
 | **Apple Shortcuts** | Optional | Receives selected articles from NetNewsWire and passes them to the digest workflow. |
 | **Apple Intelligence** | Optional | Runs the Shortcuts **Use Model** step on supplied article text; it is not required for reading RSS. |
 | **Apple Notes** | Optional | Stores a dated copy of the reviewed digest. |
-| **Mac + Python 3.11/3.12, `make` and zsh** | Maintainer only | Regenerates bundles, prepares digest input and runs validation. |
+| **Mac + Python 3.11/3.12, `make` and zsh** | Maintainer only | Regenerates bundles, prepares digest input and runs offline checks. |
+| **`curl` + `xmllint` (libxml2)** | Live validation only | Fetches direct feed endpoints and verifies their XML. |
 
 You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
 
@@ -388,7 +389,8 @@ The generated `shortcut-digest.txt` is convenient for a Shortcut text action. Th
 
 ```bash
 make help           # show the project commands
-make check          # offline generation, lint, docs, tests and syntax checks
+make check          # offline generation, lint, docs, hygiene, tests and syntax checks
+make hygiene        # scan tracked files for secrets, local paths and runtime state
 make validate-all   # live validation for Master, iPhone Lite and iPhone Air
 ```
 
@@ -400,7 +402,8 @@ Validation checks include:
 - generated OPML and source-table consistency;
 - profile membership and full-body download budgets;
 - redirect handling, XML validity, cache reuse and regression history;
-- Python compilation, shell syntax and the repository test suite.
+- Python compilation, shell syntax and the repository test suite;
+- tracked-file hygiene, including high-confidence credential, local-path and runtime-state checks.
 
 Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `*-VALIDATION-REPORT.json` files; the feed cache is kept outside the repository by default. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the maintainer workflow.
 
@@ -413,6 +416,7 @@ Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `
 | [`validate-manifest.py`](validate-manifest.py) | Lints the manifest and generated artifacts |
 | [`prepare-rss-digest-input.py`](prepare-rss-digest-input.py) | Prepares bounded article input for the Shortcut |
 | [`validate-docs.py`](validate-docs.py) | Checks README links, feed names and profile counts against the manifest |
+| [`check-repository-hygiene.py`](check-repository-hygiene.py) | Prevents tracked runtime state, credentials and machine-specific paths |
 | [`AirDrop/`](AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |
 | [Validation reports](NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
 | [`NetNewsWire-Finance-Cyber-CHANGELOG.md`](NetNewsWire-Finance-Cyber-CHANGELOG.md) | Feed-selection, maintenance and validation history |

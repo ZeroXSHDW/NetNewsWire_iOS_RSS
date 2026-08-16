@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help generate package lint docs-check test compile syntax validate validate-lite validate-air validate-all check
+.PHONY: help generate package lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check
 
 PYTHON ?= python3
 
@@ -8,7 +8,8 @@ help:
 	@printf '%s\n' \
 		'NetNewsWire Finance + Cyber bundle' \
 		'  make package       Generate all profiles and refresh the AirDrop handoff' \
-		'  make check         Run offline generation, lint, docs checks and tests' \
+		'  make check         Run offline generation, lint, docs, hygiene and tests' \
+		'  make hygiene       Scan tracked files for secrets, local paths and runtime state' \
 		'  make validate-all  Run live validation for Master, iPhone Lite and Air' \
 		'  make validate      Run live validation for the Master profile' \
 		'  make validate-lite Run live validation for iPhone Lite' \
@@ -39,6 +40,9 @@ lint:
 docs-check:
 	$(PYTHON) validate-docs.py --root .
 
+hygiene:
+	$(PYTHON) check-repository-hygiene.py --root .
+
 validate:
 	./validate-rss-bundle.sh
 
@@ -61,4 +65,4 @@ validate-all:
 	$(MAKE) validate-lite
 	$(MAKE) validate-air
 
-check: package lint docs-check compile test syntax
+check: package lint docs-check hygiene compile test syntax
