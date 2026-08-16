@@ -229,4 +229,4 @@ RSS is not live market data: it does not provide live quotes, order books, broke
 
 ## Machine-readable report
 
-Full per-feed JSON: [report.json](report.json)
+Full per-feed JSON: [NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json](NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json)

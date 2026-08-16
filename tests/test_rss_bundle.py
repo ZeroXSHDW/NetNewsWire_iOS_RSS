@@ -282,6 +282,19 @@ class GeneratedArtifactsTest(unittest.TestCase):
             cwd=ROOT,
         )
 
+    def test_documentation_and_airdrop_handoff_are_current(self) -> None:
+        docs = subprocess.run(
+            [sys.executable, str(ROOT / "validate-docs.py"), "--root", str(ROOT)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(docs.returncode, 0, docs.stderr or docs.stdout)
+        manifest = load_manifest(ROOT / "feed-manifest.json")
+        air_file = ROOT / profile_settings(manifest)["iphone-air"]["opml_file"]
+        handoff_file = ROOT / "AirDrop" / air_file.name
+        self.assertEqual(air_file.read_bytes(), handoff_file.read_bytes())
+
     def test_report_generator_is_import_safe_and_writes_portable_paths(self) -> None:
         module_path = ROOT / "generate-rss-validation-report.py"
         spec = importlib.util.spec_from_file_location("validation_report", module_path)
@@ -361,6 +374,7 @@ class GeneratedArtifactsTest(unittest.TestCase):
             payload = json.loads(json_path.read_text(encoding="utf-8"))
             self.assertEqual(payload["bundle"], "NetNewsWire-Finance-Cyber.opml")
             self.assertEqual(payload["validator"], "validate-rss-bundle.sh")
+            self.assertIn(f"[{json_path.name}]({json_path.name})", markdown_path.read_text(encoding="utf-8"))
             self.assertNotIn("/Users/", json_path.read_text(encoding="utf-8"))
             self.assertNotIn("/Users/", markdown_path.read_text(encoding="utf-8"))
 

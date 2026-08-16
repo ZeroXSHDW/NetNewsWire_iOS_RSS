@@ -11,6 +11,14 @@ Checked: 16 August 2026 (Europe/Dublin)
 - The recent high-value additions in the completed passes are FCA Scam Warnings, EBA, ESRB, GitHub Security Blog and AMLA; all are in iPhone-lite with notifications off.
 - Apple Intelligence remains an explicit Shortcut layer using selected Share Sheet items or prepared JSON/plain-text digest handoffs; NetNewsWire itself is not treated as a bulk unread exporter.
 
+## This maintenance pass — public repository hardening
+
+- Added a manifest-backed README check that validates local links, all 62 feed names and every profile count before a change can pass `make check`.
+- Added an AirDrop handoff comparison so the ready-to-send iPhone Air OPML cannot drift from the generated root artifact.
+- Fixed validation-report temporary-output naming so each Markdown report links to its real committed JSON companion.
+- Updated CI to run the deterministic gate when Markdown documentation changes, and added public pull-request, feed-request, validation-failure and security-reporting workflows.
+- Corrected the GitHub publication guide to reflect the live public repository, existing `origin`, default branch, draft PR and remaining license decision.
+
 ## Today’s import-readiness verification — 16 August 2026
 
 - Refreshed every manifest validation date to **2026-08-16** after the live master, Air and Lite audits; regenerated all OPML, source-table and notification artifacts.

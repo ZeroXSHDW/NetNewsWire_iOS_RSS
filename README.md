@@ -239,12 +239,17 @@ Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `
 | [`generate-bundle.py`](generate-bundle.py) | Generates OPML, source tables and notification metadata |
 | [`validate-manifest.py`](validate-manifest.py) | Lints the manifest and generated artifacts |
 | [`prepare-rss-digest-input.py`](prepare-rss-digest-input.py) | Prepares bounded article input for the Shortcut |
+| [`validate-docs.py`](validate-docs.py) | Checks README links, feed names and profile counts against the manifest |
 | [`AirDrop/`](AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |
 | [Validation reports](NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
+| [`NetNewsWire-Finance-Cyber-CHANGELOG.md`](NetNewsWire-Finance-Cyber-CHANGELOG.md) | Feed-selection, maintenance and validation history |
 | [`.github/workflows/rss-validation.yml`](.github/workflows/rss-validation.yml) | Deterministic CI and scheduled live validation |
+| [`SECURITY.md`](SECURITY.md) | Security reporting and sensitive-data handling |
 
 ## Publishing and maintenance
 
 The repository is public at [github.com/ZeroXSHDW/NetNewsWire_iOS_RSS](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS). The publishing checklist is in [`GITHUB-PUBLISHING.md`](GITHUB-PUBLISHING.md); contribution and feed-change rules are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+No license file is included yet. Public visibility does not grant reuse rights; choose the intended license before calling this a finished public release.
 
 When changing a feed, edit [`feed-manifest.json`](feed-manifest.json), regenerate the bundle, run the checks, inspect the generated diff and commit the source plus derived artifacts together.

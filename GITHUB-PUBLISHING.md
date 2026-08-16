@@ -1,6 +1,6 @@
 # GitHub publication guide
 
-This repository is ready to be reviewed for GitHub publication. It contains the manifest, generated NetNewsWire OPML bundles, validation reports, digest-preparation tooling and an automated validation workflow.
+This repository is published publicly for review at [github.com/ZeroXSHDW/NetNewsWire_iOS_RSS](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS). It contains the manifest, generated NetNewsWire OPML bundles, validation reports, digest-preparation tooling and an automated validation workflow.
 
 ## Release goal
 
@@ -15,7 +15,15 @@ The goal is complete when:
 - The GitHub owner/repository, visibility and license have been explicitly chosen.
 - A confirmed `origin` remote is configured and the intended commit or draft PR is pushed deliberately.
 
-The current checkout has no configured Git remote. That is the only repository-connection step still outside this workspace; do not invent a GitHub URL.
+## Current publication status
+
+- **Repository:** `ZeroXSHDW/NetNewsWire_iOS_RSS`
+- **Visibility:** public
+- **Default branch:** `main`
+- **Release branch:** `codex/github-release`
+- **Open review:** [draft pull request #1](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/pull/1)
+- **Remote:** `origin` points to the public repository
+- **Remaining ownership decision:** no license has been selected yet
 
 ## Reusable publishing prompt
 
@@ -31,14 +39,14 @@ Before writing anything:
 2. Treat feed-manifest.json as the source of truth. Regenerate all OPML, source-table, notification-matrix and AirDrop artifacts from it.
 3. Run make check, git diff --check, and the three live audits when network access is available.
 4. Check for credentials, personal paths, caches, digest state, validation history, lock files and temporary files. Do not publish any of them.
-5. Confirm the GitHub owner/repository, visibility, base branch and license with me before creating or using a remote. Do not infer a license.
+5. Confirm the GitHub owner/repository, visibility, base branch and license before creating or using a remote. For this project, the known target is `ZeroXSHDW/NetNewsWire_iOS_RSS`, public, with `main` as the default branch. Do not infer a license.
 
 Publishing rules:
 - Preserve unrelated user changes; if the worktree is mixed or the intended scope is unclear, stop and ask.
 - Do not reset, delete, force-push, or overwrite user work.
 - Create a focused codex/ release branch if the current branch is the default branch and a branch is needed.
 - Commit only the reviewed project changes with a concise message.
-- Configure origin only after the repository target is confirmed.
+- Reuse `origin` when it already points to the confirmed repository; do not add a second remote or overwrite an existing remote silently.
 - Push with tracking and open a draft PR unless I explicitly ask for a direct release.
 
 Final response: report the files changed, validation results, branch, commit, remote, push result, PR URL, and any remaining decision such as the license.
@@ -46,20 +54,20 @@ Final response: report the files changed, validation results, branch, commit, re
 
 ## Safe publishing sequence
 
-After the owner, repository name, visibility and license are confirmed:
+After the owner, repository name, visibility and license are confirmed, and after checking whether `origin` and a release branch already exist:
 
 ```sh
 git status -sb
 make check
 git diff --check
-git remote add origin https://github.com/OWNER/REPOSITORY.git
-git switch -c codex/github-release
+git remote -v
+git switch -c codex/github-release  # only when the release branch does not exist
 git add .
 git commit -m "Prepare NetNewsWire RSS bundle for GitHub"
 git push -u origin codex/github-release
 ```
 
-Review the staged diff before committing. If the repository already has a remote or the intended branch is different, adapt the sequence rather than adding a second remote or pushing to the default branch by assumption. Open a draft pull request after the push when review is desired.
+Review the staged diff before committing. If the repository already has a remote, release branch or draft PR, update those deliberately rather than adding a second remote or pushing to the default branch by assumption. Open a draft pull request after the push when review is desired.
 
 ## License decision
 

@@ -47,4 +47,4 @@ Do not add HTML pages, placeholder URLs, private feeds, API-key URLs or duplicat
 
 Explain what changed, why the source or rule is appropriate, which generated artifacts changed, and which checks passed. Do not commit local caches, digest state, validation history, lock files, temporary files or credentials.
 
-The repository does not currently declare a license. Choose one with the project owner before public publication; do not infer or add a license as part of an unrelated feed change.
+The repository does not currently declare a license. Choose one with the project owner before describing the public project as reusable; do not infer or add a license as part of an unrelated feed change.

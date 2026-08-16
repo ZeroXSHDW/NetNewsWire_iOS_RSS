@@ -55,6 +55,15 @@ def compare_generated_artifacts(data: dict, root: Path, errors: list[str], gener
                 elif generated.read_bytes() != committed.read_bytes():
                     errors.append(f"generated artifact is stale: {committed.name}")
 
+        air_config = profile_settings(data).get("iphone-air")
+        if air_config:
+            root_air = root / air_config["opml_file"]
+            handoff_air = root / "AirDrop" / Path(air_config["opml_file"]).name
+            if not handoff_air.exists():
+                errors.append(f"missing AirDrop handoff artifact: {handoff_air}")
+            elif not root_air.exists() or handoff_air.read_bytes() != root_air.read_bytes():
+                errors.append(f"AirDrop handoff is stale: {handoff_air.name}")
+
         generated_matrix_md = temporary_root / "notifications.md"
         generated_matrix_json = temporary_root / "notifications.json"
         generator.write_notification_matrix(data, generated_matrix_md)

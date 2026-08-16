@@ -1,4 +1,4 @@
-.PHONY: generate package lint test compile syntax validate validate-lite validate-air check
+.PHONY: generate package lint docs-check test compile syntax validate validate-lite validate-air check
 
 PYTHON ?= python3
 
@@ -23,6 +23,9 @@ syntax:
 lint:
 	$(PYTHON) validate-manifest.py --manifest feed-manifest.json --root .
 
+docs-check:
+	$(PYTHON) validate-docs.py --root .
+
 validate:
 	./validate-rss-bundle.sh
 
@@ -40,4 +43,4 @@ validate-air:
 	REPORT_JSON_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json \
 	./validate-rss-bundle.sh NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
-check: package lint compile test syntax
+check: package lint docs-check compile test syntax

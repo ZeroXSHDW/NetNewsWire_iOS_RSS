@@ -309,8 +309,10 @@ done < "$opml_urls_file"
 report_status=0
 report_candidate_dir="$temp_dir/report"
 mkdir -p "$report_candidate_dir"
-report_candidate_markdown="$report_candidate_dir/report.md"
-report_candidate_json="$report_candidate_dir/report.json"
+# Use the final output basenames even while writing into the temporary
+# directory, so the Markdown report's machine-readable link survives the move.
+report_candidate_markdown="$report_candidate_dir/${report_markdown_file:t}"
+report_candidate_json="$report_candidate_dir/${report_json_file:t}"
 python3 "$report_generator" \
   "$bundle_file" \
   "$source_table_file" \
