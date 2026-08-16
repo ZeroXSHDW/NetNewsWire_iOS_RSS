@@ -13,6 +13,12 @@ from bundle_config import load_manifest, profile_includes_feed, profile_settings
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)\s]+)\)")
 EXTERNAL_SCHEMES = ("http://", "https://", "mailto:", "tel:")
+NOTIFICATION_LABELS = {
+    "on": "On",
+    "optional": "Optional",
+    "optional-french": "Optional · French",
+    "off": "Off · digest",
+}
 
 
 def relative_links(text: str) -> list[tuple[int, str]]:
@@ -78,12 +84,46 @@ def validate_readme(root: Path) -> list[str]:
         if marker not in readme:
             errors.append(f"README.md: missing manifest-backed section count: {marker}")
 
+    if "### Profile coverage matrix" not in readme:
+        errors.append("README.md: missing profile coverage matrix")
+    for section, folder in dict.fromkeys(
+        (feed["section"], feed["folder"]) for feed in feeds
+    ):
+        short_folder = folder.split(" — ")[-1]
+        display_section = "Cyber" if section == "Cyber Security" else section
+        counts = {
+            profile: sum(
+                1
+                for feed in feeds
+                if feed["section"] == section
+                and feed["folder"] == folder
+                and profile_includes_feed(manifest, profile, feed)
+            )
+            for profile in ("master", "iphone-air", "iphone-lite")
+        }
+        expected_row = (
+            f"| {display_section} — {short_folder} | {counts['master']} | "
+            f"{counts['iphone-air']} | {counts['iphone-lite']} |"
+        )
+        if expected_row not in readme:
+            errors.append(f"README.md: stale profile coverage row: {display_section} — {short_folder}")
+
     feed_marker = f"Show all {len(feeds)} feed names"
     if feed_marker not in readme:
         errors.append(f"README.md: missing feed-directory marker: {feed_marker}")
+    if "Show profile membership and notification policy for every feed" not in readme:
+        errors.append("README.md: missing profile membership matrix")
     for feed in feeds:
         if feed["title"] not in readme:
             errors.append(f"README.md: missing feed title: {feed['title']}")
+        air = "Yes" if profile_includes_feed(manifest, "iphone-air", feed) else "—"
+        lite = "Yes" if profile_includes_feed(manifest, "iphone-lite", feed) else "—"
+        expected_row = (
+            f"| {feed['title']} | {air} | {lite} | "
+            f"{NOTIFICATION_LABELS[feed['notification']]} |"
+        )
+        if expected_row not in readme:
+            errors.append(f"README.md: stale profile matrix row: {feed['title']}")
 
     for profile, config in profiles.items():
         selected_count = sum(

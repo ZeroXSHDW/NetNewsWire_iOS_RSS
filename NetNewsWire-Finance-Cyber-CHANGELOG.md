@@ -13,6 +13,8 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 ## This maintenance pass — public repository hardening
 
+- Reworked the public README around the required app, optional Apple workflow, install paths and exact Air/Lite/Master feed membership so the project is understandable before opening any files.
+- Added a manifest-backed profile coverage matrix and per-feed Air/Lite/notification table, plus a clearer AirDrop quick-start note.
 - Added a manifest-backed README check that validates local links, all 62 feed names and every profile count before a change can pass `make check`.
 - Added an AirDrop handoff comparison so the ready-to-send iPhone Air OPML cannot drift from the generated root artifact.
 - Fixed validation-report temporary-output naming so each Markdown report links to its real committed JSON companion.

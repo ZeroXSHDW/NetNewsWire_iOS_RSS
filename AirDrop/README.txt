@@ -1,21 +1,29 @@
-NETNEWSWIRE — IPHONE AIR SUBSCRIPTION LIST
+NETNEWSWIRE — FINANCE + CYBER — IPHONE AIR
 
-AirDrop this folder, or just the .opml file, to the iPhone.
+This is the ready-to-import daily profile for NetNewsWire on iPhone.
+
+Required app:
+  NetNewsWire for iOS
+
+Optional digest apps:
+  Apple Shortcuts + Apple Intelligence + Apple Notes
 
 File to open:
   NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
-This is the recommended daily profile:
-  - 50 feeds
-  - Finance and Cyber Security folders included
+Profile:
+  - 50 feeds: Finance and Cyber Security folders
+  - 4 official alert notifications recommended
+  - 4 MB total and 600 KB per-feed mobile refresh limits
   - validated successfully on 16 August 2026
-  - within the 4 MB total and 600 KB per-feed mobile refresh limits
 
 On iPhone:
   1. Open the .opml file in Files.
   2. Use Share and choose NetNewsWire, or choose Open in NetNewsWire.
   3. Import it once into the intended NetNewsWire account.
-  4. Enable notifications manually for the four official alert feeds only.
+  4. Refresh and confirm the Finance and Cyber Security folders.
+  5. Enable notifications manually for the four official alert feeds only.
 
-If an older copy of this bundle is already in NetNewsWire, remove or separate
-it first because OPML import adds subscriptions instead of replacing them.
+Important:
+  OPML import is additive. If an older copy is already in NetNewsWire,
+  remove or separate it first so subscriptions are not duplicated.

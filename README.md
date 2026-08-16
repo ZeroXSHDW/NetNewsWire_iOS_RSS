@@ -5,6 +5,8 @@
 A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone**. It combines Ireland, EU, UK and US finance sources with official cybersecurity alerts, incident reporting and technical research—and adds an optional Apple Intelligence digest layer for articles you deliberately provide.
 
 > **The short version:** NetNewsWire collects and organizes the feeds. The manifest defines what belongs in each profile. Apple Intelligence summarizes only the selected, prepared article text; it does not fetch news, trade, or make decisions for you.
+>
+> This repository is **not a standalone iOS app**. It is a ready-to-import OPML/feed bundle plus optional Shortcuts and Apple Intelligence instructions.
 
 ## At a glance
 
@@ -16,6 +18,28 @@ A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone**.
 
 The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Four official alert feeds are configured for interrupting notifications; the remaining sources are intended for normal reading, optional notifications or digest review.
 
+## What you need
+
+| App or tool | Needed? | What it does |
+| --- | --- | --- |
+| **NetNewsWire for iOS** | Required | Imports the OPML bundle, refreshes feeds, organizes folders, sends selected notifications and shares articles. |
+| **Apple Shortcuts** | Optional | Receives selected articles from NetNewsWire and passes them to the digest workflow. |
+| **Apple Intelligence** | Optional | Runs the Shortcuts **Use Model** step on supplied article text; it is not required for reading RSS. |
+| **Apple Notes** | Optional | Stores a dated copy of the reviewed digest. |
+| **Mac + Python 3.11/3.12, `make` and zsh** | Maintainer only | Regenerates bundles, prepares digest input and runs validation. |
+
+You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
+
+## Choose your path
+
+| If you want to… | Use this |
+| --- | --- |
+| Read the recommended daily mix | NetNewsWire + **iPhone Air** OPML |
+| Reduce refresh cost while travelling | NetNewsWire + **iPhone Lite** OPML |
+| Search or research every configured source | NetNewsWire + **Master** OPML |
+| Create a reviewed daily digest | NetNewsWire + Shortcuts + optional Apple Intelligence |
+| Maintain or publish the project | Mac toolchain + `feed-manifest.json` + GitHub Actions |
+
 ## What this project does
 
 - Keeps the feed inventory, folders, profile membership and notification policy in [`feed-manifest.json`](feed-manifest.json).
@@ -25,6 +49,18 @@ The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Fou
 - Validates feed URLs, metadata, profile budgets and generated artifacts in CI.
 
 The generated files are delivery artifacts. Edit the manifest first, then run `make generate` or `make package` to rebuild them.
+
+```mermaid
+flowchart LR
+    MANIFEST["feed-manifest.json\nsource of truth"] --> GENERATE["generate-bundle.py"]
+    GENERATE --> BUNDLES["Master / Air / Lite OPML"]
+    BUNDLES --> NNW["NetNewsWire for iOS\nread · refresh · notify"]
+    NNW --> SHARE["Share selected articles"]
+    SHARE --> SHORTCUT["Apple Shortcuts\noptional"]
+    SHORTCUT --> MODEL["Apple Intelligence\noptional Use Model"]
+    MODEL --> NOTES["Apple Notes\noptional reviewed digest"]
+    GENERATE --> CHECKS["make check + GitHub Actions"]
+```
 
 ## Feed coverage
 
@@ -46,6 +82,23 @@ The generated files are delivery artifacts. Edit the manifest first, then run `m
 | News & incident reporting | 6 | BleepingComputer, Dark Reading, Krebs, CyberScoop, SecurityWeek and The Record |
 | Technical research | 7 | SANS ISC, CERT/CC, NIST, Mandiant, Microsoft, Unit 42 and GitHub Security |
 | Specialist alerts & research | 9 | ICS, cloud, PSIRT, supply-chain, threat-intelligence and vendor research |
+
+### Profile coverage matrix
+
+Master includes every feed. Air and Lite are curated subsets of the same manifest:
+
+| Feed group | Master | iPhone Air | iPhone Lite |
+| --- | ---: | ---: | ---: |
+| Finance — Market & Trading | 8 | 6 | 5 |
+| Finance — Official & Macro | 13 | 13 | 13 |
+| Finance — Data, Ireland, EU & UK | 7 | 7 | 3 |
+| Finance — Global Data & Research | 3 | 2 | 0 |
+| Finance — UK Regulation & Warnings | 3 | 3 | 2 |
+| Cyber — Ireland, EU & Official Alerts | 6 | 6 | 6 |
+| Cyber — News & Incident Reporting | 6 | 4 | 4 |
+| Cyber — Technical Research | 7 | 6 | 6 |
+| Cyber — Specialist Alerts & Research | 9 | 3 | 0 |
+| **Total** | **62** | **50** | **39** |
 
 <details>
 <summary>Show all 62 feed names</summary>
@@ -144,6 +197,125 @@ The generated files are delivery artifacts. Edit the manifest first, then run `m
 - OpenSSF — Supply Chain Security
 
 </details>
+
+<details>
+<summary>Show profile membership and notification policy for every feed</summary>
+
+The **Master** profile contains every feed. `Yes` means the feed is included in the selected iPhone profile; `—` means it stays in Master only.
+
+#### Finance
+
+##### 01 — Core — Market & Trading
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| Nasdaq Trader — Trade Halts | Yes | Yes | On |
+| Nasdaq Trader — Equity Trader Alerts | Yes | Yes | Off · digest |
+| BBC — Business | Yes | Yes | Off · digest |
+| Bloomberg — Markets | Yes | — | Off · digest |
+| Financial Times — Markets | Yes | Yes | Off · digest |
+| MarketWatch — Top Stories | — | — | Off · digest |
+| RTÉ — Business | Yes | Yes | Off · digest |
+| The Wall Street Journal — Markets | — | — | Off · digest |
+
+##### 02 — Core — Official & Macro
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| Central Bank of Ireland — News | Yes | Yes | Optional |
+| European Central Bank — Press | Yes | Yes | Optional |
+| European Banking Authority — News | Yes | Yes | Off · digest |
+| European Systemic Risk Board — Press | Yes | Yes | Off · digest |
+| AMLA — News & Press | Yes | Yes | Off · digest |
+| Bank of England — News | Yes | Yes | Optional |
+| HM Treasury — News & Communications | Yes | Yes | Off · digest |
+| Federal Reserve — Monetary Policy | Yes | Yes | Optional |
+| SEC — Press Releases | Yes | Yes | Optional |
+| CFTC — General Press Releases | Yes | Yes | Off · digest |
+| CFTC — Enforcement | Yes | Yes | Optional |
+| ECB — Market Operations | Yes | Yes | Off · digest |
+| Federal Reserve — Speeches | Yes | Yes | Off · digest |
+
+##### 03 — Optional — Data, Ireland, EU & UK
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| ECB — USD Reference Rate | Yes | Yes | Off · digest |
+| ECB — GBP Reference Rate | Yes | Yes | Off · digest |
+| ECB — Statistical Releases | Yes | — | Off · digest |
+| Central Bank of Ireland — Markets Update | Yes | — | Off · digest |
+| Eurostat — Economy & Finance Releases | Yes | — | Off · digest |
+| European Commission — Sanctions Guidance | Yes | — | Off · digest |
+| UK ONS — Release Calendar | Yes | Yes | Off · digest |
+
+##### 04 — Optional — Global Data & Research
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| BIS — Statistical Releases | Yes | — | Off · digest |
+| BIS — Press Releases | — | — | Off · digest |
+| Bank of England — Publications | Yes | — | Off · digest |
+
+##### 05 — Optional — UK Regulation & Warnings
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| FCA — News | Yes | — | Off · digest |
+| FCA — Scam Warnings | Yes | Yes | Off · digest |
+| OFSI — Financial Sanctions Blog | Yes | Yes | Off · digest |
+
+#### Cyber Security
+
+##### 01 — Core — Ireland, EU & Official Alerts
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| Ireland NCSC — Alerts & Advisories | Yes | Yes | On |
+| CISA — All Advisories | Yes | Yes | On |
+| CERT-EU — Security Advisories | Yes | Yes | On |
+| CERT-FR — Security Alerts (French) | Yes | Yes | Optional · French |
+| NCSC UK — News | Yes | Yes | Optional |
+| NCSC UK — All Updates | Yes | Yes | Optional |
+
+##### 02 — Core — News & Incident Reporting
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| BleepingComputer | Yes | Yes | Off · digest |
+| Dark Reading | — | — | Off · digest |
+| Krebs on Security | Yes | Yes | Off · digest |
+| CyberScoop | Yes | Yes | Off · digest |
+| SecurityWeek | — | — | Off · digest |
+| The Record — Cybersecurity News | Yes | Yes | Off · digest |
+
+##### 03 — Core — Technical Research
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| SANS Internet Storm Center | Yes | Yes | Optional |
+| CERT/CC — Vulnerability Notes | Yes | Yes | Off · digest |
+| NIST — Cybersecurity Insights | Yes | Yes | Off · digest |
+| Google Threat Intelligence — Mandiant | — | — | Off · digest |
+| Microsoft Security Blog | Yes | Yes | Off · digest |
+| Unit 42 — Threat Research | Yes | Yes | Off · digest |
+| GitHub Security Blog | Yes | Yes | Off · digest |
+
+##### 04 — Optional — Specialist Alerts & Research
+
+| Feed | Air | Lite | Notifications |
+| --- | :---: | :---: | --- |
+| CISA — ICS Advisories | — | — | Optional |
+| AWS Security Bulletins | — | — | Optional |
+| CERT-EU — Threat Intelligence | Yes | — | Off · digest |
+| CERT-FR — Security Advisories (French) | — | — | Off · digest |
+| Cisco PSIRT — Security Advisories | — | — | Optional |
+| Schneier on Security | — | — | Off · digest |
+| Cisco Talos | — | — | Off · digest |
+| CrowdStrike — Cybersecurity Research | Yes | — | Off · digest |
+| OpenSSF — Supply Chain Security | Yes | — | Off · digest |
+
+</details>
+
 
 The complete URL, folder, notification and profile metadata for every feed is in the generated [Master source table](NetNewsWire-Finance-Cyber-Source-Table.md). The [notification profile](NetNewsWire-Notification-Profile.md) explains why a feed is interrupting, optional or quiet.
 
