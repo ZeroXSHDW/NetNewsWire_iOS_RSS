@@ -6,8 +6,8 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 - **62 master feeds / 50 iPhone Air feeds / 39 iPhone-lite feeds**; 34 Finance and 28 Cyber Security sources in the master set.
 - Latest live audit on **16 August 2026**: **62/62** master, **50/50** iPhone Air and **39/39** iPhone-lite passed, with zero failed feeds, zero noisy feeds, zero metadata mismatches, zero fuzzy duplicate-story clusters and no phone-profile feed over 1 MB.
-- The iPhone Air profile is the recommended daily setup: 2.57 MB of full feed bodies, 1.07 MB of measured wire bytes, four advisory body-size review entries, two fetches over two seconds and zero device-budget failures. It inherits the Lite core and adds compact market, Ireland/EU/global data, UK conduct and supply-chain/threat-intelligence coverage.
-- The latest audit has zero cross-run drift warnings; the earlier post-addition `feed-added` notice for the FCA URL was non-critical and is retained only in the historical report record.
+- The iPhone Air profile is the recommended daily setup: 2.57 MB of full feed bodies, 1.16 MB of measured wire bytes, five advisory body-size review entries, three fetches over two seconds and zero device-budget failures. It inherits the Lite core and adds compact market, Ireland/EU/global data, UK conduct and supply-chain/threat-intelligence coverage.
+- The latest audit has one non-critical cross-run drift warning: Krebs on Security changed its server content-type label; the feed still passed XML and freshness checks.
 - The recent high-value additions in the completed passes are FCA Scam Warnings, EBA, ESRB, GitHub Security Blog and AMLA; all are in iPhone-lite with notifications off.
 - Apple Intelligence remains an explicit Shortcut layer using selected Share Sheet items or prepared JSON/plain-text digest handoffs; NetNewsWire itself is not treated as a bulk unread exporter.
 
@@ -18,7 +18,9 @@ Checked: 16 August 2026 (Europe/Dublin)
 - Added a safe `make help` default, a sequential `make validate-all` command, Dependabot updates for GitHub Actions and a `CODEOWNERS` review owner.
 - Added a manifest-backed README check that validates local links, all 62 feed names and every profile count before a change can pass `make check`.
 - Added a tracked-file hygiene gate for credentials, machine-specific paths and local runtime state, and documented the `curl`/`xmllint` requirements for live audits.
-- Added an AirDrop handoff comparison so the ready-to-send iPhone Air OPML cannot drift from the generated root artifact.
+- Reorganized public materials into `docs/`, `artifacts/` and `examples/`, with the manifest and maintenance scripts remaining discoverable at the root.
+- Added README previews showing the imported NetNewsWire feed view and the selected-article → Shortcuts → Apple Intelligence → Notes result.
+- Added an AirDrop handoff comparison so the ready-to-send iPhone Air OPML cannot drift from the generated artifact.
 - Fixed validation-report temporary-output naming so each Markdown report links to its real committed JSON companion.
 - Updated CI to run the deterministic gate when Markdown documentation changes, and added public pull-request, feed-request, validation-failure and security-reporting workflows.
 - Corrected the GitHub publication guide to reflect the live public repository, existing `origin`, default branch, draft PR and remaining license decision.
@@ -58,7 +60,7 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 ### Verification
 
-- Air: **50/50** HTTP/XML/integrity pass, 0 noisy feeds, 0 metadata mismatches, 0 stale-review failures, 0 budget failures, 2.57 MB full-body payload, 1.07 MB measured wire bytes and 0 feeds over 1 MB.
+- Air: **50/50** HTTP/XML/integrity pass, 0 noisy feeds, 0 metadata mismatches, 0 stale-review failures, 0 budget failures, 2.57 MB full-body payload, 1.16 MB measured wire bytes, 5 advisory review feeds, 3 fetches over 2 seconds and 0 feeds over 1 MB.
 - Lite: **39/39** pass and remains within the same 4 MB/600 KB device limits.
 - Master: **62/62** pass; its larger 5.65 MB full-body payload is intentionally not the default phone profile.
 
@@ -232,7 +234,7 @@ Checked: 16 August 2026 (Europe/Dublin)
 ### Added
 
 - Cross-run validation baselines in `.validation-history.json`, with advisory detection for feed identity changes, redirects, item-count collapse/spikes, freshness regressions, payload growth, new legacy/missing item links and noise-threshold crossings.
-- Generated [notification/profile matrix](./NetNewsWire-Notification-Profile.md) plus machine-readable [JSON](./NetNewsWire-Notification-Profile.json), derived from the manifest and covering all 51 feeds across master and iPhone Lite.
+- Generated [notification/profile matrix](./artifacts/notifications/NetNewsWire-Notification-Profile.md) plus machine-readable [JSON](./artifacts/notifications/NetNewsWire-Notification-Profile.json), derived from the manifest and covering all 51 feeds across master and iPhone Lite.
 - Manifest-aware digest preparation: recognized exports now carry canonical source, folder, signal type, notification policy and profile membership.
 - Digest text limits and package telemetry: 6,000 characters per item and 180,000 characters per package by default, with truncation and budget-skip counts included in the output.
 - GitHub Actions cache persistence for the feed response cache and per-profile drift baseline between monthly/manual validation runs.
@@ -248,7 +250,7 @@ Checked: 16 August 2026 (Europe/Dublin)
 
 - **`feed-manifest.json`** as the single source of truth for all 51 feed URLs, folders, titles, metadata, notification recommendations, event-driven freshness reasons, stale-review deadlines and iPhone-lite membership.
 - **`generate-bundle.py`** and a `Makefile` to regenerate the 51-feed master OPML/source table and a 30-feed `NetNewsWire-Finance-Cyber-iPhone-Lite.opml` profile.
-- **`prepare-rss-digest-input.py`** and [NetNewsWire-Daily-Digest-Workflow.md](./NetNewsWire-Daily-Digest-Workflow.md) for stateful, link-canonicalized daily digest input preparation.
+- **`prepare-rss-digest-input.py`** and [NetNewsWire-Daily-Digest-Workflow.md](./docs/NetNewsWire-Daily-Digest-Workflow.md) for stateful, link-canonicalized daily digest input preparation.
 - **`record-validation-result.py`** with ignored `.validation-history.json` state; repeated failures are surfaced after three consecutive checks per profile.
 - Deterministic tests in `tests/`, a GitHub Actions monthly/manual validation workflow and repository hygiene files.
 
@@ -341,7 +343,7 @@ The master and iPhone-lite reports are generated by `make validate` and `make va
 
 ## This maintenance pass — reusable feed-discovery prompt
 
-- Added [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md), a copy-paste prompt for finding new Finance and Cyber Security candidates without feed-count inflation.
+- Added [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./docs/NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md), a copy-paste prompt for finding new Finance and Cyber Security candidates without feed-count inflation.
 - The prompt requires a baseline coverage-gap review, authoritative-source-first searching, direct HTTPS RSS/Atom validation, item-date and link integrity, duplicate/noise analysis, mobile payload/fetch telemetry, scoring by marginal value and a final OPML/source-table reconciliation.
 - It also requires exact rejection reasons when no candidate earns a place, separate notification decisions, and explicit limits around financial advice, live trading data, exploitation claims and incident-response instructions.
 - Extended it with deterministic NetNewsWire folder/feed ordering and a daily Apple Intelligence digest mode for duplicate-story clustering, urgency, Europe/Dublin timing, confirmed facts, speculation, risks and source links.
@@ -463,7 +465,7 @@ The bundle grew from 43 to 44 feeds after adding one focused EU financial-policy
 - **Euronext Dublin notices**: no verified direct Dublin RSS/Atom endpoint; the tested Euronext RSS endpoint was for Athens.
 - **ENISA historical RSS**: the legacy news and press-release URLs return HTTP 404.
 
-The detailed decisions are in [Coverage-Gap-Assessment.md](./Coverage-Gap-Assessment.md).
+The detailed decisions are in [Coverage-Gap-Assessment.md](./docs/Coverage-Gap-Assessment.md).
 
 ### Validation result
 
@@ -559,7 +561,7 @@ The bundle grew from 32 to 37 feeds after a coverage review. The additions targe
 - Split Finance optional feeds into `Data, Ireland, EU & UK`, `Global Data & Research` and `UK Regulation & Warnings` folders.
 - Added an explicit signal type to every source-table row: alert, advisory, market, context, policy, regulatory, daily-data, calendar/data, research or news.
 - Kept all new feeds notification-off; they are intended for Apple Intelligence batch summaries and release-timing context.
-- Added [Apple-Intelligence-RSS-Summary-Prompt.md](./Apple-Intelligence-RSS-Summary-Prompt.md) with deduplication, confidence, Dublin-time, source-classification and confirmed-versus-speculative guardrails.
+- Added [Apple-Intelligence-RSS-Summary-Prompt.md](./docs/Apple-Intelligence-RSS-Summary-Prompt.md) with deduplication, confidence, Dublin-time, source-classification and confirmed-versus-speculative guardrails.
 
 ### Validator improvements
 

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+  <title id="title">NetNewsWire iPhone Air feed view preview</title>
+  <desc id="desc">An interface illustration showing Finance and Cyber Security folders, urgent alerts and quiet feeds in a NetNewsWire-style reading view.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#10213d" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="blue" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="780" fill="#f4f7fb"/>
+  <text x="70" y="72" fill="#10213d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="31" font-weight="700">NetNewsWire — iPhone Air import preview</text>
+  <text x="70" y="105" fill="#5b6b82" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="17">The generated OPML creates a folder-first reading view for the 50-feed daily profile.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="76" y="140" width="425" height="586" rx="44" fill="#111827"/>
+    <rect x="94" y="158" width="389" height="550" rx="31" fill="#fbfdff"/>
+    <rect x="231" y="170" width="115" height="22" rx="11" fill="#111827"/>
+  </g>
+  <text x="120" y="205" fill="#12233d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" font-weight="700">9:41</text>
+  <circle cx="444" cy="201" r="5" fill="#12233d"/>
+  <circle cx="458" cy="201" r="5" fill="#12233d" opacity=".65"/>
+  <text x="120" y="251" fill="#10213d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="27" font-weight="700">Feeds</text>
+  <rect x="363" y="226" width="91" height="32" rx="16" fill="#e7f0ff"/>
+  <text x="378" y="247" fill="#1d4ed8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" font-weight="700">Air · 50</text>
+
+  <rect x="115" y="280" width="347" height="42" rx="12" fill="#eaf2ff"/>
+  <circle cx="137" cy="301" r="9" fill="#2563eb"/>
+  <text x="156" y="307" fill="#17335d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="16" font-weight="700">Finance</text>
+  <text x="426" y="307" fill="#2563eb" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700">31</text>
+
+  <text x="132" y="351" fill="#74839a" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" font-weight="700">01 — CORE — MARKET &amp; TRADING</text>
+  <text x="137" y="382" fill="#203452" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="15">Nasdaq Trader — Trade Halts</text>
+  <circle cx="444" cy="377" r="7" fill="#ef4444"/>
+  <text x="137" y="412" fill="#52647d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">Central Bank of Ireland — News</text>
+  <circle cx="444" cy="407" r="7" fill="#f59e0b"/>
+  <text x="137" y="442" fill="#52647d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">BBC — Business</text>
+  <circle cx="444" cy="437" r="7" fill="#cbd5e1"/>
+
+  <rect x="115" y="468" width="347" height="42" rx="12" fill="#eefbf7"/>
+  <circle cx="137" cy="489" r="9" fill="#10b981"/>
+  <text x="156" y="495" fill="#174c40" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="16" font-weight="700">Cyber Security</text>
+  <text x="426" y="495" fill="#059669" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700">19</text>
+  <text x="137" y="548" fill="#203452" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="15">Ireland NCSC — Alerts &amp; Advisories</text>
+  <circle cx="444" cy="543" r="7" fill="#ef4444"/>
+  <text x="137" y="578" fill="#52647d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">CISA — All Advisories</text>
+  <circle cx="444" cy="573" r="7" fill="#ef4444"/>
+  <text x="137" y="608" fill="#52647d" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">GitHub Security Blog</text>
+  <circle cx="444" cy="603" r="7" fill="#cbd5e1"/>
+  <text x="137" y="666" fill="#8a99ad" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12">Quiet feeds stay available for reading and digest review.</text>
+
+  <g>
+    <rect x="560" y="140" width="570" height="586" rx="28" fill="#ffffff" stroke="#d9e3f0"/>
+    <rect x="560" y="140" width="570" height="92" rx="28" fill="url(#blue)"/>
+    <text x="598" y="181" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" font-weight="700" letter-spacing="1.5">WHAT THE IMPORT CREATES</text>
+    <text x="598" y="213" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="25" font-weight="700">A calm reading surface</text>
+
+    <rect x="598" y="263" width="494" height="92" rx="18" fill="#f5f8fc"/>
+    <circle cx="632" cy="309" r="20" fill="#dbeafe"/>
+    <text x="624" y="316" fill="#2563eb" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="19" font-weight="700">1</text>
+    <text x="670" y="298" fill="#203452" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="17" font-weight="700">Folders arrive already organized</text>
+    <text x="670" y="324" fill="#667892" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">Finance and Cyber Security sections mirror the manifest.</text>
+
+    <rect x="598" y="376" width="494" height="92" rx="18" fill="#f5f8fc"/>
+    <circle cx="632" cy="422" r="20" fill="#fee2e2"/>
+    <text x="624" y="429" fill="#dc2626" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="19" font-weight="700">2</text>
+    <text x="670" y="411" fill="#203452" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="17" font-weight="700">Only four feeds interrupt you</text>
+    <text x="670" y="437" fill="#667892" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">Urgent alerts are visible; research stays quiet by default.</text>
+
+    <rect x="598" y="489" width="494" height="92" rx="18" fill="#f5f8fc"/>
+    <circle cx="632" cy="535" r="20" fill="#dcfce7"/>
+    <text x="624" y="542" fill="#059669" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="19" font-weight="700">3</text>
+    <text x="670" y="524" fill="#203452" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="17" font-weight="700">Digest material stays selectable</text>
+    <text x="670" y="550" fill="#667892" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14">Share selected stories only when you want Apple Intelligence.</text>
+
+    <text x="598" y="650" fill="#7b8aa1" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13">Illustrative preview · content mirrors the configured iPhone Air profile.</text>
+    <text x="598" y="677" fill="#7b8aa1" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13">NetNewsWire remains the reader; this repository supplies the OPML.</text>
+  </g>
+</svg>

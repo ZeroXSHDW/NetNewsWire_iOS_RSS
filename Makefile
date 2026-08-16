@@ -3,6 +3,12 @@
 .PHONY: help generate package lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check
 
 PYTHON ?= python3
+MANIFEST := feed-manifest.json
+OPML_ROOT := artifacts/opml
+SOURCE_ROOT := artifacts/sources
+NOTIFICATION_ROOT := artifacts/notifications
+REPORT_ROOT := artifacts/validation
+AIRDROP_ROOT := artifacts/AirDrop
 
 help:
 	@printf '%s\n' \
@@ -17,13 +23,13 @@ help:
 		'  make generate      Regenerate OPML and source-table artifacts only'
 
 generate:
-	$(PYTHON) generate-bundle.py --manifest feed-manifest.json --all \
-		--notification-table NetNewsWire-Notification-Profile.md \
-		--notification-json NetNewsWire-Notification-Profile.json
+	$(PYTHON) generate-bundle.py --manifest $(MANIFEST) --all \
+		--notification-table $(NOTIFICATION_ROOT)/NetNewsWire-Notification-Profile.md \
+		--notification-json $(NOTIFICATION_ROOT)/NetNewsWire-Notification-Profile.json
 
 package: generate
-	mkdir -p AirDrop
-	cp NetNewsWire-Finance-Cyber-iPhone-Air.opml AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml
+	mkdir -p $(AIRDROP_ROOT)
+	cp $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml $(AIRDROP_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
 test:
 	PYTHONPATH=. $(PYTHON) -m unittest discover -s tests -v
@@ -35,7 +41,7 @@ syntax:
 	zsh -n validate-rss-bundle.sh
 
 lint:
-	$(PYTHON) validate-manifest.py --manifest feed-manifest.json --root .
+	$(PYTHON) validate-manifest.py --manifest $(MANIFEST) --root .
 
 docs-check:
 	$(PYTHON) validate-docs.py --root .
@@ -48,17 +54,17 @@ validate:
 
 validate-lite:
 	VALIDATION_PROFILE=iphone-lite \
-	SOURCE_TABLE_FILE=NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
-	REPORT_MARKDOWN_FILE=NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md \
-	REPORT_JSON_FILE=NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json \
-	./validate-rss-bundle.sh NetNewsWire-Finance-Cyber-iPhone-Lite.opml
+	SOURCE_TABLE_FILE=$(SOURCE_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
+	REPORT_MARKDOWN_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md \
+	REPORT_JSON_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json \
+	./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite.opml
 
 validate-air:
 	VALIDATION_PROFILE=iphone-air \
-	SOURCE_TABLE_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
-	REPORT_MARKDOWN_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md \
-	REPORT_JSON_FILE=NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json \
-	./validate-rss-bundle.sh NetNewsWire-Finance-Cyber-iPhone-Air.opml
+	SOURCE_TABLE_FILE=$(SOURCE_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
+	REPORT_MARKDOWN_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md \
+	REPORT_JSON_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json \
+	./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
 validate-all:
 	$(MAKE) validate

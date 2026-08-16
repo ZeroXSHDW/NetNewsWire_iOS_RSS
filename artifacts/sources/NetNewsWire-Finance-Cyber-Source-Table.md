@@ -79,11 +79,11 @@ The master profile preserves the full 62-feed coverage set. Notification prefere
 
 ## Operating references
 
-- [Setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md)
-- [Coverage-gap assessment](Coverage-Gap-Assessment.md)
-- [Apple Intelligence summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md)
-- [Daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md)
-- [Feature and automation matrix](NetNewsWire-Feature-and-Automation-Matrix.md)
+- [Setup and notification plan](../../docs/NetNewsWire-Setup-and-Notification-Plan.md)
+- [Coverage-gap assessment](../../docs/Coverage-Gap-Assessment.md)
+- [Apple Intelligence summary prompt](../../docs/Apple-Intelligence-RSS-Summary-Prompt.md)
+- [Daily digest workflow](../../docs/NetNewsWire-Daily-Digest-Workflow.md)
+- [Feature and automation matrix](../../docs/NetNewsWire-Feature-and-Automation-Matrix.md)
 
 ## Maintenance
 

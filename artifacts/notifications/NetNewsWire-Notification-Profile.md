@@ -97,4 +97,4 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 5. Leave **Off** feeds notification-disabled and process them in the daily digest.
 6. Re-check this matrix after any manifest change; the generated OPML and source tables should be regenerated together.
 
-See [NetNewsWire setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md) for batch review.
+See [NetNewsWire setup and notification plan](../../docs/NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](../../docs/NetNewsWire-Daily-Digest-Workflow.md) for batch review.

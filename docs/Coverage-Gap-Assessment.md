@@ -10,8 +10,8 @@ Use [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Fe
 
 ## Operational improvements now in place
 
-- [feed-manifest.json](./feed-manifest.json) is the source of truth; [generate-bundle.py](./generate-bundle.py) regenerates every manifest-defined OPML/source-table artifact.
-- The master bundle now contains 62 feeds. The recommended [50-feed iPhone Air OPML](./NetNewsWire-Finance-Cyber-iPhone-Air.opml) adds compact market, data, conduct and supply-chain context to the [39-feed iPhone-lite OPML](./NetNewsWire-Finance-Cyber-iPhone-Lite.opml); archive-heavy specialist feeds remain in the master profile.
+- [feed-manifest.json](../feed-manifest.json) is the source of truth; [generate-bundle.py](../generate-bundle.py) regenerates every manifest-defined OPML/source-table artifact.
+- The master bundle now contains 62 feeds. The recommended [50-feed iPhone Air OPML](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) adds compact market, data, conduct and supply-chain context to the [39-feed iPhone-lite OPML](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml); archive-heavy specialist feeds remain in the master profile.
 - The validator now compares manifest, OPML and source-table metadata, measures decompressed body and compressed/wire bytes separately, detects conservative fuzzy duplicate stories and enforces feed-specific stale-review deadlines.
 - Run `make test`, `make validate` and `make validate-lite`; the GitHub Actions workflow repeats these checks monthly or on demand.
 - Use [NetNewsWire-Daily-Digest-Workflow.md](./NetNewsWire-Daily-Digest-Workflow.md) and `prepare-rss-digest-input.py` to remove already processed items before the Apple Intelligence daily digest.

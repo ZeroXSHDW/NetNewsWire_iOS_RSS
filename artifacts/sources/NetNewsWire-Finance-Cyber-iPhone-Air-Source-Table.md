@@ -1,6 +1,6 @@
 # NetNewsWire Finance + Cyber source table
 
-Generated from `feed-manifest.json` for the **iphone-lite** profile.
+Generated from `feed-manifest.json` for the **iphone-air** profile.
 
 ## Finance
 
@@ -9,6 +9,7 @@ Generated from `feed-manifest.json` for the **iphone-lite** profile.
 | 01 — Core — Market & Trading | Nasdaq Trader — Trade Halts | https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts | Official exchange alert; fast-moving structured halt items | alert | None | High; trading-day alerts; structured-item exception documented below | **On** | 2026-08-16 |
 | 01 — Core — Market & Trading | Nasdaq Trader — Equity Trader Alerts | https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&categorylist=2 | Official Nasdaq exchange operations; equity trading notices, market-structure changes and listing/trader alerts | regulatory/event | None | High; event-driven; includes older archive items | Off; summarize | 2026-08-16 |
 | 01 — Core — Market & Trading | BBC — Business | https://feeds.bbci.co.uk/news/business/rss.xml | Independent public broadcaster; free context | context | None | High; fast | Off; summarize | 2026-08-16 |
+| 01 — Core — Market & Trading | Bloomberg — Markets | https://www.bloomberg.com/feeds/markets/news.rss | Independent commercial news; fast market context | market | Metered / subscription | High; fast | Off; summarize | 2026-08-16 |
 | 01 — Core — Market & Trading | Financial Times — Markets | https://www.ft.com/markets?format=rss | Independent commercial news; global markets | market/research | Metered / subscription | High; fast and analytical | Off; summarize | 2026-08-16 |
 | 01 — Core — Market & Trading | RTÉ — Business | https://www.rte.ie/feeds/rss/?index=/news/business | Independent Irish public broadcaster; Ireland and international business | context | None | High; fast | Off; summarize | 2026-08-16 |
 | 02 — Core — Official & Macro | Central Bank of Ireland — News | https://www.centralbank.ie/feeds/news-media-feed | Official Irish central bank; regulation, financial stability and policy | policy/regulatory | None | High; event-driven | Optional on | 2026-08-16 |
@@ -26,7 +27,14 @@ Generated from `feed-manifest.json` for the **iphone-lite** profile.
 | 02 — Core — Official & Macro | Federal Reserve — Speeches | https://www.federalreserve.gov/feeds/speeches.xml | Official US central bank; speeches, outlooks and policymaker context | policy/research | None | High; event-driven | Off; summarize | 2026-08-16 |
 | 03 — Optional — Data, Ireland, EU & UK | ECB — USD Reference Rate | https://www.ecb.europa.eu/rss/fxref-usd.html | Official daily EUR/USD reference-rate data | daily-data | None | High; daily data | Off; summarize | 2026-08-16 |
 | 03 — Optional — Data, Ireland, EU & UK | ECB — GBP Reference Rate | https://www.ecb.europa.eu/rss/fxref-gbp.html | Official daily EUR/GBP reference-rate data; Ireland/UK relevance | daily-data | None | High; daily data | Off; summarize | 2026-08-16 |
+| 03 — Optional — Data, Ireland, EU & UK | ECB — Statistical Releases | https://www.ecb.europa.eu/rss/statpress.html | Official euro-area monetary, interest-rate, balance-of-payments and financial statistics | data/event | None | High; event-driven | Off; summarize | 2026-08-16 |
+| 03 — Optional — Data, Ireland, EU & UK | Central Bank of Ireland — Markets Update | https://www.centralbank.ie/feeds/markets-updates-feed | Official Irish market-supervision and investment-firm updates | regulatory/event | None | High; event-driven | Off; summarize | 2026-08-16 |
+| 03 — Optional — Data, Ireland, EU & UK | Eurostat — Economy & Finance Releases | https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&p_p_lifecycle=2&p_p_state=maximized&p_p_mode=view&p_p_resource_id=atom&_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL&_estatsearchportlet_WAR_estatsearchportlet_theme=PER_ECOFIN | Official EU statistics; inflation, GDP, employment, trade and public finance releases | data/event | None | High; scheduled releases | Off; summarize | 2026-08-16 |
+| 03 — Optional — Data, Ireland, EU & UK | European Commission — Sanctions Guidance | https://finance.ec.europa.eu/node/1296/rss_en | Official EU financial-policy guidance; sanctions, finance/banking and circumvention updates | regulatory/event | None | High; event-driven; may be quiet between releases | Off; summarize | 2026-08-16 |
 | 03 — Optional — Data, Ireland, EU & UK | UK ONS — Release Calendar | https://www.ons.gov.uk/releasecalendar?rss&highlight=true&limit=10&page=1&release-type=type-published&sort=date-newest | Official UK statistics release calendar; timing context rather than live market data | calendar/data | None | High; scheduled, broad | Off; summarize | 2026-08-16 |
+| 04 — Optional — Global Data & Research | BIS — Statistical Releases | https://www.bis.org/doclist/all_statistics.rss | Official global central-bank statistics; liquidity, banking and property data | data/research | None | High; event-driven/research | Off; summarize | 2026-08-16 |
+| 04 — Optional — Global Data & Research | Bank of England — Publications | https://www.bankofengland.co.uk/rss/publications | Official UK central-bank research, reports and weekly publications | research | None | High; periodic/research | Off; summarize | 2026-08-16 |
+| 05 — Optional — UK Regulation & Warnings | FCA — News | https://www.fca.org.uk/news/rss.xml | Official UK financial-conduct regulator; market conduct, supervision and regulatory news | regulatory/news | None | High; event-driven | Off; summarize | 2026-08-16 |
 | 05 — Optional — UK Regulation & Warnings | FCA — Scam Warnings | https://www.fca.org.uk/news/warnings/rss.xml | Official UK financial-conduct regulator; unauthorised firms, clone firms and investment-scam warnings | regulatory/alert | None | High; event-driven warning publications | Off; summarize | 2026-08-16 |
 | 05 — Optional — UK Regulation & Warnings | OFSI — Financial Sanctions Blog | https://ofsi.blog.gov.uk/feed/ | Official UK Office of Financial Sanctions Implementation; sanctions policy, licensing and compliance context | sanctions/policy | None | Periodic; event-driven | Off; summarize | 2026-08-16 |
 ## Cyber Security
@@ -49,18 +57,21 @@ Generated from `feed-manifest.json` for the **iphone-lite** profile.
 | 03 — Core — Technical Research | Microsoft Security Blog | https://www.microsoft.com/en-us/security/blog/feed/ | Official vendor research, threat intelligence and advisories | research/advisory | None | High; research/event-driven | Off; summarize | 2026-08-16 |
 | 03 — Core — Technical Research | Unit 42 — Threat Research | https://unit42.paloaltonetworks.com/feed/atom/ | Official Palo Alto Networks threat research; malware, vulnerability, cloud, identity and incident analysis | research | None | High; research-driven | Off; summarize | 2026-08-16 |
 | 03 — Core — Technical Research | GitHub Security Blog | https://github.blog/security/feed/ | Official GitHub security coverage; open-source supply chain, CI/CD, Dependabot and developer-platform security | research/advisory | None | High; research-driven | Off; summarize | 2026-08-16 |
+| 04 — Optional — Specialist Alerts & Research | CERT-EU — Threat Intelligence | https://cert.europa.eu/publications/threat-intelligence-rss | Official EU threat-intelligence analysis | research | None | High; research/event-driven | Off; summarize | 2026-08-16 |
+| 04 — Optional — Specialist Alerts & Research | CrowdStrike — Cybersecurity Research | https://www.crowdstrike.com/en-us/blog/feed | Official vendor research; threat intelligence, vulnerability and incident analysis | research | None | High; fast/research | Off; summarize | 2026-08-16 |
+| 04 — Optional — Specialist Alerts & Research | OpenSSF — Supply Chain Security | https://openssf.org/feed/ | Independent nonprofit Linux Foundation project; open-source supply-chain security, CRA and tooling guidance | research/guidance | None | High; periodic/research | Off; summarize | 2026-08-16 |
 
 ## Profile notes
 
-The iPhone-lite profile contains 39 feeds: official/core alerts, Ireland/EU/UK macro context, selected US enforcement coverage, selected market reporting and a compact cyber research layer. Optional specialist and high-payload research feeds remain in the master profile.
+The iPhone Air profile contains 50 feeds: the iPhone-lite alert and triage core plus one strong market source, Ireland/EU/global data, UK conduct coverage and compact supply-chain/threat-intelligence research. It is the recommended daily profile; the device budget caps it at 50 feeds, 4 MB of full feed bodies, 600 KB per feed, six mobile-review feeds and four interrupting notifications, while the digest handoff caps the selected input at 30 items and 90,000 text characters. Master remains the deep-research backup.
 
 ## Operating references
 
-- [Setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md)
-- [Coverage-gap assessment](Coverage-Gap-Assessment.md)
-- [Apple Intelligence summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md)
-- [Daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md)
-- [Feature and automation matrix](NetNewsWire-Feature-and-Automation-Matrix.md)
+- [Setup and notification plan](../../docs/NetNewsWire-Setup-and-Notification-Plan.md)
+- [Coverage-gap assessment](../../docs/Coverage-Gap-Assessment.md)
+- [Apple Intelligence summary prompt](../../docs/Apple-Intelligence-RSS-Summary-Prompt.md)
+- [Daily digest workflow](../../docs/NetNewsWire-Daily-Digest-Workflow.md)
+- [Feature and automation matrix](../../docs/NetNewsWire-Feature-and-Automation-Matrix.md)
 
 ## Maintenance
 

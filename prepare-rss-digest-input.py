@@ -401,7 +401,7 @@ def main() -> int:
     parser.add_argument("--max-seen-items", type=int, help="override the selected profile's seen-state budget")
     parser.add_argument("--duplicate-window-days", type=float, help="override the selected profile's duplicate window")
     parser.add_argument("--dry-run", action="store_true", help="do not update digest state")
-    parser.add_argument("--prompt-file", default="Apple-Intelligence-RSS-Summary-Prompt.md")
+    parser.add_argument("--prompt-file", default="docs/Apple-Intelligence-RSS-Summary-Prompt.md")
     parser.add_argument("--shortcut-output", type=Path, help="also write a compact plain-text package for an iPhone Shortcut")
     args = parser.parse_args()
 

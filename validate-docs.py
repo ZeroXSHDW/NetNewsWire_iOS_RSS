@@ -12,6 +12,7 @@ from bundle_config import load_manifest, profile_includes_feed, profile_settings
 
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)\s]+)\)")
+IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 EXTERNAL_SCHEMES = ("http://", "https://", "mailto:", "tel:")
 NOTIFICATION_LABELS = {
     "on": "On",
@@ -26,6 +27,21 @@ def relative_links(text: str) -> list[tuple[int, str]]:
 
     links: list[tuple[int, str]] = []
     for match in MARKDOWN_LINK.finditer(text):
+        target = match.group(1).strip().strip("<>")
+        if not target or target.startswith(EXTERNAL_SCHEMES) or target.startswith("#"):
+            continue
+        target = target.split("#", 1)[0].split("?", 1)[0]
+        if target:
+            line = text.count("\n", 0, match.start()) + 1
+            links.append((line, target))
+    return links
+
+
+def embedded_links(text: str) -> list[tuple[int, str]]:
+    """Return local image/link targets embedded as Markdown images."""
+
+    links: list[tuple[int, str]] = []
+    for match in IMAGE_LINK.finditer(text):
         target = match.group(1).strip().strip("<>")
         if not target or target.startswith(EXTERNAL_SCHEMES) or target.startswith("#"):
             continue
@@ -54,9 +70,10 @@ def validate_markdown_links(root: Path) -> tuple[list[str], int]:
     root_resolved = root.resolve()
     for markdown_path in markdown_files(root):
         text = markdown_path.read_text(encoding="utf-8")
-        link_count += len(relative_links(text))
+        links = [*relative_links(text), *embedded_links(text)]
+        link_count += len(links)
         display_path = markdown_path.relative_to(root)
-        for line, target in relative_links(text):
+        for line, target in links:
             candidate = (markdown_path.parent / target).resolve()
             try:
                 candidate.relative_to(root_resolved)

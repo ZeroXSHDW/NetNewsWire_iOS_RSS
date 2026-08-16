@@ -12,9 +12,9 @@ A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone**.
 
 | Profile | Feeds | Best for | Download |
 | --- | ---: | --- | --- |
-| **iPhone Air** | 50 | Recommended daily profile with broad coverage and a 4 MB full-body budget | [OPML](AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml) · [source table](NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md) |
-| **iPhone Lite** | 39 | Lower-noise mobile reading and smaller refreshes | [OPML](NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
-| **Master** | 62 | Full research coverage and rebuilding the other profiles | [OPML](NetNewsWire-Finance-Cyber.opml) · [source table](NetNewsWire-Finance-Cyber-Source-Table.md) |
+| **iPhone Air** | 50 | Recommended daily profile with broad coverage and a 4 MB full-body budget | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md) |
+| **iPhone Lite** | 39 | Lower-noise mobile reading and smaller refreshes | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
+| **Master** | 62 | Full research coverage and rebuilding the other profiles | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md) |
 
 The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Four official alert feeds are configured for interrupting notifications; the remaining sources are intended for normal reading, optional notifications or digest review.
 
@@ -62,6 +62,18 @@ flowchart LR
     MODEL --> NOTES["Apple Notes\noptional reviewed digest"]
     GENERATE --> CHECKS["make check + GitHub Actions"]
 ```
+
+## What the result looks like
+
+These repository-authored previews make the deliverable visible before you import anything. They use the current iPhone Air folders, alert policy and Apple Intelligence handoff described by the manifest; they are interface illustrations, not screenshots or NetNewsWire source code.
+
+![NetNewsWire iPhone Air feed view preview](docs/previews/netnewswire-feed-preview.svg)
+
+*NetNewsWire result: organized Finance and Cyber Security folders, four interrupting alert feeds, and quieter sources available for reading or digest review.*
+
+![Apple Intelligence RSS digest preview](docs/previews/apple-intelligence-preview.svg)
+
+*Apple Intelligence result: selected evidence passes through Shortcuts, then becomes a reviewed digest with provenance, uncertainty labels and no action recommendation.*
 
 ## Feed coverage
 
@@ -318,7 +330,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 </details>
 
 
-The complete URL, folder, notification and profile metadata for every feed is in the generated [Master source table](NetNewsWire-Finance-Cyber-Source-Table.md). The [notification profile](NetNewsWire-Notification-Profile.md) explains why a feed is interrupting, optional or quiet.
+The complete URL, folder, notification and profile metadata for every feed is in the generated [Master source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md). The [notification profile](artifacts/notifications/NetNewsWire-Notification-Profile.md) explains why a feed is interrupting, optional or quiet.
 
 ## Profiles and notification policy
 
@@ -337,17 +349,17 @@ Other official sources can be enabled as optional notifications. News, research 
 
 ## Install in NetNewsWire
 
-1. Run `make package` on the Mac, or use the committed **iPhone Air** handoff in [`AirDrop/`](AirDrop/).
-2. AirDrop the **iPhone Air** OPML file to the iPhone. Use the root-level Lite or Master OPML if you want a different bundle.
+1. Run `make package` on the Mac, or use the committed **iPhone Air** handoff in [`artifacts/AirDrop/`](artifacts/AirDrop/).
+2. AirDrop the **iPhone Air** OPML file to the iPhone. Use the Lite or Master files in [`artifacts/opml/`](artifacts/opml/) if you want a different bundle.
 3. Open the file in NetNewsWire and import it.
-4. Refresh once, then review the notification settings against [`NetNewsWire-Notification-Profile.md`](NetNewsWire-Notification-Profile.md).
+4. Refresh once, then review the notification settings against [`NetNewsWire-Notification-Profile.md`](artifacts/notifications/NetNewsWire-Notification-Profile.md).
 5. Use the Master OPML only when you want the full research set.
 
 NetNewsWire remains the reading and collection layer. The bundle does not claim to provide live quotes, order books, positions, execution, incident-response commands or financial advice.
 
 ## How Apple Intelligence is used
 
-Apple Intelligence is an **optional summarization step after collection**. It receives the article material that you selected in NetNewsWire—or the prepared JSON/text export created by this repository—and applies the fixed instructions in [`Apple-Intelligence-RSS-Summary-Prompt.md`](Apple-Intelligence-RSS-Summary-Prompt.md).
+Apple Intelligence is an **optional summarization step after collection**. It receives the article material that you selected in NetNewsWire—or the prepared JSON/text export created by this repository—and applies the fixed instructions in [`Apple-Intelligence-RSS-Summary-Prompt.md`](docs/Apple-Intelligence-RSS-Summary-Prompt.md).
 
 ```mermaid
 flowchart LR
@@ -368,7 +380,7 @@ The workflow is deliberately bounded:
 - **The output is a review aid.** The Shortcut shows the digest and can save `Finance + Cyber Digest — YYYY-MM-DD` to Apple Notes. It does not automatically mark articles read or recommend trades.
 - **Model routing is intentional.** Use the on-device model for short/private batches, Private Cloud Compute for larger supported batches, or a ChatGPT extension only when deliberately selected in Shortcuts.
 
-For the full Shortcut contract, scheduling limits and privacy/safety notes, see [`NetNewsWire-Daily-Digest-Workflow.md`](NetNewsWire-Daily-Digest-Workflow.md) and [`NetNewsWire-Feature-and-Automation-Matrix.md`](NetNewsWire-Feature-and-Automation-Matrix.md).
+For the full Shortcut contract, scheduling limits and privacy/safety notes, see [`NetNewsWire-Daily-Digest-Workflow.md`](docs/NetNewsWire-Daily-Digest-Workflow.md) and [`NetNewsWire-Feature-and-Automation-Matrix.md`](docs/NetNewsWire-Feature-and-Automation-Matrix.md).
 
 ## Prepare a digest input
 
@@ -405,7 +417,7 @@ Validation checks include:
 - Python compilation, shell syntax and the repository test suite;
 - tracked-file hygiene, including high-confidence credential, local-path and runtime-state checks.
 
-Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `*-VALIDATION-REPORT.json` files; the feed cache is kept outside the repository by default. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the maintainer workflow.
+Committed validation snapshots live under [`artifacts/validation/`](artifacts/validation/); the feed cache is kept outside the repository by default. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the maintainer workflow.
 
 ## Repository map
 
@@ -417,8 +429,11 @@ Committed validation snapshots are the root-level `*-VALIDATION-REPORT.md` and `
 | [`prepare-rss-digest-input.py`](prepare-rss-digest-input.py) | Prepares bounded article input for the Shortcut |
 | [`validate-docs.py`](validate-docs.py) | Checks README links, feed names and profile counts against the manifest |
 | [`check-repository-hygiene.py`](check-repository-hygiene.py) | Prevents tracked runtime state, credentials and machine-specific paths |
-| [`AirDrop/`](AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |
-| [Validation reports](NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
+| [`docs/`](docs/) | Setup guides, Apple Intelligence instructions, research notes and visual previews |
+| [`artifacts/`](artifacts/) | Generated OPML, source tables, notification matrix, reports and AirDrop handoff |
+| [`examples/`](examples/) | Safe example input for digest preparation |
+| [`artifacts/AirDrop/`](artifacts/AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |
+| [Validation reports](artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
 | [`NetNewsWire-Finance-Cyber-CHANGELOG.md`](NetNewsWire-Finance-Cyber-CHANGELOG.md) | Feed-selection, maintenance and validation history |
 | [`.github/`](.github/) | CI, Dependabot, ownership and contribution workflows |
 | [`.github/workflows/rss-validation.yml`](.github/workflows/rss-validation.yml) | Deterministic CI and scheduled live validation |

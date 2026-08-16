@@ -6,16 +6,16 @@
       "opml_title": "Finance and Cyber Security — NetNewsWire high-signal bundle",
       "note": "The master profile preserves the full 62-feed coverage set. Notification preferences are documented below and must be enabled manually after OPML import.",
       "include_all": true,
-      "opml_file": "NetNewsWire-Finance-Cyber.opml",
-      "source_table_file": "NetNewsWire-Finance-Cyber-Source-Table.md"
+      "opml_file": "artifacts/opml/NetNewsWire-Finance-Cyber.opml",
+      "source_table_file": "artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md"
     },
     "iphone-lite": {
       "label": "iPhone Lite",
       "opml_title": "Finance and Cyber Security — NetNewsWire iPhone-lite bundle",
       "note": "The iPhone-lite profile contains 39 feeds: official/core alerts, Ireland/EU/UK macro context, selected US enforcement coverage, selected market reporting and a compact cyber research layer. Optional specialist and high-payload research feeds remain in the master profile.",
       "include_all": false,
-      "opml_file": "NetNewsWire-Finance-Cyber-iPhone-Lite.opml",
-      "source_table_file": "NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md",
+      "opml_file": "artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml",
+      "source_table_file": "artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md",
       "device_budget": {
         "max_feeds": 40,
         "max_total_payload_bytes": 4194304,
@@ -37,8 +37,8 @@
       "note": "The iPhone Air profile contains 50 feeds: the iPhone-lite alert and triage core plus one strong market source, Ireland/EU/global data, UK conduct coverage and compact supply-chain/threat-intelligence research. It is the recommended daily profile; the device budget caps it at 50 feeds, 4 MB of full feed bodies, 600 KB per feed, six mobile-review feeds and four interrupting notifications, while the digest handoff caps the selected input at 30 items and 90,000 text characters. Master remains the deep-research backup.",
       "include_all": false,
       "inherits": ["iphone-lite"],
-      "opml_file": "NetNewsWire-Finance-Cyber-iPhone-Air.opml",
-      "source_table_file": "NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md",
+      "opml_file": "artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml",
+      "source_table_file": "artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md",
       "recommended": true,
       "device_budget": {
         "max_feeds": 50,

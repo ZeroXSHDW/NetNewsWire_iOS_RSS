@@ -8,11 +8,11 @@ set -o pipefail
 
 script_dir="${0:A:h}"
 script_path="${0:A}"
-bundle_file="${1:-$script_dir/NetNewsWire-Finance-Cyber.opml}"
-source_table_file="${SOURCE_TABLE_FILE:-$script_dir/NetNewsWire-Finance-Cyber-Source-Table.md}"
+bundle_file="${1:-$script_dir/artifacts/opml/NetNewsWire-Finance-Cyber.opml}"
+source_table_file="${SOURCE_TABLE_FILE:-$script_dir/artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md}"
 manifest_file_path="${MANIFEST_FILE:-$script_dir/feed-manifest.json}"
-report_markdown_file="${REPORT_MARKDOWN_FILE:-$script_dir/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md}"
-report_json_file="${REPORT_JSON_FILE:-$script_dir/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json}"
+report_markdown_file="${REPORT_MARKDOWN_FILE:-$script_dir/artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md}"
+report_json_file="${REPORT_JSON_FILE:-$script_dir/artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json}"
 report_generator="$script_dir/generate-rss-validation-report.py"
 validation_profile="${VALIDATION_PROFILE:-master}"
 validation_cache_dir="${VALIDATION_CACHE_DIR:-$script_dir/.rss-validation-cache}"
@@ -313,7 +313,7 @@ mkdir -p "$report_candidate_dir"
 # directory, so the Markdown report's machine-readable link survives the move.
 report_candidate_markdown="$report_candidate_dir/${report_markdown_file:t}"
 report_candidate_json="$report_candidate_dir/${report_json_file:t}"
-python3 "$report_generator" \
+REPORT_LINK_DIRECTORY="${report_markdown_file:h}" python3 "$report_generator" \
   "$bundle_file" \
   "$source_table_file" \
   "$manifest_file" \

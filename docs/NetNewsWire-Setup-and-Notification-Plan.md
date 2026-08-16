@@ -2,14 +2,14 @@
 
 ## Import
 
-Import [NetNewsWire-Finance-Cyber-iPhone-Air.opml](./NetNewsWire-Finance-Cyber-iPhone-Air.opml) as the recommended daily setup, [NetNewsWire-Finance-Cyber-iPhone-Lite.opml](./NetNewsWire-Finance-Cyber-iPhone-Lite.opml) when refresh cost matters most, or [NetNewsWire-Finance-Cyber.opml](./NetNewsWire-Finance-Cyber.opml) for the complete 62-feed master bundle. The OPML supplies the folders and feed URLs; notification preferences are best reviewed manually after import.
+Import [NetNewsWire-Finance-Cyber-iPhone-Air.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) as the recommended daily setup, [NetNewsWire-Finance-Cyber-iPhone-Lite.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) when refresh cost matters most, or [NetNewsWire-Finance-Cyber.opml](../artifacts/opml/NetNewsWire-Finance-Cyber.opml) for the complete 62-feed master bundle. The OPML supplies the folders and feed URLs; notification preferences are best reviewed manually after import.
 Import exactly one profile into the target NetNewsWire account. The import is additive: if an older copy of this bundle is already present, remove or separate it first so the feeds are not duplicated.
 For today’s iPhone import, save the chosen `.opml` file in Files or iCloud Drive, open NetNewsWire’s Feeds screen, tap **Settings → Import Subscriptions**, choose the file and select the intended account if NetNewsWire asks. Confirm that the expected folders and feed counts appear before applying notifications.
 Review [Coverage-Gap-Assessment.md](./Coverage-Gap-Assessment.md) for the source-selection decisions behind the bundle.
 Use the [RSS feed discovery and addition prompt](./NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md) when searching for new candidates; it defines the evidence, mobile-cost and rejection gates before any feed is added.
 Use the [feature and automation matrix](./NetNewsWire-Feature-and-Automation-Matrix.md) for the complete iPhone capability checklist and Shortcut design.
-The [feed manifest](./feed-manifest.json) is the source of truth. Run `make generate` after changing it rather than editing generated OPML or source-table rows by hand.
-Use the generated [notification/profile matrix](./NetNewsWire-Notification-Profile.md) as the post-import per-feed checklist; the machine-readable version is [NetNewsWire-Notification-Profile.json](./NetNewsWire-Notification-Profile.json).
+The [feed manifest](../feed-manifest.json) is the source of truth. Run `make generate` after changing it rather than editing generated OPML or source-table rows by hand.
+Use the generated [notification/profile matrix](../artifacts/notifications/NetNewsWire-Notification-Profile.md) as the post-import per-feed checklist; the machine-readable version is [NetNewsWire-Notification-Profile.json](../artifacts/notifications/NetNewsWire-Notification-Profile.json).
 
 ## iPhone refresh profile
 
@@ -92,4 +92,4 @@ These are deliberately not in the OPML because they are not verified direct RSS/
 
 ## Maintenance
 
-Run `make test`, `make validate`, `make validate-lite` and `make validate-air` monthly. Review the generated [master Markdown report](./NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md), [iPhone Air report](./NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md), [iPhone-lite report](./NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md) and [coverage-gap assessment](./Coverage-Gap-Assessment.md). The live validator now checks manifest/OPML/source-table metadata, future-dated items, feed-specific stale-review deadlines, fuzzy duplicate candidates, compressed/wire telemetry and device budgets. Remove a source only after a failed-feed, paywall, noise or duplication decision is recorded in the changelog.
+Run `make test`, `make validate`, `make validate-lite` and `make validate-air` monthly. Review the generated [master Markdown report](../artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md), [iPhone Air report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md), [iPhone-lite report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md) and [coverage-gap assessment](./Coverage-Gap-Assessment.md). The live validator now checks manifest/OPML/source-table metadata, future-dated items, feed-specific stale-review deadlines, fuzzy duplicate candidates, compressed/wire telemetry and device budgets. Remove a source only after a failed-feed, paywall, noise or duplication decision is recorded in the changelog.

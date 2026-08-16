@@ -122,6 +122,15 @@ def generate_report(args: argparse.Namespace) -> int:
     records = read_manifest(fetch_manifest_path)
     manifest_data = load_manifest(manifest_path)
     report_root = Path(manifest_path).resolve().parent
+    markdown_link_directory = os.environ.get("REPORT_LINK_DIRECTORY", "")
+    markdown_root = Path(markdown_link_directory or markdown_path).resolve()
+    if not markdown_link_directory:
+        markdown_root = markdown_root.parent
+
+    def markdown_reference(relative_path: str) -> str:
+        target = report_root / relative_path
+        return Path(os.path.relpath(target.resolve(), markdown_root)).as_posix()
+
     validator_display_path = portable_path(validator_path, report_root)
     manifest_validation = validation_settings(manifest_data)
     manifest_profiles = profile_settings(manifest_data)
@@ -940,7 +949,7 @@ def generate_report(args: argparse.Namespace) -> int:
         "- **Finance**: US, UK, Irish, euro-area and global market context; SEC, CFTC, Federal Reserve speeches and monetary policy, ECB press, market operations and statistical releases, Central Bank of Ireland, EBA, AMLA, ESRB, Bank of England, HM Treasury, FCA, Eurostat, ONS, BIS and European Commission sanctions guidance; Nasdaq trade halts and Equity Trader Alerts; EUR/USD and EUR/GBP reference data. BEA was tested but rejected for one malformed historical item link.",
         "- **Cyber**: Ireland NCSC, CISA, CISA ICS, CERT-EU, UK NCSC, CERT/CC, NIST, Microsoft, Mandiant, Unit 42, GitHub Security Blog, Cisco PSIRT, Cisco Talos, OpenSSF and CrowdStrike, plus independent incident reporting and technical research.",
         "- **Ireland/EU/UK/US scope**: present in official alerts, regulation, macro data and market coverage.",
-        "- **Coverage-gap decisions**: see [Coverage-Gap-Assessment.md](Coverage-Gap-Assessment.md) for tested candidates, exact rejection reasons and next-addition triggers.",
+        f"- **Coverage-gap decisions**: see [Coverage-Gap-Assessment.md]({markdown_reference('docs/Coverage-Gap-Assessment.md')}) for tested candidates, exact rejection reasons and next-addition triggers.",
         "",
         "## Notification recommendation",
         "",
@@ -977,7 +986,7 @@ def generate_report(args: argparse.Namespace) -> int:
         "",
         "## Apple Intelligence guardrails",
         "",
-        "Use the [Apple Intelligence RSS summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md), [NetNewsWire setup plan](NetNewsWire-Setup-and-Notification-Plan.md) and [market-hours reference](Market-Hours-and-Holiday-Reference.md) for deduplication, confidence labels, Dublin-time conversion, exchange-session state and notification control.",
+        f"Use the [Apple Intelligence RSS summary prompt]({markdown_reference('docs/Apple-Intelligence-RSS-Summary-Prompt.md')}), [NetNewsWire setup plan]({markdown_reference('docs/NetNewsWire-Setup-and-Notification-Plan.md')}) and [market-hours reference]({markdown_reference('docs/Market-Hours-and-Holiday-Reference.md')}) for deduplication, confidence labels, Dublin-time conversion, exchange-session state and notification control.",
         "",
         "Finance summaries must identify the event, asset/ticker, catalyst, Dublin timing, confirmed facts, speculation, risks and sources, without a buy/sell recommendation.",
         "",

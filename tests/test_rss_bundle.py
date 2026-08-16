@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import importlib.util
 import copy
+import os
 import subprocess
 import sys
 import tempfile
@@ -292,7 +293,7 @@ class GeneratedArtifactsTest(unittest.TestCase):
         self.assertEqual(docs.returncode, 0, docs.stderr or docs.stdout)
         manifest = load_manifest(ROOT / "feed-manifest.json")
         air_file = ROOT / profile_settings(manifest)["iphone-air"]["opml_file"]
-        handoff_file = ROOT / "AirDrop" / air_file.name
+        handoff_file = ROOT / "artifacts" / "AirDrop" / air_file.name
         self.assertEqual(air_file.read_bytes(), handoff_file.read_bytes())
 
     def test_report_generator_is_import_safe_and_writes_portable_paths(self) -> None:
@@ -306,6 +307,7 @@ class GeneratedArtifactsTest(unittest.TestCase):
 
         manifest = load_manifest(ROOT / "feed-manifest.json")
         feed = manifest["feeds"][0]
+        master_config = profile_settings(manifest)["master"]
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             xml_path = directory / "feed.xml"
@@ -354,8 +356,8 @@ class GeneratedArtifactsTest(unittest.TestCase):
                 [
                     sys.executable,
                     str(module_path),
-                    str(ROOT / "NetNewsWire-Finance-Cyber.opml"),
-                    str(ROOT / "NetNewsWire-Finance-Cyber-Source-Table.md"),
+                    str(ROOT / master_config["opml_file"]),
+                    str(ROOT / master_config["source_table_file"]),
                     str(fetch_manifest),
                     str(markdown_path),
                     str(json_path),
@@ -369,10 +371,11 @@ class GeneratedArtifactsTest(unittest.TestCase):
                 cwd=ROOT,
                 capture_output=True,
                 text=True,
+                env={**os.environ, "REPORT_LINK_DIRECTORY": str(ROOT / "artifacts" / "validation")},
             )
             self.assertNotEqual(result.returncode, 0)
             payload = json.loads(json_path.read_text(encoding="utf-8"))
-            self.assertEqual(payload["bundle"], "NetNewsWire-Finance-Cyber.opml")
+            self.assertEqual(payload["bundle"], master_config["opml_file"])
             self.assertEqual(payload["validator"], "validate-rss-bundle.sh")
             self.assertIn(f"[{json_path.name}]({json_path.name})", markdown_path.read_text(encoding="utf-8"))
             self.assertNotIn("/Users/", json_path.read_text(encoding="utf-8"))

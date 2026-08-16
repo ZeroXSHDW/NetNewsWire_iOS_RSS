@@ -7,14 +7,14 @@ Goal: Build and maintain the most useful practical Finance + Cyber Security RSS 
 
 Act as a senior RSS curator, financial-news researcher and cyber-threat-intelligence analyst. Work from the current workspace and the live web. Inspect the existing files before searching:
 
-- NetNewsWire-Finance-Cyber.opml
-- NetNewsWire-Finance-Cyber-Source-Table.md
-- Coverage-Gap-Assessment.md
-- NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
-- NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
+- artifacts/opml/NetNewsWire-Finance-Cyber.opml
+- artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md
+- docs/Coverage-Gap-Assessment.md
+- artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
+- artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
 - validate-rss-bundle.sh
 - generate-rss-validation-report.py
-- NetNewsWire-Setup-and-Notification-Plan.md
+- docs/NetNewsWire-Setup-and-Notification-Plan.md
 
 User context:
 
@@ -252,7 +252,7 @@ If one or more candidates pass:
    - notification recommendation
    - validation date
 3. Mark event-driven feeds explicitly in the OPML.
-4. Update Coverage-Gap-Assessment.md with the gap filled, evidence, overlap decision and rejected alternatives.
+4. Update docs/Coverage-Gap-Assessment.md with the gap filled, evidence, overlap decision and rejected alternatives.
 5. Update the changelog with every addition, removal, replacement and URL canonicalization.
 6. Keep the source table and OPML URL sets exactly equal.
 

@@ -48,7 +48,14 @@ def compare_generated_artifacts(data: dict, root: Path, errors: list[str], gener
             generated_opml = temporary_root / f"{profile}.opml"
             generated_table = temporary_root / f"{profile}.md"
             generator.write_opml(data, feeds, generated_opml, profile)
-            generator.write_source_table(data, feeds, generated_table, profile)
+            generator.write_source_table(
+                data,
+                feeds,
+                generated_table,
+                profile,
+                repository_root=root,
+                link_directory=committed_table.parent,
+            )
             for generated, committed in ((generated_opml, committed_opml), (generated_table, committed_table)):
                 if not committed.exists():
                     errors.append(f"missing generated artifact: {committed.name}")
@@ -58,7 +65,7 @@ def compare_generated_artifacts(data: dict, root: Path, errors: list[str], gener
         air_config = profile_settings(data).get("iphone-air")
         if air_config:
             root_air = root / air_config["opml_file"]
-            handoff_air = root / "AirDrop" / Path(air_config["opml_file"]).name
+            handoff_air = root / "artifacts" / "AirDrop" / Path(air_config["opml_file"]).name
             if not handoff_air.exists():
                 errors.append(f"missing AirDrop handoff artifact: {handoff_air}")
             elif not root_air.exists() or handoff_air.read_bytes() != root_air.read_bytes():
@@ -66,11 +73,16 @@ def compare_generated_artifacts(data: dict, root: Path, errors: list[str], gener
 
         generated_matrix_md = temporary_root / "notifications.md"
         generated_matrix_json = temporary_root / "notifications.json"
-        generator.write_notification_matrix(data, generated_matrix_md)
+        generator.write_notification_matrix(
+            data,
+            generated_matrix_md,
+            repository_root=root,
+            link_directory=root / "artifacts" / "notifications",
+        )
         generator.write_notification_json(data, generated_matrix_json)
         for generated, committed in (
-            (generated_matrix_md, root / "NetNewsWire-Notification-Profile.md"),
-            (generated_matrix_json, root / "NetNewsWire-Notification-Profile.json"),
+            (generated_matrix_md, root / "artifacts" / "notifications" / "NetNewsWire-Notification-Profile.md"),
+            (generated_matrix_json, root / "artifacts" / "notifications" / "NetNewsWire-Notification-Profile.json"),
         ):
             if not committed.exists():
                 errors.append(f"missing generated artifact: {committed.name}")

@@ -12,7 +12,7 @@ After a manifest change, regenerate everything with:
 make package
 ```
 
-The `AirDrop/` copy is a generated handoff artifact for the recommended iPhone Air profile.
+The `artifacts/AirDrop/` copy is a generated handoff artifact for the recommended iPhone Air profile.
 
 ## Required checks
 
@@ -39,7 +39,7 @@ Live validation also requires `curl` and `xmllint` from libxml2. The offline `ma
 
 ## Adding or changing a feed
 
-1. Document the coverage gap or operational reason in `Coverage-Gap-Assessment.md`.
+1. Document the coverage gap or operational reason in `docs/Coverage-Gap-Assessment.md`.
 2. Use a direct, public HTTPS RSS or Atom endpoint; keep the HTML page in `html_url`.
 3. Record the feed’s purpose, signal type, access model, cadence, validation date and profile membership in the manifest.
 4. Regenerate the artifacts and inspect the source table and notification matrix.
