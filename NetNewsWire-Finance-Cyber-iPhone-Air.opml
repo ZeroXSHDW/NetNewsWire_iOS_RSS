@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <opml version="2.0">
   <head>
-    <title>Finance and Cyber Security — NetNewsWire iPhone-lite bundle</title>
+    <title>Finance and Cyber Security — NetNewsWire iPhone Air bundle</title>
   </head>
   <body>
     <outline text="Finance" title="Finance">
@@ -9,6 +9,7 @@
         <outline type="rss" text="Nasdaq Trader — Trade Halts" title="Nasdaq Trader — Trade Halts" xmlUrl="https://www.nasdaqtrader.com/rss.aspx?feed=tradehalts" htmlUrl="https://www.nasdaqtrader.com/Trader.aspx?id=TradeHaltRSS" itemLinkPolicy="structured-alert" />
         <outline type="rss" text="Nasdaq Trader — Equity Trader Alerts" title="Nasdaq Trader — Equity Trader Alerts" xmlUrl="https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&amp;categorylist=2" htmlUrl="https://www.nasdaqtrader.com/Trader.aspx?id=NewsRSS" eventDriven="true" />
         <outline type="rss" text="BBC — Business" title="BBC — Business" xmlUrl="https://feeds.bbci.co.uk/news/business/rss.xml" htmlUrl="https://www.bbc.com/news/business" />
+        <outline type="rss" text="Bloomberg — Markets" title="Bloomberg — Markets" xmlUrl="https://www.bloomberg.com/feeds/markets/news.rss" htmlUrl="https://www.bloomberg.com/markets" />
         <outline type="rss" text="Financial Times — Markets" title="Financial Times — Markets" xmlUrl="https://www.ft.com/markets?format=rss" htmlUrl="https://www.ft.com/markets" />
         <outline type="rss" text="RTÉ — Business" title="RTÉ — Business" xmlUrl="https://www.rte.ie/feeds/rss/?index=/news/business" htmlUrl="https://www.rte.ie/news/business/" />
       </outline>
@@ -30,9 +31,18 @@
       <outline text="03 — Optional — Data, Ireland, EU &amp; UK" title="03 — Optional — Data, Ireland, EU &amp; UK">
         <outline type="rss" text="ECB — USD Reference Rate" title="ECB — USD Reference Rate" xmlUrl="https://www.ecb.europa.eu/rss/fxref-usd.html" htmlUrl="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" />
         <outline type="rss" text="ECB — GBP Reference Rate" title="ECB — GBP Reference Rate" xmlUrl="https://www.ecb.europa.eu/rss/fxref-gbp.html" htmlUrl="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-gbp.en.html" />
+        <outline type="rss" text="ECB — Statistical Releases" title="ECB — Statistical Releases" xmlUrl="https://www.ecb.europa.eu/rss/statpress.html" htmlUrl="https://www.ecb.europa.eu/press/stats/intro/html/index.en.html" eventDriven="true" />
+        <outline type="rss" text="Central Bank of Ireland — Markets Update" title="Central Bank of Ireland — Markets Update" xmlUrl="https://www.centralbank.ie/feeds/markets-updates-feed" htmlUrl="https://www.centralbank.ie/regulation/markets-update" eventDriven="true" />
+        <outline type="rss" text="Eurostat — Economy &amp; Finance Releases" title="Eurostat — Economy &amp; Finance Releases" xmlUrl="https://ec.europa.eu/eurostat/en/search?p_p_id=estatsearchportlet_WAR_estatsearchportlet&amp;p_p_lifecycle=2&amp;p_p_state=maximized&amp;p_p_mode=view&amp;p_p_resource_id=atom&amp;_estatsearchportlet_WAR_estatsearchportlet_collection=CAT_PREREL&amp;_estatsearchportlet_WAR_estatsearchportlet_theme=PER_ECOFIN" htmlUrl="https://ec.europa.eu/eurostat/web/rss" eventDriven="true" />
+        <outline type="rss" text="European Commission — Sanctions Guidance" title="European Commission — Sanctions Guidance" xmlUrl="https://finance.ec.europa.eu/node/1296/rss_en" htmlUrl="https://finance.ec.europa.eu/eu-and-world/sanctions-restrictive-measures/sanctions-adopted-following-russias-military-aggression-against-ukraine/guidance-documents_en" eventDriven="true" />
         <outline type="rss" text="UK ONS — Release Calendar" title="UK ONS — Release Calendar" xmlUrl="https://www.ons.gov.uk/releasecalendar?rss&amp;highlight=true&amp;limit=10&amp;page=1&amp;release-type=type-published&amp;sort=date-newest" htmlUrl="https://www.ons.gov.uk/releasecalendar" />
       </outline>
+      <outline text="04 — Optional — Global Data &amp; Research" title="04 — Optional — Global Data &amp; Research">
+        <outline type="rss" text="BIS — Statistical Releases" title="BIS — Statistical Releases" xmlUrl="https://www.bis.org/doclist/all_statistics.rss" htmlUrl="https://www.bis.org/rss/index.htm" eventDriven="true" />
+        <outline type="rss" text="Bank of England — Publications" title="Bank of England — Publications" xmlUrl="https://www.bankofengland.co.uk/rss/publications" htmlUrl="https://www.bankofengland.co.uk/rss" eventDriven="true" />
+      </outline>
       <outline text="05 — Optional — UK Regulation &amp; Warnings" title="05 — Optional — UK Regulation &amp; Warnings">
+        <outline type="rss" text="FCA — News" title="FCA — News" xmlUrl="https://www.fca.org.uk/news/rss.xml" htmlUrl="https://www.fca.org.uk/what-we-publish" eventDriven="true" />
         <outline type="rss" text="FCA — Scam Warnings" title="FCA — Scam Warnings" xmlUrl="https://www.fca.org.uk/news/warnings/rss.xml" htmlUrl="https://www.fca.org.uk/news/warnings" eventDriven="true" />
         <outline type="rss" text="OFSI — Financial Sanctions Blog" title="OFSI — Financial Sanctions Blog" xmlUrl="https://ofsi.blog.gov.uk/feed/" htmlUrl="https://ofsi.blog.gov.uk/" eventDriven="true" />
       </outline>
@@ -59,6 +69,11 @@
         <outline type="rss" text="Microsoft Security Blog" title="Microsoft Security Blog" xmlUrl="https://www.microsoft.com/en-us/security/blog/feed/" htmlUrl="https://www.microsoft.com/en-us/security/blog/" />
         <outline type="rss" text="Unit 42 — Threat Research" title="Unit 42 — Threat Research" xmlUrl="https://unit42.paloaltonetworks.com/feed/atom/" htmlUrl="https://unit42.paloaltonetworks.com/" />
         <outline type="rss" text="GitHub Security Blog" title="GitHub Security Blog" xmlUrl="https://github.blog/security/feed/" htmlUrl="https://github.blog/security/" />
+      </outline>
+      <outline text="04 — Optional — Specialist Alerts &amp; Research" title="04 — Optional — Specialist Alerts &amp; Research">
+        <outline type="rss" text="CERT-EU — Threat Intelligence" title="CERT-EU — Threat Intelligence" xmlUrl="https://cert.europa.eu/publications/threat-intelligence-rss" htmlUrl="https://cert.europa.eu/publications/threat-intelligence" eventDriven="true" />
+        <outline type="rss" text="CrowdStrike — Cybersecurity Research" title="CrowdStrike — Cybersecurity Research" xmlUrl="https://www.crowdstrike.com/en-us/blog/feed" htmlUrl="https://www.crowdstrike.com/en-us/blog/" />
+        <outline type="rss" text="OpenSSF — Supply Chain Security" title="OpenSSF — Supply Chain Security" xmlUrl="https://openssf.org/feed/" htmlUrl="https://openssf.org/blog/" eventDriven="true" />
       </outline>
     </outline>
   </body>

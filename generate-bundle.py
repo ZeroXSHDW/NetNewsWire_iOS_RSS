@@ -10,69 +10,24 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from pathlib import Path
 
-from rss_validation import url_is_web
-
-
-NOTIFICATION_DISPLAY = {
-    "on": "**On**",
-    "optional": "Optional on",
-    "optional-french": "Optional on; French",
-    "off": "Off; summarize",
-}
+from bundle_config import (
+    NOTIFICATION_DISPLAY,
+    item_link_policy,
+    load_manifest as load_manifest_file,
+    profile_device_budget,
+    profile_includes_feed,
+    profile_config,
+    profile_settings,
+)
 
 
 def load_manifest(path: Path) -> dict:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    feeds = data.get("feeds")
-    if not isinstance(feeds, list) or not feeds:
-        raise ValueError("manifest must contain a non-empty feeds list")
-
-    seen_ids: set[str] = set()
-    seen_urls: set[str] = set()
-    for feed in feeds:
-        for key in (
-            "id",
-            "section",
-            "folder",
-            "title",
-            "url",
-            "html_url",
-            "purpose",
-            "signal_type",
-            "access",
-            "cadence",
-            "validated",
-        ):
-            if not str(feed.get(key, "")).strip():
-                raise ValueError(f"feed is missing required field {key!r}: {feed!r}")
-        feed_id = str(feed["id"])
-        url = str(feed["url"])
-        if feed_id in seen_ids:
-            raise ValueError(f"duplicate feed id: {feed_id}")
-        if url in seen_urls:
-            raise ValueError(f"duplicate feed URL: {url}")
-        seen_ids.add(feed_id)
-        seen_urls.add(url)
-        if not url_is_web(url) or not url.lower().startswith("https://"):
-            raise ValueError(f"feed URL must be a direct HTTPS URL: {feed_id}")
-        if not url_is_web(str(feed["html_url"])):
-            raise ValueError(f"html_url must be an HTTP(S) URL: {feed_id}")
-        if feed.get("notification") not in NOTIFICATION_DISPLAY:
-            raise ValueError(f"invalid notification policy for {feed_id}")
-        if feed.get("event_driven") and not str(feed.get("freshness_reason", "")).strip():
-            raise ValueError(f"event-driven feed has no freshness_reason: {feed_id}")
-        profiles = feed.get("profiles", {})
-        if not isinstance(profiles, dict):
-            raise ValueError(f"profiles must be an object: {feed_id}")
-        if not isinstance(profiles.get("iphone-lite", False), bool):
-            raise ValueError(f"iphone-lite profile must be boolean: {feed_id}")
-    return data
+    return load_manifest_file(path)
 
 
 def selected_feeds(data: dict, profile: str) -> list[dict]:
-    if profile == "master":
-        return list(data["feeds"])
-    return [feed for feed in data["feeds"] if feed.get("profiles", {}).get(profile, False)]
+    profile_config(data, profile)
+    return [feed for feed in data["feeds"] if profile_includes_feed(data, profile, feed)]
 
 
 def _xml_text(value: str) -> str:
@@ -82,7 +37,7 @@ def _xml_text(value: str) -> str:
 def write_opml(data: dict, feeds: list[dict], destination: Path, profile: str) -> None:
     root = ET.Element("opml", {"version": "2.0"})
     head = ET.SubElement(root, "head")
-    ET.SubElement(head, "title").text = _xml_text(data["opml_titles"][profile])
+    ET.SubElement(head, "title").text = _xml_text(profile_config(data, profile)["opml_title"])
     body = ET.SubElement(root, "body")
 
     sections: OrderedDict[str, OrderedDict[str, list[dict]]] = OrderedDict()
@@ -107,6 +62,9 @@ def write_opml(data: dict, feeds: list[dict], destination: Path, profile: str) -
                 }
                 if feed.get("event_driven"):
                     attributes["eventDriven"] = "true"
+                policy = item_link_policy(feed)
+                if policy != "default":
+                    attributes["itemLinkPolicy"] = policy
                 ET.SubElement(folder_outline, "outline", attributes)
 
     ET.indent(root, space="  ")
@@ -158,7 +116,7 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
         "",
         "## Profile notes",
         "",
-        data.get("profile_notes", {}).get(profile, ""),
+        profile_config(data, profile).get("note", ""),
         "",
         "## Operating references",
         "",
@@ -166,10 +124,11 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
         "- [Coverage-gap assessment](Coverage-Gap-Assessment.md)",
         "- [Apple Intelligence summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md)",
         "- [Daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md)",
+        "- [Feature and automation matrix](NetNewsWire-Feature-and-Automation-Matrix.md)",
         "",
         "## Maintenance",
         "",
-        "Run `make test`, `make validate` and `make validate-lite` after manifest changes and during the monthly live health review.",
+        "Run `make check`, `make validate`, `make validate-lite` and `make validate-air` after manifest changes and during the monthly live health review.",
         "",
     ])
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -178,18 +137,22 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
 
 def notification_matrix_data(data: dict) -> dict:
     profiles = OrderedDict()
-    for profile, label in (("master", "Master"), ("iphone-lite", "iPhone Lite")):
+    manifest_profiles = profile_settings(data)
+    for profile, config in manifest_profiles.items():
         feeds = selected_feeds(data, profile)
         counts = OrderedDict((policy, 0) for policy in NOTIFICATION_DISPLAY)
         for feed in feeds:
             counts[feed["notification"]] += 1
         profiles[profile] = {
-            "label": label,
+            "label": config["label"],
             "feed_count": len(feeds),
+            "recommended": bool(config.get("recommended", False)),
+            "device_budget": profile_device_budget(config),
             "notification_counts": counts,
             "feed_ids": [feed["id"] for feed in feeds],
         }
     return {
+        "schema_version": 2,
         "manifest_version": data.get("manifest_version"),
         "profiles": profiles,
         "feeds": [
@@ -203,8 +166,8 @@ def notification_matrix_data(data: dict) -> dict:
                 "notification_display": NOTIFICATION_DISPLAY[feed["notification"]],
                 "signal_type": feed["signal_type"],
                 "profiles": {
-                    "master": True,
-                    "iphone-lite": bool(feed.get("profiles", {}).get("iphone-lite", False)),
+                    profile: profile_includes_feed(data, profile, feed)
+                    for profile in manifest_profiles
                 },
             }
             for feed in data["feeds"]
@@ -223,15 +186,25 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
         "",
         "## Profile summary",
         "",
-        "| Profile | Feeds | On | Optional | Optional French | Off |",
-        "|---|---:|---:|---:|---:|---:|",
+        "| Profile | Recommended | Feeds | On | Optional | Optional French | Off |",
+        "|---|---|---:|---:|---:|---:|---:|",
     ]
     for profile, profile_data in matrix["profiles"].items():
         counts = profile_data["notification_counts"]
         lines.append(
-            f"| {profile_data['label']} | {profile_data['feed_count']} | {counts['on']} | {counts['optional']} | {counts['optional-french']} | {counts['off']} |"
+            f"| {profile_data['label']} | {'Yes' if profile_data['recommended'] else 'No'} | {profile_data['feed_count']} | {counts['on']} | {counts['optional']} | {counts['optional-french']} | {counts['off']} |"
         )
 
+    profile_names = list(matrix["profiles"])
+    profile_headers = [matrix["profiles"][profile]["label"] for profile in profile_names]
+    recommended_profile = next(
+        (matrix["profiles"][profile]["label"] for profile in profile_names if matrix["profiles"][profile]["recommended"]),
+        profile_headers[-1],
+    )
+    full_profile = next(
+        (matrix["profiles"][profile]["label"] for profile in profile_names if profile_settings(data)[profile]["include_all"]),
+        profile_headers[0],
+    )
     lines.extend([
         "",
         "## Policy meanings",
@@ -245,8 +218,8 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
         "",
         "## Per-feed matrix",
         "",
-        "| Section | Folder | Feed | Master | iPhone Lite | Notification policy | Signal type |",
-        "|---|---|---|---|---|---|---|",
+        "| Section | Folder | Feed | " + " | ".join(profile_headers) + " | Notification policy | Signal type |",
+        "|---|---|---|" + "---|" * len(profile_headers) + "---|---|",
     ])
     for feed in matrix["feeds"]:
         lines.append(
@@ -257,8 +230,7 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
                     feed["section"],
                     feed["folder"],
                     feed["title"],
-                    "Yes",
-                    "Yes" if feed["profiles"]["iphone-lite"] else "No",
+                    *["Yes" if feed["profiles"].get(profile, False) else "No" for profile in profile_names],
                     feed["notification_display"],
                     feed["signal_type"],
                 )
@@ -270,11 +242,12 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
         "",
         "## Import checklist",
         "",
-        "1. Import the iPhone Lite OPML for the lower-refresh profile, or the master OPML for full coverage.",
-        "2. Apply **On** only to the four urgent official alert feeds unless your operating needs justify more interruptions.",
-        "3. Review **Optional** feeds after import; leave them off during normal use.",
-        "4. Leave **Off** feeds notification-disabled and process them in the daily digest.",
-        "5. Re-check this matrix after any manifest change; the generated OPML and source tables should be regenerated together.",
+        f"1. Import exactly one profile: the **{recommended_profile}** OPML as the default, the Lite OPML for constrained connections, or the **{full_profile}** OPML for full coverage.",
+        "2. NetNewsWire adds imported feeds to the current subscription list; remove or separate an older copy before importing if you are replacing a previous bundle.",
+        "3. Apply **On** only to the four urgent official alert feeds unless your operating needs justify more interruptions.",
+        "4. Review **Optional** feeds after import; leave them off during normal use.",
+        "5. Leave **Off** feeds notification-disabled and process them in the daily digest.",
+        "6. Re-check this matrix after any manifest change; the generated OPML and source tables should be regenerated together.",
         "",
         "See [NetNewsWire setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md) for batch review.",
         "",
@@ -294,7 +267,9 @@ def write_notification_json(data: dict, destination: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", default="feed-manifest.json", type=Path)
-    parser.add_argument("--profile", choices=("master", "iphone-lite"), default="master")
+    parser.add_argument("--profile", default="master")
+    parser.add_argument("--all", dest="all_profiles", action="store_true", help="generate every manifest-defined profile")
+    parser.add_argument("--output-root", type=Path, default=Path("."))
     parser.add_argument("--opml", type=Path)
     parser.add_argument("--source-table", type=Path)
     parser.add_argument("--notification-table", type=Path)
@@ -303,13 +278,26 @@ def main() -> int:
 
     try:
         data = load_manifest(args.manifest)
-        feeds = selected_feeds(data, args.profile)
-        if not feeds:
-            raise ValueError(f"profile contains no feeds: {args.profile}")
-        if args.opml:
-            write_opml(data, feeds, args.opml, args.profile)
-        if args.source_table:
-            write_source_table(data, feeds, args.source_table, args.profile)
+        if args.all_profiles and (args.opml or args.source_table):
+            raise ValueError("--all cannot be combined with --opml or --source-table")
+        if args.all_profiles:
+            generated_profiles = []
+            for profile, config in profile_settings(data).items():
+                feeds = selected_feeds(data, profile)
+                if not feeds:
+                    raise ValueError(f"profile contains no feeds: {profile}")
+                write_opml(data, feeds, args.output_root / config["opml_file"], profile)
+                write_source_table(data, feeds, args.output_root / config["source_table_file"], profile)
+                generated_profiles.append(f"{profile}={len(feeds)}")
+        else:
+            feeds = selected_feeds(data, args.profile)
+            if not feeds:
+                raise ValueError(f"profile contains no feeds: {args.profile}")
+            if args.opml:
+                write_opml(data, feeds, args.opml, args.profile)
+            if args.source_table:
+                write_source_table(data, feeds, args.source_table, args.profile)
+            generated_profiles = [f"{args.profile}={len(feeds)}"]
         if args.notification_table:
             write_notification_matrix(data, args.notification_table)
         if args.notification_json:
@@ -318,7 +306,7 @@ def main() -> int:
         print(f"generate-bundle: {exc}", file=sys.stderr)
         return 2
 
-    print(f"profile={args.profile} feeds={len(feeds)} notification_matrix={'yes' if args.notification_table or args.notification_json else 'no'}")
+    print(f"profiles={' '.join(generated_profiles)} notification_matrix={'yes' if args.notification_table or args.notification_json else 'no'}")
     return 0
 
 

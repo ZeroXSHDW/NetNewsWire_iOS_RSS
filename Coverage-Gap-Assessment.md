@@ -1,6 +1,6 @@
 # RSS Coverage-Gap Assessment
 
-Checked: 15 August 2026 (Europe/Dublin)
+Checked: 16 August 2026 (Europe/Dublin)
 
 ## Selection rule
 
@@ -10,15 +10,103 @@ Use [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Fe
 
 ## Operational improvements now in place
 
-- [feed-manifest.json](./feed-manifest.json) is the source of truth; [generate-bundle.py](./generate-bundle.py) regenerates the master and iPhone-lite OPML/source-table artifacts.
-- The master bundle remains 51 feeds. A separate [30-feed iPhone-lite OPML](./NetNewsWire-Finance-Cyber-iPhone-Lite.opml) keeps official/core alerts, Ireland/EU/UK context and a compact research layer while leaving specialist feeds in the master profile.
+- [feed-manifest.json](./feed-manifest.json) is the source of truth; [generate-bundle.py](./generate-bundle.py) regenerates every manifest-defined OPML/source-table artifact.
+- The master bundle now contains 62 feeds. The recommended [50-feed iPhone Air OPML](./NetNewsWire-Finance-Cyber-iPhone-Air.opml) adds compact market, data, conduct and supply-chain context to the [39-feed iPhone-lite OPML](./NetNewsWire-Finance-Cyber-iPhone-Lite.opml); archive-heavy specialist feeds remain in the master profile.
 - The validator now compares manifest, OPML and source-table metadata, measures decompressed body and compressed/wire bytes separately, detects conservative fuzzy duplicate stories and enforces feed-specific stale-review deadlines.
 - Run `make test`, `make validate` and `make validate-lite`; the GitHub Actions workflow repeats these checks monthly or on demand.
 - Use [NetNewsWire-Daily-Digest-Workflow.md](./NetNewsWire-Daily-Digest-Workflow.md) and `prepare-rss-digest-input.py` to remove already processed items before the Apple Intelligence daily digest.
 
-## Change made in this cycle
+## This research pass — FCA Warning List coverage
 
 ### Added
+
+- **FCA — Scam Warnings** — `https://www.fca.org.uk/news/warnings/rss.xml`
+  - Official FCA Warning List stream for unauthorised firms, clone firms and investment-scam warnings.
+  - Added beside the existing general FCA news feed because the current 20 warning items had zero exact title/link overlap with that stream.
+  - Live candidate check: HTTP 200, RSS/XML, 20 dated items through 14 August 2026, 60.1 KB body, 5.4 KB wire response, 0.12 s fetch, and no noise or item-integrity failures.
+  - Included in iPhone-lite with notifications off; warnings are high-signal but frequent enough that they belong in the digest rather than immediate alerts.
+
+### Rechecked and not added
+
+- **BLS — Latest Numbers** remains a useful official US macro candidate and its documented feed URL is current, but access was intermittent: the direct Python fetch returned RSS/XML while the bundle’s reproducible curl validator received HTTP 403. It remains outside the bundle until the endpoint is stable under the same fetch path used by validation.
+- **ESMA RSS**, **ENISA RSS**, **CSO Ireland RSS**, **Euronext press RSS** and **US Treasury RSS** still did not produce a stronger validator-compatible feed: ESMA lacks item dates, ENISA/CSO/Treasury candidates returned 404, and Euronext’s feed remains an undated 2021–2022 archive.
+
+## This research pass — threat research and cloud-bulletin coverage
+
+### Added
+
+- **Unit 42 — Threat Research** — `https://unit42.paloaltonetworks.com/feed/atom/`
+  - Official Palo Alto Networks research covering malware, vulnerabilities, cloud, identity and incident analysis.
+  - Added to `Cyber / Core / Technical Research` and the iPhone-lite profile because it is a compact, current threat-intelligence source distinct from Mandiant, Microsoft and Cisco Talos.
+  - Live candidate check: HTTP 200, Atom/XML, 15 dated items through 11 August 2026, 24.2 KB payload, 1.70 s fetch and no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; summarize with the technical-research batch.
+
+- **AWS Security Bulletins** — `https://aws.amazon.com/security/security-bulletins/rss/feed/`
+  - Official AWS security bulletin stream for service, open-source component and cloud-platform vulnerabilities.
+  - Added to `Cyber / Optional / Specialist Alerts & Research` in the master profile only. Its 100-item archive is useful for a deeper cloud-security pass but is not necessary for the default iPhone profile.
+  - Live candidate check: HTTP 200, RSS/XML, 100 dated items through 13 August 2026, 166.2 KB payload, no exact or fuzzy title/link overlap in the comparison window.
+  - Optional notification only for users with AWS responsibility; off by default.
+
+- **OFSI — Financial Sanctions Blog** — `https://ofsi.blog.gov.uk/feed/`
+  - Official UK Office of Financial Sanctions Implementation stream covering sanctions policy, licensing and compliance context.
+  - Added to `Finance / Optional / UK Regulation & Warnings` and the iPhone-lite profile because it fills a direct UK sanctions/financial-crime gap beside HM Treasury and FCA coverage.
+  - Live candidate check: HTTP 200, Atom/XML, 10 dated items through 23 June 2026, 99.8 KB payload, no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; urgent designation changes should be followed through the official UK sanctions-list/e-alert channels rather than inferred from a blog feed.
+
+- **European Banking Authority — News** — `https://www.eba.europa.eu/news-press/news/rss.xml`
+  - Official EU banking-supervision stream covering prudential regulation, AML, DORA/ICT risk and financial-sector resilience.
+  - Added to the core official/macro folder and iPhone-lite because it fills the EU banking-regulatory gap left by the invalid-date ESMA feed.
+  - Live candidate check: HTTP 200, RSS/XML, 10 dated items from 17 July through 6 August 2026, 11.4 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; use the daily digest for regulatory context.
+
+- **European Systemic Risk Board — Press** — `https://www.esrb.europa.eu/rss/press.xml`
+  - Official EU macroprudential stream covering systemic risk, financial stability and cyber-resilience context.
+  - Added to the core official/macro folder and iPhone-lite because it adds a distinct systemic-risk lens, including the interaction between frontier AI and financial cyber resilience.
+  - Live candidate check: HTTP 200, XML, 15 dated items from 20 October 2025 through 7 July 2026, 6.1 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; event-driven items are reviewed in the finance digest.
+
+- **GitHub Security Blog** — `https://github.blog/security/feed/`
+  - Official GitHub security stream focused on open-source supply chain attacks, CI/CD, Dependabot and developer-platform security.
+  - Added to the technical-research folder and iPhone-lite because it provides a direct GitHub platform perspective not covered by OpenSSF, Microsoft or AWS bulletins.
+  - Live candidate check: HTTP 200, RSS/XML, 10 dated items through 13 August 2026, 179.1 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; review in the supply-chain and cloud/identity digest batch.
+
+- **AMLA — News & Press** — `https://www.amla.europa.eu/node/19/rss_en`
+  - Adds the official EU Anti-Money Laundering Authority stream for AML/CFT supervision, FIU cooperation, reporting standards and financial-crime policy.
+  - Added to the finance core and iPhone-lite because EU-level AML/CFT responsibilities moved from EBA to AMLA in 2026; the existing EBA feed alone should not be treated as the current AML authority.
+  - Live candidate check: HTTP 200, RSS/XML, 30 dated items through 6 August 2026, 40.5 KB body and no exact or fuzzy title/link overlap in the comparison window.
+  - Notification-off; summarize with enforcement, sanctions and regulator context.
+
+### Rechecked and not added
+
+- **AWS Security Blog** is current and valid, but its broader product/how-to/compliance stream is less focused than the retained AWS Security Bulletins feed; adding both would increase vendor noise without a comparable alert gain.
+- **Google Security Blog** is structurally valid but its current RSS response stops at 23 April 2026, so it fails the current-freshness preference for a live phone feed.
+- **Cloudflare Security, Rapid7 and GitHub Security Lab tag feeds** are valid, but each is broader or less current than the retained technical-research set; none earned a distinct iPhone slot in this pass.
+- **JPCERT/CC English alerts** are valid and current, but the tested items are mostly Microsoft/Adobe patch notices already covered by official advisory and vendor feeds; it remains a useful web reference rather than another alert stream.
+- **FINRA** publishes useful RSS feeds, but the official endpoints remain HTTP-only and their HTTPS host fails transport; they remain outside the HTTPS bundle policy.
+- **CFPB Newsroom RSS** is current, but the validator-compatible request returns HTTP 403 while a different browser/curl identity succeeds; it remains outside the reproducible automated bundle until anonymous access is stable.
+
+## Earlier additions in this maintenance series
+
+### Added
+
+- **CFTC — Enforcement** — `https://www.cftc.gov/RSS/RSSENF/rssenf.xml`
+  - Official US derivatives-enforcement stream covering fraud, manipulation, AML, supervision and related orders.
+  - Added to `Finance / Core / Official & Macro` because its current ten items are distinct from the retained general CFTC press-release feed.
+  - Live check: HTTP 200, RSS/XML, 10 dated items, 4.5 KB body, 1.2 KB wire response, 0.18 s fetch and no current title/link overlap with general CFTC.
+  - Optional notification; keep off by default and summarize in the finance digest.
+
+- **CyberScoop** — `https://cyberscoop.com/feed/`
+  - Independent cyber-policy, government, national-security and incident reporting.
+  - Added to `Cyber / Core / News & Incident Reporting` and the iPhone-lite profile because it supplies a dedicated US policy/news perspective distinct from the retained incident publishers.
+  - Live check: HTTP 200, RSS/XML, 10 dated items, 67.7 KB body, 22.5 KB wire response, 0.15 s fetch and no current title/link overlap in the comparison window.
+  - Notification-off; review in the daily digest.
+
+- **Schneier on Security** — `https://www.schneier.com/feed/atom/`
+  - Independent privacy, cryptography and security analysis.
+  - Added to `Cyber / Optional / Specialist Alerts & Research` in the master profile only; its mixed technology and speaking items make it useful context but not a phone-core source.
+  - Live check: HTTP 200, Atom/XML, 10 dated items, 51.3 KB body, 14.1 KB wire response, 0.80 s fetch and no current title/link overlap in the comparison window.
+  - Notification-off.
 
 - **CERT-FR — Security Alerts (French)** — `https://www.cert.ssi.gouv.fr/alerte/feed/`
   - Official French national CSIRT alert stream for urgent vulnerability and incident warnings, distinct from the CERT-FR advisory feed already retained.
@@ -61,6 +149,10 @@ Use [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Fe
 
 ### Rechecked in this cycle
 
+- **BLS Latest Numbers** is still a useful official US macro source, but the validator-compatible HTTPS request returned HTTP 403 even though a browser-like request returned 200; it remains outside the bundle until anonymous automated access is reliable.
+- **MSRC Security Update Guide** is current but returned roughly 2.54 MB with 5,014 items; it is too broad and expensive for this iPhone-focused bundle.
+- **SEC Trading Suspensions, Litigation Releases and Administrative Proceedings** expose official RSS endpoints, but the live validator received HTTP 403 for each endpoint; the existing SEC Press Releases feed remains the reliable retained SEC channel.
+- **The Hacker News, The Register Security, CSO Online, Help Net Security, Security Boulevard and Malwarebytes Labs** were reachable and structurally valid, but their broader high-volume editorial coverage did not fill a distinct gap over the retained publishers strongly enough to justify adding them to the phone profiles. They remain optional retest candidates rather than imported feeds.
 - **ESMA RSS** still returns HTTP 200 and valid RSS, but its current entries still have no detectable item dates; it remains rejected.
 - **FINRA HTTPS endpoints** still fail at the TLS/transport layer; FINRA’s published endpoints remain HTTP-only and remain outside the bundle policy.
 - **ENISA historical RSS paths** still return HTTP 404.
@@ -81,16 +173,16 @@ Use [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Fe
 | Ireland finance | Central Bank of Ireland news and markets updates, RTÉ Business | Good coverage; CSO release calendar and Department of Finance fiscal releases remain web-only because no verified direct RSS/Atom feed was retained. |
 | Ireland cyber | Ireland NCSC alerts | Good official alert coverage; event-driven freshness is explicitly supported. |
 | EU monetary/data | ECB press, operations, statistics and EUR/USD/EUR/GBP reference rates; Eurostat economy/finance releases | Strong coverage for the stated use case. |
-| EU financial policy | European Commission sanctions guidance | Added as an optional, low-noise policy source; no notification. |
-| EU securities regulation | ESMA was tested but not retained | Its direct RSS endpoint returned HTTP 200 and RSS, but current items had no detectable publication date, so it fails the date-integrity rule. |
+| EU financial policy | European Banking Authority banking supervision, AMLA AML/CFT, ESRB systemic risk, European Commission sanctions guidance | Strong official coverage across prudential supervision, financial crime, macroprudential risk, resilience and sanctions policy; all notification-off. |
+| EU securities regulation | European Banking Authority banking supervision; ESMA was tested but not retained | EBA supplies current regulatory context; ESMA’s direct RSS endpoint returned HTTP 200 and RSS, but current items had no detectable publication date, so it fails the date-integrity rule. |
 | EU cyber | CERT-EU security advisories and threat intelligence, CERT-FR alerts and advisories | Strong operational coverage; ENISA’s historical RSS URLs currently return HTTP 404. CERT-FR is optional and French-language. |
-| UK finance | HM Treasury, Bank of England news/publications, FCA news and warnings, ONS release calendar | Strong central-bank, fiscal-policy, regulator and macro-timing coverage. |
+| UK finance | HM Treasury, Bank of England news/publications, FCA news and warnings, OFSI sanctions policy, ONS release calendar | Strong central-bank, fiscal-policy, conduct, sanctions and macro-timing coverage. |
 | UK cyber | NCSC UK News and all-updates feeds | Strong official current-incident and guidance coverage; stale reports and duplicate blog feeds were not added. |
-| US finance | Nasdaq trade halts, SEC, CFTC and Federal Reserve | Strong official coverage; company-specific regulatory feeds remain intentionally excluded without user-provided tickers or names. BEA remains a useful web-only candidate because its RSS has one malformed historical item link. |
+| US finance | Nasdaq trade halts, SEC, CFTC general and enforcement, Federal Reserve | Strong official coverage for market operations, derivatives policy and enforcement; company-specific regulatory feeds remain intentionally excluded without user-provided tickers or names. BEA remains a useful web-only candidate because its RSS has one malformed historical item link. |
 | US exchange alerts | Nasdaq Trade Halts and Nasdaq Equity Trader Alerts | The retained feeds cover live halt records and official equity-trading operations. NYSE provides a live web page and CSV/email or proprietary market-data services, but no verified direct public RSS/Atom endpoint was found. |
-| US financial regulation | SEC and CFTC; FINRA candidate tested | FINRA’s published RSS endpoints are HTTP-only, and the HTTPS transport did not provide a reliable XML response, so they were rejected. |
+| US financial regulation | SEC press releases, CFTC general and enforcement | FINRA’s published RSS endpoints are HTTP-only; SEC topic-specific feeds returned HTTP 403 to the validator. The retained SEC press and CFTC streams are the reliable public channels. |
 | US cyber | CISA all advisories and ICS advisories, NIST, CERT/CC | Strong official and technical coverage. |
-| Technical research | Mandiant, Microsoft, Cisco Talos, SANS, CERT/CC, OpenSSF, CrowdStrike and independent reporting | Stronger supply-chain and threat-intelligence coverage; both new specialist feeds remain optional and notification-off to limit duplication and alert fatigue. |
+| Technical research | Mandiant, Microsoft, Unit 42, GitHub Security Blog, Cisco Talos, SANS, CERT/CC, OpenSSF, CrowdStrike, Schneier and independent reporting | Strong supply-chain, threat-intelligence and independent analysis coverage; Unit 42 and GitHub Security Blog are compact enough for Lite, while Air adds compact CrowdStrike, OpenSSF and CERT-EU threat-intelligence context. Mandiant, Cisco Talos, AWS Security Bulletins and Schneier remain Master-only to limit archive/mixed-topic volume. |
 
 ## Candidates rejected this cycle
 
@@ -111,8 +203,12 @@ Use [NetNewsWire-RSS-Feed-Discovery-and-Addition-Prompt.md](./NetNewsWire-RSS-Fe
 | Nasdaq Equity Regulatory Updates — `https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&categorylist=6` | Valid but only one current item in the tested response; too sparse to add distinct value. |
 | Nasdaq Equity Technical Updates — `https://www.nasdaqtrader.com/rss.aspx?feed=currentheadlines&categorylist=7` | Valid but only three items, with older entries and overlap with trader-operations notices; not retained separately. |
 | BLS Latest Numbers — `https://www.bls.gov/feed/bls_latest.rss` | Official BLS documentation identifies the feed, but the live endpoint returned HTTP 403 to the validator-compatible HTTPS fetch path; it cannot be imported until public access is reliable. |
+| MSRC Security Update Guide — `https://api.msrc.microsoft.com/update-guide/rss` | Valid and current, but the response was about 2.54 MB with 5,014 items; its refresh cost and breadth are disproportionate for an iPhone bundle. |
+| SEC topic feeds — `https://www.sec.gov/enforcement-litigation/trading-suspensions/rss`, `/litigation-releases/rss`, `/administrative-proceedings/rss` | Official RSS endpoints are discoverable, but each returned HTTP 403 to the validator-compatible live request; the existing SEC press-release feed is retained. |
+| The Hacker News — `https://feeds.feedburner.com/TheHackersNews?format=xml` | Valid current RSS, but 50 high-volume general cyber items add less marginal value than the retained BleepingComputer, SecurityWeek, The Record, CyberScoop and specialist feeds; not added to the phone profiles. |
+| The Register Security — `https://www.theregister.com/security/headlines.atom` | Valid current Atom feed, but 50 items and a roughly 279 KB full response add broad technology-news volume; kept as a web reference rather than a core phone feed. |
 | ENISA current-news candidates | The current ENISA site exposes current HTML publications and news but no discoverable direct RSS/Atom endpoint; historical RSS references are not substituted with HTML. |
-| EBA press/news candidates | The current EBA press and news pages are HTML and no direct public RSS/Atom endpoint was exposed or validated; no guessed endpoint was imported. |
+| EBA press/news page | The HTML page alone did not expose the feed during the first search, but the official direct news RSS endpoint `https://www.eba.europa.eu/news-press/news/rss.xml` was later validated and retained. |
 | NCSC UK Threat Reports — `https://www.ncsc.gov.uk/api/1/services/v1/report-rss-feed.xml` | Valid RSS, but the newest item is 7 May 2025 and outside the 180-day freshness window. |
 | NCSC UK Guidance — `https://www.ncsc.gov.uk/api/1/services/v1/guidance-rss-feed.xml` | Valid RSS, but it adds broad guidance rather than a material gap against the retained NCSC all-updates, NIST and official-advisory coverage; not retained. |
 | NCSC UK Blog Posts — `https://www.ncsc.gov.uk/api/1/services/v1/blog-post-rss-feed.xml` | All 20 current links overlap the retained NCSC UK all-updates feed; rejected as duplicate coverage. |
@@ -134,6 +230,8 @@ Add a source only if one of these conditions changes:
 - A new Irish, EU, UK or US source provides information not already covered by the current official feeds.
 - A smaller direct Project Zero feed or a genuine NVD RSS/Atom stream becomes available without replacing a higher-signal source.
 - CSO Ireland or the Department of Finance publishes a stable direct HTTPS RSS/Atom feed with dated release items.
+- BLS Latest Numbers allows stable anonymous automated HTTPS access to the canonical feed endpoint.
+- SEC topic-specific RSS endpoints return HTTP 200 to the validator and add reliable trading-suspension or enforcement coverage beyond SEC Press Releases.
 
 ## Ongoing quality controls
 

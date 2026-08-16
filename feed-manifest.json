@@ -1,8 +1,60 @@
 {
-  "manifest_version": 1,
-  "opml_titles": {
-    "master": "Finance and Cyber Security — NetNewsWire high-signal bundle",
-    "iphone-lite": "Finance and Cyber Security — NetNewsWire iPhone-lite bundle"
+  "manifest_version": 2,
+  "profiles": {
+    "master": {
+      "label": "Master",
+      "opml_title": "Finance and Cyber Security — NetNewsWire high-signal bundle",
+      "note": "The master profile preserves the full 62-feed coverage set. Notification preferences are documented below and must be enabled manually after OPML import.",
+      "include_all": true,
+      "opml_file": "NetNewsWire-Finance-Cyber.opml",
+      "source_table_file": "NetNewsWire-Finance-Cyber-Source-Table.md"
+    },
+    "iphone-lite": {
+      "label": "iPhone Lite",
+      "opml_title": "Finance and Cyber Security — NetNewsWire iPhone-lite bundle",
+      "note": "The iPhone-lite profile contains 39 feeds: official/core alerts, Ireland/EU/UK macro context, selected US enforcement coverage, selected market reporting and a compact cyber research layer. Optional specialist and high-payload research feeds remain in the master profile.",
+      "include_all": false,
+      "opml_file": "NetNewsWire-Finance-Cyber-iPhone-Lite.opml",
+      "source_table_file": "NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md",
+      "device_budget": {
+        "max_feeds": 40,
+        "max_total_payload_bytes": 4194304,
+        "max_single_payload_bytes": 614400,
+        "max_review_feeds": 6,
+        "max_notifications_on": 4
+      },
+      "digest_budget": {
+        "max_items": 24,
+        "max_item_chars": 5000,
+        "max_total_chars": 75000,
+        "max_seen_items": 10000,
+        "duplicate_window_days": 3.0
+      }
+    },
+    "iphone-air": {
+      "label": "iPhone Air",
+      "opml_title": "Finance and Cyber Security — NetNewsWire iPhone Air bundle",
+      "note": "The iPhone Air profile contains 50 feeds: the iPhone-lite alert and triage core plus one strong market source, Ireland/EU/global data, UK conduct coverage and compact supply-chain/threat-intelligence research. It is the recommended daily profile; the device budget caps it at 50 feeds, 4 MB of full feed bodies, 600 KB per feed, six mobile-review feeds and four interrupting notifications, while the digest handoff caps the selected input at 30 items and 90,000 text characters. Master remains the deep-research backup.",
+      "include_all": false,
+      "inherits": ["iphone-lite"],
+      "opml_file": "NetNewsWire-Finance-Cyber-iPhone-Air.opml",
+      "source_table_file": "NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md",
+      "recommended": true,
+      "device_budget": {
+        "max_feeds": 50,
+        "max_total_payload_bytes": 4194304,
+        "max_single_payload_bytes": 614400,
+        "max_review_feeds": 6,
+        "max_notifications_on": 4
+      },
+      "digest_budget": {
+        "max_items": 30,
+        "max_item_chars": 6000,
+        "max_total_chars": 90000,
+        "max_seen_items": 10000,
+        "duplicate_window_days": 3.0
+      }
+    }
   },
   "validation": {
     "max_age_days": 180,
@@ -11,11 +63,10 @@
     "stale_review_default_days": 365,
     "mobile_review_bytes": 262144,
     "mobile_large_bytes": 1048576,
-    "mobile_slow_seconds": 2.0
-  },
-  "profile_notes": {
-    "master": "The master profile preserves the full 51-feed coverage set. Notification preferences are documented below and must be enabled manually after OPML import.",
-    "iphone-lite": "The iPhone-lite profile contains 30 feeds: official/core alerts, Ireland/EU/UK macro context, selected market reporting and a compact cyber research layer. Optional specialist and high-payload research feeds remain in the master profile."
+    "mobile_slow_seconds": 2.0,
+    "max_response_bytes": 16777216,
+    "duplicate_story_window_days": 3.0,
+    "validated_max_age_days": 180
   },
   "feeds": [
     {
@@ -30,8 +81,9 @@
       "signal_type": "alert",
       "access": "None",
       "cadence": "High; trading-day alerts; structured-item exception documented below",
+      "item_link_policy": "structured-alert",
       "notification": "on",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -49,7 +101,7 @@
       "access": "None",
       "cadence": "High; event-driven; includes older archive items",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -69,7 +121,7 @@
       "access": "None",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -87,9 +139,10 @@
       "access": "Metered / subscription",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -105,7 +158,7 @@
       "access": "Metered / subscription",
       "cadence": "High; fast and analytical",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -123,7 +176,7 @@
       "access": "Metered / subscription",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -141,7 +194,7 @@
       "access": "None",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -159,7 +212,7 @@
       "access": "Subscription",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -177,7 +230,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -197,11 +250,71 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
       "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Banking Authority — News",
+      "url": "https://www.eba.europa.eu/news-press/news/rss.xml",
+      "html_url": "https://www.eba.europa.eu/news-press",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-european-banking-authority-news",
+      "purpose": "Official EU banking authority; prudential supervision, banking regulation, AML, DORA and financial-sector resilience",
+      "signal_type": "regulatory/policy",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven EU banking supervision",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Systemic Risk Board — Press",
+      "url": "https://www.esrb.europa.eu/rss/press.xml",
+      "html_url": "https://www.esrb.europa.eu/home/html/rss.en.html",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-european-systemic-risk-board-press",
+      "purpose": "Official EU macroprudential authority; systemic risk, financial stability and cyber-resilience context",
+      "signal_type": "macroprudential/research",
+      "access": "None",
+      "cadence": "Periodic; event-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven systemic-risk research",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "AMLA — News & Press",
+      "url": "https://www.amla.europa.eu/node/19/rss_en",
+      "html_url": "https://www.amla.europa.eu/news-media_en",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-amla-news-press",
+      "purpose": "Official EU Anti-Money Laundering Authority; AML/CFT supervision, FIU cooperation, reporting and financial-crime policy",
+      "signal_type": "aml/enforcement/regulatory",
+      "access": "None",
+      "cadence": "High; event-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven EU AML/CFT authority",
       "stale_review_days": 365
     },
     {
@@ -217,7 +330,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -237,7 +350,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -257,7 +370,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -277,7 +390,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -297,11 +410,31 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
       "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "CFTC — Enforcement",
+      "url": "https://www.cftc.gov/RSS/RSSENF/rssenf.xml",
+      "html_url": "https://www.cftc.gov/PressRoom/PressReleases",
+      "event_driven": true,
+      "id": "finance-02-core-official-macro-cftc-enforcement",
+      "purpose": "Official US derivatives regulator; fraud, manipulation, AML, supervision and enforcement actions",
+      "signal_type": "enforcement/regulatory",
+      "access": "None",
+      "cadence": "High; event-driven enforcement",
+      "notification": "optional",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven enforcement",
       "stale_review_days": 365
     },
     {
@@ -317,7 +450,7 @@
       "access": "None",
       "cadence": "High; frequent/event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -337,7 +470,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -357,7 +490,7 @@
       "access": "None",
       "cadence": "High; daily data",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -375,7 +508,7 @@
       "access": "None",
       "cadence": "High; daily data",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -393,9 +526,10 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; event-driven",
       "stale_review_days": 365
@@ -413,9 +547,10 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; event-driven",
       "stale_review_days": 365
@@ -433,9 +568,10 @@
       "access": "None",
       "cadence": "High; scheduled releases",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; scheduled releases",
       "stale_review_days": 365
@@ -453,9 +589,10 @@
       "access": "None",
       "cadence": "High; event-driven; may be quiet between releases",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "Official policy guidance is episodic; review if no dated release appears for 270 days.",
       "stale_review_days": 270
@@ -473,7 +610,7 @@
       "access": "None",
       "cadence": "High; scheduled, broad",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -491,9 +628,10 @@
       "access": "None",
       "cadence": "High; event-driven/research",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; event-driven/research",
       "stale_review_days": 365
@@ -511,7 +649,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       },
@@ -531,9 +669,10 @@
       "access": "None",
       "cadence": "High; periodic/research",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; periodic/research",
       "stale_review_days": 365
@@ -541,21 +680,62 @@
     {
       "section": "Finance",
       "folder": "05 — Optional — UK Regulation & Warnings",
-      "title": "FCA — News & Warnings",
+      "title": "FCA — News",
       "url": "https://www.fca.org.uk/news/rss.xml",
       "html_url": "https://www.fca.org.uk/what-we-publish",
       "event_driven": true,
-      "id": "finance-05-optional-uk-regulation-warnings-fca-news-warnings",
-      "purpose": "Official UK financial-conduct regulator; market conduct and scam warnings",
-      "signal_type": "regulatory/alert",
+      "id": "finance-05-optional-uk-regulation-warnings-fca-news",
+      "purpose": "Official UK financial-conduct regulator; market conduct, supervision and regulatory news",
+      "signal_type": "regulatory/news",
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "FCA — Scam Warnings",
+      "url": "https://www.fca.org.uk/news/warnings/rss.xml",
+      "html_url": "https://www.fca.org.uk/news/warnings",
+      "event_driven": true,
+      "id": "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
+      "purpose": "Official UK financial-conduct regulator; unauthorised firms, clone firms and investment-scam warnings",
+      "signal_type": "regulatory/alert",
+      "access": "None",
+      "cadence": "High; event-driven warning publications",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; event-driven financial-scam warnings",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Finance",
+      "folder": "05 — Optional — UK Regulation & Warnings",
+      "title": "OFSI — Financial Sanctions Blog",
+      "url": "https://ofsi.blog.gov.uk/feed/",
+      "html_url": "https://ofsi.blog.gov.uk/",
+      "event_driven": true,
+      "id": "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
+      "purpose": "Official UK Office of Financial Sanctions Implementation; sanctions policy, licensing and compliance context",
+      "signal_type": "sanctions/policy",
+      "access": "None",
+      "cadence": "Periodic; event-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      },
+      "freshness_reason": "High; sanctions policy is event-driven",
       "stale_review_days": 365
     },
     {
@@ -571,7 +751,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "on",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -591,7 +771,7 @@
       "access": "None",
       "cadence": "High; frequent",
       "notification": "on",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -611,7 +791,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "on",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -631,7 +811,7 @@
       "access": "None",
       "cadence": "High; event-driven; French-language",
       "notification": "optional-french",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -651,7 +831,7 @@
       "access": "None",
       "cadence": "High; current/event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -669,7 +849,7 @@
       "access": "None",
       "cadence": "High; frequent/event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -689,7 +869,7 @@
       "access": "None",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -707,7 +887,7 @@
       "access": "Free / may be metered",
       "cadence": "High; fast",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -725,7 +905,25 @@
       "access": "None",
       "cadence": "High; investigative",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "02 — Core — News & Incident Reporting",
+      "title": "CyberScoop",
+      "url": "https://cyberscoop.com/feed/",
+      "html_url": "https://cyberscoop.com/news/",
+      "event_driven": false,
+      "id": "cyber-security-02-core-news-incident-reporting-cyberscoop",
+      "purpose": "Independent cyber-policy and national-security reporting; US government, threats, incidents and regulation",
+      "signal_type": "news/policy",
+      "access": "None",
+      "cadence": "High; current news and analysis",
+      "notification": "off",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -743,7 +941,7 @@
       "access": "None",
       "cadence": "High; fast and analytical",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -761,7 +959,7 @@
       "access": "Free / some restricted",
       "cadence": "High; fast and analytical",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -770,7 +968,7 @@
       "section": "Cyber Security",
       "folder": "03 — Core — Technical Research",
       "title": "SANS Internet Storm Center",
-      "url": "https://isc.sans.edu/rssfeed_full.xml",
+      "url": "https://isc.sans.edu/rssfeed.xml",
       "html_url": "https://isc.sans.edu/",
       "event_driven": false,
       "id": "cyber-security-03-core-technical-research-sans-internet-storm-center",
@@ -779,7 +977,7 @@
       "access": "None",
       "cadence": "High; frequent technical updates",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -797,7 +995,7 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -817,7 +1015,7 @@
       "access": "None",
       "cadence": "High; periodic guidance",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       },
@@ -837,7 +1035,7 @@
       "access": "None",
       "cadence": "High; research-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -855,7 +1053,43 @@
       "access": "None",
       "cadence": "High; research/event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "Unit 42 — Threat Research",
+      "url": "https://unit42.paloaltonetworks.com/feed/atom/",
+      "html_url": "https://unit42.paloaltonetworks.com/",
+      "event_driven": false,
+      "id": "cyber-security-03-core-technical-research-unit-42-threat-research",
+      "purpose": "Official Palo Alto Networks threat research; malware, vulnerability, cloud, identity and incident analysis",
+      "signal_type": "research",
+      "access": "None",
+      "cadence": "High; research-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": true
+      }
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "03 — Core — Technical Research",
+      "title": "GitHub Security Blog",
+      "url": "https://github.blog/security/feed/",
+      "html_url": "https://github.blog/security/",
+      "event_driven": false,
+      "id": "cyber-security-03-core-technical-research-github-security-blog",
+      "purpose": "Official GitHub security coverage; open-source supply chain, CI/CD, Dependabot and developer-platform security",
+      "signal_type": "research/advisory",
+      "access": "None",
+      "cadence": "High; research-driven",
+      "notification": "off",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": true
       }
@@ -873,11 +1107,31 @@
       "access": "None",
       "cadence": "High; frequent/event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       },
       "freshness_reason": "High; frequent/event-driven",
+      "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "AWS Security Bulletins",
+      "url": "https://aws.amazon.com/security/security-bulletins/rss/feed/",
+      "html_url": "https://aws.amazon.com/security/security-bulletins/",
+      "event_driven": true,
+      "id": "cyber-security-04-optional-specialist-alerts-research-aws-security-bulletins",
+      "purpose": "Official AWS security bulletins; service, open-source component and cloud-platform vulnerability notices",
+      "signal_type": "advisory",
+      "access": "None",
+      "cadence": "High; bulletin-driven",
+      "notification": "optional",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": false
+      },
+      "freshness_reason": "High; bulletin-driven",
       "stale_review_days": 365
     },
     {
@@ -893,9 +1147,10 @@
       "access": "None",
       "cadence": "High; research/event-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; research/event-driven",
       "stale_review_days": 365
@@ -913,7 +1168,7 @@
       "access": "None",
       "cadence": "High; frequent; French-language",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -931,12 +1186,30 @@
       "access": "None",
       "cadence": "High; event-driven",
       "notification": "optional",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       },
       "freshness_reason": "High; event-driven",
       "stale_review_days": 365
+    },
+    {
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Schneier on Security",
+      "url": "https://www.schneier.com/feed/atom/",
+      "html_url": "https://www.schneier.com/blog/",
+      "event_driven": false,
+      "id": "cyber-security-04-optional-specialist-alerts-research-schneier-on-security",
+      "purpose": "Independent security, privacy, cryptography and technology analysis; long-form context",
+      "signal_type": "research/context",
+      "access": "None",
+      "cadence": "Periodic; mixed security and technology analysis",
+      "notification": "off",
+      "validated": "2026-08-16",
+      "profiles": {
+        "iphone-lite": false
+      }
     },
     {
       "section": "Cyber Security",
@@ -951,7 +1224,7 @@
       "access": "None",
       "cadence": "High; research-driven",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
         "iphone-lite": false
       }
@@ -969,9 +1242,10 @@
       "access": "None",
       "cadence": "High; fast/research",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       }
     },
     {
@@ -987,9 +1261,10 @@
       "access": "None",
       "cadence": "High; periodic/research",
       "notification": "off",
-      "validated": "2026-08-15",
+      "validated": "2026-08-16",
       "profiles": {
-        "iphone-lite": false
+        "iphone-lite": false,
+        "iphone-air": true
       },
       "freshness_reason": "High; periodic/research",
       "stale_review_days": 365

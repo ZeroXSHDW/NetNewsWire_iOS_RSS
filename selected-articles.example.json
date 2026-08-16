@@ -1,9 +1,10 @@
 [
   {
     "title": "Example headline",
-    "link": "https://example.com/article",
-    "feed": "Example source",
-    "published": "2026-08-15T09:30:00Z",
+    "link": "https://www.cisa.gov/news-events/cybersecurity-advisories",
+    "feed": "CISA — All Advisories",
+    "feed_url": "https://www.cisa.gov/cybersecurity-advisories/all.xml",
+    "published": "2026-08-16T09:30:00+01:00",
     "summary": "Optional RSS summary",
     "source_class": "official",
     "language": "en"
