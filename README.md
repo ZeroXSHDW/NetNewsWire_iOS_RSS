@@ -12,9 +12,9 @@ A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone**.
 
 | Profile | Feeds | Best for | Download |
 | --- | ---: | --- | --- |
-| **iPhone Air** | 50 | Recommended daily profile with broad coverage and a 4 MB full-body budget | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md) |
-| **iPhone Lite** | 39 | Lower-noise mobile reading and smaller refreshes | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
-| **Master** | 62 | Full research coverage and rebuilding the other profiles | [OPML](artifacts/opml/NetNewsWire-Finance-Cyber.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md) |
+| **iPhone Air** | 50 | Recommended daily profile with broad coverage and a 4 MB full-body budget | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md) |
+| **iPhone Lite** | 39 | Lower-noise mobile reading and smaller refreshes | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
+| **Master** | 62 | Full research coverage and rebuilding the other profiles | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md) |
 
 The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Four official alert feeds are configured for interrupting notifications; the remaining sources are intended for normal reading, optional notifications or digest review.
 
@@ -30,6 +30,18 @@ The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Fou
 | **`curl` + `xmllint` (libxml2)** | Live validation only | Fetches direct feed endpoints and verifies their XML. |
 
 You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
+
+## Install directly from this GitHub page
+
+If you are reading this README on your iPhone, you do not need a Mac or AirDrop:
+
+1. Install [NetNewsWire for iPhone and iPad](https://netnewswire.com/) if it is not already installed.
+2. Tap [Download the recommended iPhone Air profile](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml?raw=1). Use [iPhone Lite](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml?raw=1) for a smaller bundle, or [Master](artifacts/opml/NetNewsWire-Finance-Cyber.opml?raw=1) for all feeds.
+3. If Safari shows the OPML text, tap **Share → Save to Files**. If it downloads automatically, find it in **Files → Downloads**. Keep the `.opml` extension.
+4. In NetNewsWire, open **Feeds → Settings → Import Subscriptions**, choose the downloaded file, and select the account that should receive the feeds.
+5. Refresh once and confirm the **Finance** and **Cyber Security** folders. Import only one profile: OPML imports are additive and can duplicate an older copy.
+
+For the official explanation of this import flow, see [NetNewsWire’s OPML instructions](https://netnewswire.com/help/ios/6.1/en/import-opml.html).
 
 ## Choose your path
 
@@ -347,13 +359,11 @@ The four interrupting alert feeds are:
 
 Other official sources can be enabled as optional notifications. News, research and duplicate-prone sources are intentionally quieter so the feed reader remains usable.
 
-## Install in NetNewsWire
+## Install from a Mac or with AirDrop
 
 1. Run `make package` on the Mac, or use the committed **iPhone Air** handoff in [`artifacts/AirDrop/`](artifacts/AirDrop/).
-2. AirDrop the **iPhone Air** OPML file to the iPhone. Use the Lite or Master files in [`artifacts/opml/`](artifacts/opml/) if you want a different bundle.
-3. Open the file in NetNewsWire and import it.
-4. Refresh once, then review the notification settings against [`NetNewsWire-Notification-Profile.md`](artifacts/notifications/NetNewsWire-Notification-Profile.md).
-5. Use the Master OPML only when you want the full research set.
+2. AirDrop the selected `.opml` file to the iPhone, save it in Files, and follow the NetNewsWire import steps above.
+3. Refresh once, then review the notification settings against [`NetNewsWire-Notification-Profile.md`](artifacts/notifications/NetNewsWire-Notification-Profile.md).
 
 NetNewsWire remains the reading and collection layer. The bundle does not claim to provide live quotes, order books, positions, execution, incident-response commands or financial advice.
 
