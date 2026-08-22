@@ -7,14 +7,14 @@ Goal: Build and maintain the most useful practical Finance + Cyber Security RSS 
 
 Act as a senior RSS curator, financial-news researcher and cyber-threat-intelligence analyst. Work from the current workspace and the live web. Inspect the existing files before searching:
 
-- NetNewsWire-Finance-Cyber.opml
-- NetNewsWire-Finance-Cyber-Source-Table.md
-- Coverage-Gap-Assessment.md
-- NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
-- NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
+- artifacts/opml/NetNewsWire-Finance-Cyber.opml
+- artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md
+- docs/Coverage-Gap-Assessment.md
+- artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
+- artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
 - validate-rss-bundle.sh
 - generate-rss-validation-report.py
-- NetNewsWire-Setup-and-Notification-Plan.md
+- docs/NetNewsWire-Setup-and-Notification-Plan.md
 
 User context:
 
@@ -138,7 +138,7 @@ Use these mobile review thresholds:
 
 These are review thresholds, not automatic rejection rules. A large CISA, regulator or technical-research feed may still be worthwhile; a large general-news feed usually is not. Consider conditional requests, but do not pretend they eliminate the cost of the first full refresh.
 
-Reject feeds that are technically valid but excessively noisy. As a default noise gate, a feed with at least 10 items fails review when more than 50% of titles or links repeat. Also reject broad feeds when a narrower official category feed provides the same useful coverage at lower mobile cost.
+Reject feeds that are technically valid but excessively noisy. As a default noise gate, a feed with at least 10 items fails review when more than 50% of titles or links repeat. Explicit structured-alert feeds may be exempted when repeated ticker/identifier titles are the alert payload itself, catalogue-update may be used only for a first-party statistical/data-catalogue stream where repeated dataset records are the data-change payload itself, and scheduled-calendar may be used only for a first-party meeting calendar where repeated event titles are the schedule payload itself; record the policy and its rationale in the manifest and report. Also reject broad feeds when a narrower official category feed provides the same useful coverage at lower mobile cost.
 
 ## 5. Score surviving candidates
 
@@ -252,7 +252,7 @@ If one or more candidates pass:
    - notification recommendation
    - validation date
 3. Mark event-driven feeds explicitly in the OPML.
-4. Update Coverage-Gap-Assessment.md with the gap filled, evidence, overlap decision and rejected alternatives.
+4. Update docs/Coverage-Gap-Assessment.md with the gap filled, evidence, overlap decision and rejected alternatives.
 5. Update the changelog with every addition, removal, replacement and URL canonicalization.
 6. Keep the source table and OPML URL sets exactly equal.
 

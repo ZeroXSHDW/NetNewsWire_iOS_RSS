@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.netnewswire.finance-cyber.hourly-digest</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>__STAGED_ROOT__/automation/run-hourly-digest.sh</string>
+    <string>--run-shortcut</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>NETNEWSWIRE_DIGEST_DIR</key>
+    <string>__RUNTIME_DIR__</string>
+    <key>PYTHON_BIN</key>
+    <string>__PYTHON_BIN__</string>
+    <key>SHORTCUT_NAME</key>
+    <string>__SHORTCUT_NAME__</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>__INTERVAL__</integer>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>__RUNTIME_DIR__/launchd-stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>__RUNTIME_DIR__/launchd-stderr.log</string>
+  <key>WorkingDirectory</key>
+  <string>__STAGED_ROOT__</string>
+</dict>
+</plist>

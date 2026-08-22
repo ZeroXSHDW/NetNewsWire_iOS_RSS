@@ -349,6 +349,16 @@ def shortcut_text(package: dict) -> str:
         f"Coverage until: {coverage.get('until') or 'not specified'}",
         "",
     ]
+    collection = package.get("collection")
+    if isinstance(collection, dict):
+        lines.insert(
+            5,
+            "Feed collection: "
+            f"{collection.get('feeds_succeeded', 0)}/{collection.get('feeds_considered', 0)} succeeded; "
+            f"{collection.get('feeds_failed', 0)} failed",
+        )
+        if collection.get("status") == "partial":
+            lines.insert(6, "Warning: this batch is partial; check failed feed details before relying on completeness.")
     articles = package.get("articles", [])
     if not articles:
         lines.append("No material new articles were selected.")
@@ -401,7 +411,7 @@ def main() -> int:
     parser.add_argument("--max-seen-items", type=int, help="override the selected profile's seen-state budget")
     parser.add_argument("--duplicate-window-days", type=float, help="override the selected profile's duplicate window")
     parser.add_argument("--dry-run", action="store_true", help="do not update digest state")
-    parser.add_argument("--prompt-file", default="Apple-Intelligence-RSS-Summary-Prompt.md")
+    parser.add_argument("--prompt-file", default="docs/Apple-Intelligence-RSS-Summary-Prompt.md")
     parser.add_argument("--shortcut-output", type=Path, help="also write a compact plain-text package for an iPhone Shortcut")
     args = parser.parse_args()
 

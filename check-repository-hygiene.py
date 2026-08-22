@@ -12,10 +12,13 @@ from pathlib import Path
 FORBIDDEN_TRACKED_NAMES = {
     ".digest-state.json",
     ".digest-state.json.lock",
+    ".rss-fetch-state.json",
+    ".rss-fetch-state.json.lock",
     ".validation-history.json",
     ".validation-history.json.lock",
     ".rss-validation-cache",
     ".rss-validation-cache.lock",
+    ".runtime",
 }
 FORBIDDEN_TRACKED_PARTS = {
     "__pycache__",

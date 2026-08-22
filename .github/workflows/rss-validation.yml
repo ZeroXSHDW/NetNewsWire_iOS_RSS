@@ -52,15 +52,15 @@ jobs:
       - name: Ensure generated artifacts are committed
         run: |
           git diff --exit-code -- \
-            AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
-            NetNewsWire-Finance-Cyber.opml \
-            NetNewsWire-Finance-Cyber-Source-Table.md \
-            NetNewsWire-Finance-Cyber-iPhone-Lite.opml \
-            NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
-            NetNewsWire-Finance-Cyber-iPhone-Air.opml \
-            NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
-            NetNewsWire-Notification-Profile.md \
-            NetNewsWire-Notification-Profile.json
+            artifacts/AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
+            artifacts/opml/NetNewsWire-Finance-Cyber.opml \
+            artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md \
+            artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml \
+            artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
+            artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
+            artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
+            artifacts/notifications/NetNewsWire-Notification-Profile.md \
+            artifacts/notifications/NetNewsWire-Notification-Profile.json
   validate:
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
@@ -85,7 +85,7 @@ jobs:
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
-        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Air.opml NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
+        run: git diff --exit-code -- artifacts/opml/NetNewsWire-Finance-Cyber.opml artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md artifacts/notifications/NetNewsWire-Notification-Profile.md artifacts/notifications/NetNewsWire-Notification-Profile.json
       - name: Lint manifest and generated artifacts
         run: make lint
       - name: Run deterministic tests
@@ -102,12 +102,12 @@ jobs:
         with:
           name: rss-validation-reports
           path: |
-            NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
-            NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
-            NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md
-            NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json
-            NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md
-            NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json
+            artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md
+            artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.json
+            artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md
+            artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json
+            artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md
+            artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json
       - name: Save RSS cache and drift baseline
         if: always()
         uses: actions/cache/save@v6

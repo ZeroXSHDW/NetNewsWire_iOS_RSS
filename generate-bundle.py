@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
@@ -27,7 +28,12 @@ def load_manifest(path: Path) -> dict:
 
 def selected_feeds(data: dict, profile: str) -> list[dict]:
     profile_config(data, profile)
-    return [feed for feed in data["feeds"] if profile_includes_feed(data, profile, feed)]
+    selected = [feed for feed in data["feeds"] if profile_includes_feed(data, profile, feed)]
+    grouped: OrderedDict[tuple[str, str], list[dict]] = OrderedDict()
+    for feed in selected:
+        key = (feed["section"], feed["folder"])
+        grouped.setdefault(key, []).append(feed)
+    return [feed for feeds in grouped.values() for feed in feeds]
 
 
 def _xml_text(value: str) -> str:
@@ -77,7 +83,36 @@ def escape_markdown(value: object) -> str:
     return str(value).replace("\\", "\\\\").replace("|", "\\|").replace("\n", " ")
 
 
-def write_source_table(data: dict, feeds: list[dict], destination: Path, profile: str) -> None:
+def _reference_link(repository_root: Path, link_directory: Path, target: str) -> str:
+    """Return a Markdown link from an artifact directory to a repository file."""
+
+    absolute_target = (repository_root / target).resolve()
+    return Path(os.path.relpath(absolute_target, link_directory.resolve())).as_posix()
+
+
+def _operating_reference_links(repository_root: Path, link_directory: Path) -> dict[str, str]:
+    targets = {
+        "setup": "docs/NetNewsWire-Setup-and-Notification-Plan.md",
+        "coverage": "docs/Coverage-Gap-Assessment.md",
+        "apple": "docs/Apple-Intelligence-RSS-Summary-Prompt.md",
+        "digest": "docs/NetNewsWire-Daily-Digest-Workflow.md",
+        "matrix": "docs/NetNewsWire-Feature-and-Automation-Matrix.md",
+    }
+    return {
+        name: _reference_link(repository_root, link_directory, target)
+        for name, target in targets.items()
+    }
+
+
+def write_source_table(
+    data: dict,
+    feeds: list[dict],
+    destination: Path,
+    profile: str,
+    *,
+    repository_root: Path = Path("."),
+    link_directory: Path | None = None,
+) -> None:
     lines = [
         "# NetNewsWire Finance + Cyber source table",
         "",
@@ -112,6 +147,10 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
             )
             + " |"
         )
+    links = _operating_reference_links(
+        repository_root,
+        link_directory or destination.parent,
+    )
     lines.extend([
         "",
         "## Profile notes",
@@ -120,11 +159,11 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
         "",
         "## Operating references",
         "",
-        "- [Setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md)",
-        "- [Coverage-gap assessment](Coverage-Gap-Assessment.md)",
-        "- [Apple Intelligence summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md)",
-        "- [Daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md)",
-        "- [Feature and automation matrix](NetNewsWire-Feature-and-Automation-Matrix.md)",
+        f"- [Setup and notification plan]({links['setup']})",
+        f"- [Coverage-gap assessment]({links['coverage']})",
+        f"- [Apple Intelligence summary prompt]({links['apple']})",
+        f"- [Daily digest workflow]({links['digest']})",
+        f"- [Feature and automation matrix]({links['matrix']})",
         "",
         "## Maintenance",
         "",
@@ -175,7 +214,13 @@ def notification_matrix_data(data: dict) -> dict:
     }
 
 
-def write_notification_matrix(data: dict, destination: Path) -> None:
+def write_notification_matrix(
+    data: dict,
+    destination: Path,
+    *,
+    repository_root: Path = Path("."),
+    link_directory: Path | None = None,
+) -> None:
     matrix = notification_matrix_data(data)
     lines = [
         "# NetNewsWire notification and profile matrix",
@@ -204,6 +249,10 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
     full_profile = next(
         (matrix["profiles"][profile]["label"] for profile in profile_names if profile_settings(data)[profile]["include_all"]),
         profile_headers[0],
+    )
+    links = _operating_reference_links(
+        repository_root,
+        link_directory or destination.parent,
     )
     lines.extend([
         "",
@@ -249,7 +298,7 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
         "5. Leave **Off** feeds notification-disabled and process them in the daily digest.",
         "6. Re-check this matrix after any manifest change; the generated OPML and source tables should be regenerated together.",
         "",
-        "See [NetNewsWire setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md) for batch review.",
+        f"See [NetNewsWire setup and notification plan]({links['setup']}) for the operating rationale and [daily digest workflow]({links['digest']}) for batch review.",
         "",
     ])
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -287,7 +336,14 @@ def main() -> int:
                 if not feeds:
                     raise ValueError(f"profile contains no feeds: {profile}")
                 write_opml(data, feeds, args.output_root / config["opml_file"], profile)
-                write_source_table(data, feeds, args.output_root / config["source_table_file"], profile)
+                source_table_path = args.output_root / config["source_table_file"]
+                write_source_table(
+                    data,
+                    feeds,
+                    source_table_path,
+                    profile,
+                    repository_root=args.manifest.parent,
+                )
                 generated_profiles.append(f"{profile}={len(feeds)}")
         else:
             feeds = selected_feeds(data, args.profile)
@@ -296,10 +352,20 @@ def main() -> int:
             if args.opml:
                 write_opml(data, feeds, args.opml, args.profile)
             if args.source_table:
-                write_source_table(data, feeds, args.source_table, args.profile)
+                write_source_table(
+                    data,
+                    feeds,
+                    args.source_table,
+                    args.profile,
+                    repository_root=args.manifest.parent,
+                )
             generated_profiles = [f"{args.profile}={len(feeds)}"]
         if args.notification_table:
-            write_notification_matrix(data, args.notification_table)
+            write_notification_matrix(
+                data,
+                args.notification_table,
+                repository_root=args.manifest.parent,
+            )
         if args.notification_json:
             write_notification_json(data, args.notification_json)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
