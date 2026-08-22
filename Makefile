@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help generate package lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check
+.PHONY: help generate package hourly-digest lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check check-frozen
 
 PYTHON ?= python3
 MANIFEST := feed-manifest.json
@@ -20,7 +20,11 @@ help:
 		'  make validate      Run live validation for the Master profile' \
 		'  make validate-lite Run live validation for iPhone Lite' \
 		'  make validate-air  Run live validation for iPhone Air' \
-		'  make generate      Regenerate OPML and source-table artifacts only'
+		'  make generate      Regenerate OPML and source-table artifacts only' \
+		'  make check-frozen  Run non-mutating checks against the frozen artifacts' \
+		'  make hourly-digest Collect manifest feeds and prepare the Apple Intelligence handoff'
+
+RUNTIME_DIR ?= .runtime/hourly
 
 generate:
 	$(PYTHON) generate-bundle.py --manifest $(MANIFEST) --all \
@@ -30,6 +34,16 @@ generate:
 package: generate
 	mkdir -p $(AIRDROP_ROOT)
 	cp $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml $(AIRDROP_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml
+
+hourly-digest:
+	$(PYTHON) run-hourly-rss-digest.py \
+		--manifest $(MANIFEST) \
+		--source-profile master \
+		--digest-profile master \
+		--fetch-state $(RUNTIME_DIR)/fetch-state.json \
+		--digest-state $(RUNTIME_DIR)/digest-state.json \
+		--output $(RUNTIME_DIR)/hourly-digest-input.json \
+		--shortcut-output $(RUNTIME_DIR)/shortcut-digest.txt
 
 test:
 	PYTHONPATH=. $(PYTHON) -m unittest discover -s tests -v
@@ -72,3 +86,7 @@ validate-all:
 	$(MAKE) validate-air
 
 check: package lint docs-check hygiene compile test syntax
+
+check-frozen:
+	PYTHONDONTWRITEBYTECODE=1 $(MAKE) lint docs-check hygiene test syntax
+	git diff --check

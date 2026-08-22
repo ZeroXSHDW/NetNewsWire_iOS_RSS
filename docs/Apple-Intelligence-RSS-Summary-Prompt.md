@@ -22,13 +22,13 @@ Pass the prepared `shortcut-digest.txt` text, or the prepared JSON package read 
 - Do not provide buy/sell recommendations, price targets, portfolio instructions or unsupported incident-response commands.
 - RSS does not provide live quotes, order books, broker execution, positions or trade IDs.
 
-## Daily digest mode
+## Prepared batch mode
 
-Use this mode once per day with selected NetNewsWire articles or a prepared external export. The prompt does not schedule the digest or create a bulk unread export; it defines a consistent daily output for Apple Intelligence.
+Use this mode for each selected or prepared batch, including the optional hourly collector. The prompt does not fetch missing articles, silently export NetNewsWire’s unread database or create the schedule; it defines a consistent output for Apple Intelligence.
 
 Begin with:
 
-- `Daily Finance and Cyber Digest — YYYY-MM-DD — Europe/Dublin`.
+- `Finance and Cyber Digest — YYYY-MM-DD HH:mm — Europe/Dublin`.
 - The coverage window and number of source items.
 - `Urgent`, `material`, `routine` or `no material change`.
 

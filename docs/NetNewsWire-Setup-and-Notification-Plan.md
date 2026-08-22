@@ -3,7 +3,7 @@
 ## Import
 
 From an iPhone, use the README’s [recommended iPhone Air download](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml?raw=1), [iPhone Lite download](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml?raw=1), or [Master download](../artifacts/opml/NetNewsWire-Finance-Cyber.opml?raw=1). Save the `.opml` file in Files, then follow NetNewsWire’s [official OPML import instructions](https://netnewswire.com/help/ios/6.1/en/import-opml.html): **Feeds → Settings → Import Subscriptions**. The OPML supplies the folders and feed URLs; notification preferences are best reviewed manually after import.
-On a Mac, use [NetNewsWire-Finance-Cyber-iPhone-Air.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) as the recommended daily setup, [NetNewsWire-Finance-Cyber-iPhone-Lite.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) when refresh cost matters most, or [NetNewsWire-Finance-Cyber.opml](../artifacts/opml/NetNewsWire-Finance-Cyber.opml) for the complete 62-feed master bundle.
+On a Mac, use [NetNewsWire-Finance-Cyber-iPhone-Air.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) as the recommended daily setup, [NetNewsWire-Finance-Cyber-iPhone-Lite.opml](../artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) when refresh cost matters most, or [NetNewsWire-Finance-Cyber.opml](../artifacts/opml/NetNewsWire-Finance-Cyber.opml) for the complete 533-feed master bundle.
 Import exactly one profile into the target NetNewsWire account. The import is additive: if an older copy of this bundle is already present, remove or separate it first so the feeds are not duplicated.
 For today’s iPhone import, save the chosen `.opml` file in Files or iCloud Drive, open NetNewsWire’s Feeds screen, tap **Settings → Import Subscriptions**, choose the file and select the intended account if NetNewsWire asks. Confirm that the expected folders and feed counts appear before applying notifications.
 Review [Coverage-Gap-Assessment.md](./Coverage-Gap-Assessment.md) for the source-selection decisions behind the bundle.
@@ -14,9 +14,9 @@ Use the generated [notification/profile matrix](../artifacts/notifications/NetNe
 
 ## iPhone refresh profile
 
-The latest live full-response baseline measured about 5.79 MB of decompressed feed bodies and 1.71 MB of compressed/wire bytes across 62 feeds; five feeds were flagged for mobile body review, with one over 1 MB and no fetches over two seconds. The iPhone-lite bundle contains 39 feeds and measured about 2.30 MB of bodies, 910 KB of wire bytes and two advisory review entries. The iPhone Air bundle contains 50 feeds and measured about 2.70 MB of bodies, 1.13 MB of wire bytes and two advisory body-size review entries, with no slow-fetch observations in the final run. No phone-profile feed exceeded 1 MB or the declared 600 KB per-feed budget. NetNewsWire and the validator can use conditional requests, so actual repeat-refresh traffic can be lower.
+The current profiles contain 533 master feeds, 118 iPhone-lite feeds and 125 iPhone Air feeds. NetNewsWire and the validator can use conditional requests, so actual repeat-refresh traffic can be lower than the full-response totals measured by live validation.
 
-For the best everyday balance on iPhone Air, use the Air OPML, leave Optional folders notification-off and summarize them in batches. The Air profile is explicitly capped at 50 feeds, 4 MB of full response bodies, 600 KB per feed and six mobile-review feeds; the current validator fails the profile if those limits are exceeded. Use Lite for constrained connections. The master bundle retains industrial-control and specialist research feeds for later use.
+For the best everyday balance on iPhone Air, use the Air OPML, leave Optional folders notification-off and summarize them in batches. Air contains 125 feeds and is capped at 125 feeds, 4 MB of full response bodies, 600 KB per feed and six mobile-review feeds; Lite contains 118 feeds under the same 4 MB body ceiling. The compact Global Affairs Canada, Communications Security Establishment, Defence Investment Agency and Canadian Security Intelligence Service streams join CIS MS-ISAC Advisories, U.S. Courts Judiciary News, European Council — Meetings and SIPRI Global Security & Arms Control in both phone profiles. European Commission Representation in Ireland — News, ComReg, the Houses of the Oireachtas press-release and sitting/committee-calendar streams, the four new UK Government national-security/cyber taxonomy streams, FRA Publications, eu-LISA News and Updates, eu-LISA Publications, EUSPA Press Releases, National Crime Agency — Direct News, National Defence, the Canadian Centre for Cyber Security streams, Japan SESC Press Releases, the other four Council meeting calendars, EUISS — News & Publications, ECFR, Bellingcat, Global Initiative, Jamestown, Atlantic Council, FDD, Lawfare Cybersecurity & Tech, U.S. Department of Energy Energy News, NIST General News & Critical Technology, Chatham House Expert Comment and News Releases remain Master-only because their specialist, regulatory, parliamentary, taxonomy, scheduled-calendar or broad research bodies are better suited to the local digest collector. The four urgent alert feeds remain the only default notifications.
 
 ## Notifications
 
@@ -30,21 +30,24 @@ Start with only these feeds enabled for notifications:
 Use as optional notifications only when you need them:
 
 - Federal Reserve — Monetary Policy
+- CIS — MS-ISAC Advisories (leave notification-off; summarize in the digest)
 - European Central Bank — Press
 - Central Bank of Ireland — News
 - Bank of England — News
 - AMLA — News & Press
 - European Banking Authority — News
 - European Systemic Risk Board — Press
+- European Securities and Markets Authority — News (leave notification-off; summarize in the digest)
+- ECB Banking Supervision — Press (leave notification-off; summarize in the digest)
+- Federal Reserve — Enforcement Actions (optional only when US banking enforcement is directly relevant)
 - NCSC UK — News
 - NCSC UK — All Updates
 - CERT-FR — Security Alerts (French), if French-language headlines are useful
 - CISA — ICS Advisories, if industrial systems matter to you
 - Cisco PSIRT, if you use Cisco products
-- SANS Internet Storm Center, if security research/alerts are useful
 - AWS Security Bulletins, if your work includes AWS services or dependencies
 
-Keep Nasdaq Trader — Equity Trader Alerts, HM Treasury — News & Communications, FCA — Scam Warnings, OFSI — Financial Sanctions Blog, CFTC — Enforcement, CyberScoop, Unit 42 — Threat Research, AWS Security Bulletins, European Banking Authority — News, European Systemic Risk Board — Press, AMLA — News & Press, CERT-FR — Security Advisories (French), all commercial news, research, ECB operations/statistics, European Commission sanctions guidance, CERT/CC vulnerability-note, exchange-rate, macro-data, release-calendar and speech feeds notification-off. Review them in one daily Apple Intelligence digest instead of receiving an alert for every article.
+Keep Nasdaq Trader — Equity Trader Alerts, HM Treasury — News & Communications, Office for Budget Responsibility — News, European Investment Bank — News, HM Revenue & Customs — Activity on GOV.UK, FINTRAC — News, Serious Fraud Office — Activity on GOV.UK, Insolvency Service — Activity on GOV.UK, APRA — News, DNB General News, DNB Supervision News, DNB Statistical News, DNB Publications, DNB Research Publications, CFPB — Newsroom, FCA — Scam Warnings, OFSI — Financial Sanctions Blog, CFTC — Enforcement, CyberScoop, Unit 42 — Threat Research, Google Project Zero — Research, Council of the EU — Press Releases, European Parliament — Committee Press Releases, European Data Protection Board — News, European Public Prosecutor’s Office — News, European Commission — Competition Policy News, European Commission — Taxation & Customs News, European Commission — Financial Services News (FISMA), WTO — Latest News, UN News — Economic Development, UN News — Human Rights, UN News — Peace and Security, UN News — Health, AWS Security Bulletins, European Banking Authority — News, European Systemic Risk Board — Press, AMLA — News & Press, CERT-FR — Security Advisories (French), all commercial news, research, ECB operations/statistics, BIS statistical releases, European Commission sanctions guidance, CERT/CC vulnerability-note, exchange-rate, macro-data, release-calendar and speech feeds notification-off. Review them in one daily Apple Intelligence digest instead of receiving an alert for every article. The BBC Business feed, Bank of England Publications, FBI Cyber Division podcast, OLAF and Eurojust remain Master-only for deeper research or because their full RSS bodies are less suitable for the remaining Air budget.
 
 ## Apple Intelligence workflow
 
@@ -55,7 +58,9 @@ Keep Nasdaq Trader — Equity Trader Alerts, HM Treasury — News & Communicatio
 5. Ask for one daily digest, with duplicate events clustered and corroborating sources grouped underneath.
 6. Treat a headline as a lead until an official source confirms it.
 
-The Air command filters recognized exports to the 50-feed Air profile and applies a 30-item, 6,000-character-per-item and 90,000-character total digest budget. Lite has a smaller 24-item/5,000-per-item/75,000-total budget. The [daily workflow](./NetNewsWire-Daily-Digest-Workflow.md) documents the JSON format, plain-text Shortcut handoff and state behavior. It is a summary format, not a live-price service or an automatic schedule.
+The Air command filters recognized exports to the 125-feed Air profile and applies a 30-item, 6,000-character-per-item and 90,000-character total digest budget. Lite has a smaller 24-item/5,000-per-item/75,000-total budget. The [daily workflow](./NetNewsWire-Daily-Digest-Workflow.md) documents the JSON format, plain-text Shortcut handoff and state behavior. It is a summary format, not a live-price service or an automatic schedule.
+
+For unattended high-coverage batches every 30 minutes or every hour, use the [hourly Apple Intelligence workflow](./NetNewsWire-Hourly-Apple-Intelligence-Workflow.md). It fetches the same manifest URLs on macOS, applies the bounded Master digest budget and invokes the named Shortcut through `launchd`; it does not export NetNewsWire’s private iPhone unread database.
 
 ## iPhone feature checklist
 
@@ -64,7 +69,8 @@ The Air command filters recognized exports to the 50-feed Air profile and applie
 - Enable notifications only for urgent feeds. NetNewsWire’s notification setting is per feed, so alerts remain separate from reading coverage.
 - Use Reader View, search, starring and the Share Sheet for article review. Share selected articles to the digest Shortcut rather than trying to summarize every item.
 - Create one Shortcut named `Daily Finance + Cyber Digest`, enable **Show in Share Sheet**, and use this action order: receive text/URL/article input → stop with an alert if empty → add the supplied digest text and fixed prompt → **Use Model** → show the result → save it to a dated Apple Note.
-- In **Use Model**, choose **On-Device** for a short batch, **Private Cloud Compute** for a larger supplied batch when available, or **Extension Model** (ChatGPT) only when you deliberately choose it. Keep the source links in the input and output.
+- For a recurring 30-minute/hourly handoff, create and test that Shortcut on macOS, run `make hourly-digest`, then install `automation/install-hourly-digest-launch-agent.sh`; use the Share Sheet when the digest must be limited to reader-selected items.
+- In **Use Model**, keep **On-Device** selected for the normal short/private batch. Use **Private Cloud Compute** for a larger supplied batch when available, or **Extension Model** (ChatGPT) only when you deliberately choose it. Keep the source links in the input and output.
 - Turn on Apple Intelligence and update iOS before building the Shortcut. If **Use Model** is missing, check device, language and region availability before troubleshooting the feed bundle.
 - Create three optional time-of-day personal automations at 07:30, 12:30 and 17:30 Europe/Dublin only if a prepared input source will exist at those times. A time trigger alone cannot extract NetNewsWire’s unread database.
 - NetNewsWire’s documented iOS integration provides OPML, background refresh, notifications and sharing, but not a direct “export all unread items to Shortcuts” action. For unattended summaries, use a prepared JSON/text input or a separate feed-fetching service; for the privacy-first workflow, use the Share Sheet with selected articles.
@@ -86,11 +92,11 @@ These are deliberately not in the OPML because they are not verified direct RSS/
 - [NYSE trading halts](https://www.nyse.com/trade/trading-halts) — official live page and CSV; no verified public RSS feed was found.
 - [Coverage-gap assessment](./Coverage-Gap-Assessment.md) — current RSS candidates rejected or retained, with exact reasons.
 - [CISA Known Exploited Vulnerabilities catalogue](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — structured vulnerability data, not RSS.
-- [US Treasury press releases](https://home.treasury.gov/news/press-releases) — official macro/fiscal source, currently retained as a web reference because no verified direct RSS endpoint was found.
+- [US Treasury press releases](https://home.treasury.gov/news/press-releases) — official macro/fiscal source; the currently reachable root RSS endpoint is a narrow SSBCI/TA stream rather than a useful general press-release feed, so the press-release page remains the reference.
 - [BEA News Releases](https://www.bea.gov/news) — official US GDP, personal-income/PCE, trade and investment releases; its RSS candidate was tested but excluded because one historical item has a malformed schemeless link.
 - [Ireland Department of Finance](https://www.gov.ie/en/department-of-finance/) — official fiscal and budget coverage; tested RSS paths were blocked or unavailable, so this remains a web reference.
 - [Nasdaq Trader news and alerts](https://www.nasdaqtrader.com/Trader.aspx?id=NewsRSS) — official feed directory; the focused Equity Trader Alerts stream is already in the OPML, while the broad current-headlines stream was rejected as too large and mixed.
 
 ## Maintenance
 
-Run `make test`, `make validate`, `make validate-lite` and `make validate-air` monthly. Review the generated [master Markdown report](../artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md), [iPhone Air report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md), [iPhone-lite report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md) and [coverage-gap assessment](./Coverage-Gap-Assessment.md). The live validator now checks manifest/OPML/source-table metadata, future-dated items, feed-specific stale-review deadlines, fuzzy duplicate candidates, compressed/wire telemetry and device budgets. Remove a source only after a failed-feed, paywall, noise or duplication decision is recorded in the changelog.
+Run `make test`, `make validate`, `make validate-lite` and `make validate-air` monthly. When the bundle is intentionally frozen for integration, use `make check-frozen` for the offline gate; it does not regenerate committed artifacts. Review the generated [master Markdown report](../artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md), [iPhone Air report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md), [iPhone-lite report](../artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md) and [coverage-gap assessment](./Coverage-Gap-Assessment.md). The live validator now checks manifest/OPML/source-table metadata, future-dated items, feed-specific stale-review deadlines, fuzzy duplicate candidates, compressed/wire telemetry and device budgets. Remove a source only after a failed-feed, paywall, noise or duplication decision is recorded in the changelog.

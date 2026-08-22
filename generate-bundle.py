@@ -28,7 +28,12 @@ def load_manifest(path: Path) -> dict:
 
 def selected_feeds(data: dict, profile: str) -> list[dict]:
     profile_config(data, profile)
-    return [feed for feed in data["feeds"] if profile_includes_feed(data, profile, feed)]
+    selected = [feed for feed in data["feeds"] if profile_includes_feed(data, profile, feed)]
+    grouped: OrderedDict[tuple[str, str], list[dict]] = OrderedDict()
+    for feed in selected:
+        key = (feed["section"], feed["folder"])
+        grouped.setdefault(key, []).append(feed)
+    return [feed for feeds in grouped.values() for feed in feeds]
 
 
 def _xml_text(value: str) -> str:

@@ -2,6 +2,8 @@
 
 This workflow turns selected NetNewsWire items, or a prepared external JSON/text export, into one stateful Apple Intelligence digest. It does not schedule a digest or access NetNewsWire’s unread database directly; it keeps the input and deduplication step repeatable.
 
+For an unattended manifest-based batch every 30 minutes or hourly, use [NetNewsWire-Hourly-Apple-Intelligence-Workflow.md](NetNewsWire-Hourly-Apple-Intelligence-Workflow.md). This page remains the reader-selected/share-sheet path.
+
 ## Optional iPhone Shortcut layer
 
 For a practical semi-automated workflow, create a Shortcut named `Daily Finance + Cyber Digest` and enable **Show in Share Sheet**:
@@ -10,7 +12,7 @@ For a practical semi-automated workflow, create a Shortcut named `Daily Finance 
 2. If the input is empty, show `Open NetNewsWire, select the relevant unread items, and share them here.` and stop.
 3. Preserve the supplied article titles, links, publication times and summaries; do not ask the model to fetch missing articles.
 4. Add the fixed instructions from `Apple-Intelligence-RSS-Summary-Prompt.md` and pass the supplied digest text as the input variable to **Use Model**.
-5. Choose **On-Device**, **Private Cloud Compute** or **Extension Model** (ChatGPT) deliberately, then show the response and save it to a dated Apple Note.
+5. Choose **On-Device** as the default for short/private batches; use **Private Cloud Compute** or **Extension Model** (ChatGPT) only deliberately for larger or externally routed batches. Then show the response and save it to a dated Apple Note.
 
 Create optional time-of-day personal automations for 07:30, 12:30 and 17:30 Europe/Dublin only when a prepared input source will be available. A time trigger does not create article input by itself: NetNewsWire’s documented iOS features include sharing and background refresh, but no direct Shortcut action that exports its entire unread database. Fully unattended summaries therefore need a prepared text/JSON source or a separate feed-fetching service; selected-article Share Sheet input is the simplest privacy-first option.
 

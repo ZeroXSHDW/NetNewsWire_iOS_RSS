@@ -9,7 +9,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -145,11 +145,25 @@ def generate_report(args: argparse.Namespace) -> int:
     MOBILE_LARGE_BYTES = int(manifest_validation["mobile_large_bytes"])
     MOBILE_SLOW_SECONDS = float(manifest_validation["mobile_slow_seconds"])
     DUPLICATE_STORY_WINDOW_DAYS = float(manifest_validation["duplicate_story_window_days"])
+    FUTURE_DATE_TOLERANCE_MINUTES = float(manifest_validation["future_date_tolerance_minutes"])
     all_manifest_feed_list = manifest_entries(manifest_path)
-    manifest_feed_list = [
+    selected_manifest_feeds = [
         feed
         for feed in all_manifest_feed_list
         if profile_includes_feed(manifest_data, manifest_profile, feed)
+    ]
+    # The bundle generator intentionally groups selected feeds by their first
+    # section/folder occurrence before writing OPML and source tables. Mirror
+    # that stable artifact order here so metadata checks compare corresponding
+    # records instead of treating harmless manifest ordering as drift.
+    grouped_manifest_feeds: dict[tuple[str, str], list[dict[str, object]]] = {}
+    for feed in selected_manifest_feeds:
+        key = (str(feed.get("section", "")), str(feed.get("folder", "")))
+        grouped_manifest_feeds.setdefault(key, []).append(feed)
+    manifest_feed_list = [
+        feed
+        for group in grouped_manifest_feeds.values()
+        for feed in group
     ]
     manifest_by_url = {str(feed["url"]): feed for feed in manifest_feed_list}
     opml_record_list = opml_entries(bundle_path)
@@ -216,24 +230,47 @@ def generate_report(args: argparse.Namespace) -> int:
         feed_metadata = manifest_by_url.get(record["url"], {})
         detail["manifest_id"] = feed_metadata.get("id", "")
         detail["event_driven"] = bool(feed_metadata.get("event_driven", False))
+        detail["item_link_policy"] = str(feed_metadata.get("item_link_policy", "default") or "default")
         detail["freshness_reason"] = feed_metadata.get("freshness_reason", "")
         detail["stale_review_days"] = float(
             feed_metadata.get("stale_review_days", STALE_REVIEW_DEFAULT_DAYS)
         ) if detail["event_driven"] else None
+        date_timezone_name = str(feed_metadata.get("date_timezone", "UTC") or "UTC")
+        try:
+            date_timezone = ZoneInfo(date_timezone_name)
+        except Exception:
+            date_timezone_name = "UTC"
+            date_timezone = timezone.utc
+        detail["date_timezone"] = date_timezone_name
+        feed_future_date_tolerance = FUTURE_DATE_TOLERANCE_MINUTES
+        raw_feed_future_date_tolerance = feed_metadata.get("future_date_tolerance_minutes")
+        if isinstance(raw_feed_future_date_tolerance, (int, float)) and not isinstance(
+            raw_feed_future_date_tolerance, bool
+        ) and raw_feed_future_date_tolerance > 0:
+            feed_future_date_tolerance = float(raw_feed_future_date_tolerance)
+        detail["future_date_tolerance_minutes"] = feed_future_date_tolerance
+        detail["future_date_reason"] = feed_metadata.get("future_date_reason", "")
         try:
             root = safe_xml_root(record["xml_path"])
             detail["xml_valid"] = True
-            feed_title, items = extract_feed(root)
+            feed_title, items = extract_feed(
+                root,
+                naive_timezone=date_timezone,
+                base_url=str(record.get("effective_url") or record.get("url") or ""),
+            )
         except (ET.ParseError, OSError, ValueError):
             detail["xml_valid"] = False
             feed_title, items = "", []
 
-        detail["feed_title"] = feed_title
+        # A few otherwise valid official feeds omit the channel title. Keep
+        # the report identity aligned with NetNewsWire and the shell validator
+        # by using the manifest-authored display title in that case.
+        detail["feed_title"] = feed_title or str(feed_metadata.get("title", "") or "")
         detail["item_count"] = len(items)
         detail["valid_item_title_count"] = sum(1 for item in items if str(item["title"]).strip())
-        detail["all_item_titles_valid"] = bool(items) and detail["valid_item_title_count"] == detail["item_count"]
+        detail["all_item_titles_valid"] = not items or detail["valid_item_title_count"] == detail["item_count"]
         detail["valid_item_date_count"] = sum(1 for item in items if item["date"] is not None)
-        detail["all_item_dates_valid"] = bool(items) and detail["valid_item_date_count"] == detail["item_count"]
+        detail["all_item_dates_valid"] = not items or detail["valid_item_date_count"] == detail["item_count"]
         detail["effective_https"] = url_is_web(str(detail["effective_url"])) and str(detail["effective_url"]).lower().startswith("https://")
         content_type = str(detail["content_type"]).lower()
         detail["content_type_unsafe"] = "application/json" in content_type or "text/json" in content_type
@@ -292,9 +329,10 @@ def generate_report(args: argparse.Namespace) -> int:
         detail["https_item_link_count"] = item_link_schemes.get("https", 0)
         detail["http_item_link_count"] = item_link_schemes.get("http", 0)
         detail["missing_item_link_count"] = item_link_schemes.get("(none)", 0)
-        detail["all_item_links_https"] = bool(items) and detail["https_item_link_count"] == detail["item_count"]
+        detail["all_item_links_https"] = not items or detail["https_item_link_count"] == detail["item_count"]
         detail["all_item_links_valid"] = bool(
-            detail["item_link_status"] == "structured-alert"
+            detail["item_link_status"] in {"structured-alert", "event-driven-empty"}
+            or not items
             or detail["valid_item_link_count"] == detail["item_count"]
         )
         dated_items = [item["date"] for item in items if item["date"] is not None]
@@ -307,13 +345,29 @@ def generate_report(args: argparse.Namespace) -> int:
             and detail["stale_review_days"] is not None
             and detail["latest_age_days"] > detail["stale_review_days"]
         )
+        future_date_now = datetime.now(timezone.utc).replace(microsecond=0)
+        global_future_date_cutoff = future_date_now + timedelta(
+            minutes=FUTURE_DATE_TOLERANCE_MINUTES
+        )
+        effective_future_date_cutoff = future_date_now + timedelta(
+            minutes=feed_future_date_tolerance
+        )
+        detail["future_date_exception_count"] = sum(
+            1
+            for item in items
+            if item["date"] is not None
+            and global_future_date_cutoff < item["date"] <= effective_future_date_cutoff
+        )
         detail["future_item_date_count"] = sum(
             1
             for item in items
             if item["date"] is not None
-            and item["date"] > datetime.now(timezone.utc).replace(microsecond=0)
+            and item["date"] > effective_future_date_cutoff
         )
         detail["noise_review"] = bool(
+            detail["item_link_status"] != "structured-alert"
+            and detail["item_link_policy"] not in {"catalogue-update", "scheduled-calendar"}
+            and
             len(items) >= MIN_ITEMS_FOR_NOISE
             and (detail["duplicate_title_rate"] > DUPLICATE_RATE_LIMIT or detail["duplicate_link_rate"] > DUPLICATE_RATE_LIMIT)
         )
@@ -452,6 +506,9 @@ def generate_report(args: argparse.Namespace) -> int:
 
     stale_review_failures = [detail for detail in details if detail["stale_review_due"]]
     future_date_failures = [detail for detail in details if int(detail["future_item_date_count"]) > 0]
+    future_date_exceptions = [
+        detail for detail in details if int(detail["future_date_exception_count"]) > 0
+    ]
 
     current_snapshots = {
         str(snapshot["url"]): snapshot
@@ -563,6 +620,8 @@ def generate_report(args: argparse.Namespace) -> int:
         "non_empty_title_count": count_where(details, lambda d: bool(d["feed_title"])),
         "valid_item_url_count": count_where(details, lambda d: d["item_link_status"] == "yes"),
         "structured_alert_exception_count": count_where(details, lambda d: d["item_link_status"] == "structured-alert"),
+        "catalogue_update_exception_count": count_where(details, lambda d: d["item_link_policy"] == "catalogue-update"),
+        "scheduled_calendar_exception_count": count_where(details, lambda d: d["item_link_policy"] == "scheduled-calendar"),
         "all_item_titles_valid_feed_count": count_where(details, lambda d: d["all_item_titles_valid"]),
         "invalid_item_title_feed_count": count_where(details, lambda d: not d["all_item_titles_valid"]),
         "item_title_total": sum(int(d["item_count"]) for d in details),
@@ -584,7 +643,8 @@ def generate_report(args: argparse.Namespace) -> int:
         "recent_content_count": count_where(details, lambda d: d["recent"] == "yes"),
         "event_driven_feed_count": count_where(details, lambda d: d["staleness_policy"] == "event-driven"),
         "event_driven_stale_count": count_where(details, lambda d: d["recent"] == "event-driven"),
-        "recent_or_event_driven_count": count_where(details, lambda d: d["recent"] in {"yes", "event-driven"}),
+        "event_driven_empty_count": count_where(details, lambda d: d["recent"] == "event-driven-empty"),
+        "recent_or_event_driven_count": count_where(details, lambda d: d["recent"] in {"yes", "event-driven", "event-driven-empty"}),
         "oldest_latest_item_age_days": max((d["latest_age_days"] for d in details if d["latest_age_days"] is not None), default=None),
         "failed_feed_count": count_where(details, lambda d: d["passed"] != "yes"),
         "effective_https_count": count_where(details, lambda d: d["effective_https"]),
@@ -640,6 +700,10 @@ def generate_report(args: argparse.Namespace) -> int:
         "stale_review_due_count": len(stale_review_failures),
         "future_item_date_feed_count": len(future_date_failures),
         "future_item_date_total": sum(int(d["future_item_date_count"]) for d in details),
+        "future_date_exception_feed_count": len(future_date_exceptions),
+        "future_date_exception_total": sum(
+            int(d["future_date_exception_count"]) for d in details
+        ),
         "drift_baseline_available": bool(previous_snapshots),
         "regression_warning_count": len(regression_warnings),
         "regression_critical_count": sum(1 for warning in regression_warnings if warning["severity"] == "critical"),
@@ -690,6 +754,7 @@ def generate_report(args: argparse.Namespace) -> int:
         "metadata_mismatches": metadata_mismatches,
         "stale_review_failures": stale_review_failures,
         "future_date_failures": future_date_failures,
+        "future_date_exceptions": future_date_exceptions,
         "noisy_feeds": noisy_feeds,
         "device_budget": device_budget,
         "device_budget_failures": device_budget_failures,
@@ -770,6 +835,8 @@ def generate_report(args: argparse.Namespace) -> int:
         f"| Non-empty feed titles | {summary['non_empty_title_count']}/{summary['feed_count']} |",
         f"| Valid item URLs | {summary['valid_item_url_count']}/{summary['feed_count']} |",
         f"| Structured alert identity | {summary['structured_alert_exception_count']}/{summary['feed_count']} |",
+        f"| Catalogue-update noise policy | {summary['catalogue_update_exception_count']}/{summary['feed_count']} |",
+        f"| Scheduled-calendar noise policy | {summary['scheduled_calendar_exception_count']}/{summary['feed_count']} |",
         f"| Item titles with text | {summary['item_title_valid_total']}/{summary['item_title_total']} |",
         f"| Feeds with all item titles valid | {summary['all_item_titles_valid_feed_count']}/{summary['feed_count']} |",
         f"| Item dates with valid timestamps | {summary['item_date_valid_total']}/{summary['item_date_total']} |",
@@ -784,6 +851,7 @@ def generate_report(args: argparse.Namespace) -> int:
         f"| Recent content, default max age {int(MAX_AGE_DAYS)} days | {summary['recent_content_count']}/{summary['feed_count']} |",
         f"| Feeds marked event-driven in OPML | {summary['event_driven_feed_count']}/{summary['feed_count']} |",
         f"| Stale feeds allowed by event-driven policy | {summary['event_driven_stale_count']} |",
+        f"| Event-driven feeds with no active items | {summary['event_driven_empty_count']} |",
         f"| Recent or allowed event-driven content | {summary['recent_or_event_driven_count']}/{summary['feed_count']} |",
         f"| Oldest detected current item | {summary['oldest_latest_item_age_days']} days |",
         f"| Cross-feed duplicate title clusters | {summary['cross_feed_duplicate_title_clusters']} |",
@@ -799,7 +867,8 @@ def generate_report(args: argparse.Namespace) -> int:
         f"| Metadata mismatches | {summary['metadata_mismatch_count']} |",
         f"| Source-table duplicate URLs | {summary['source_table_duplicate_url_count']} |",
         f"| Stale-review deadlines due | {summary['stale_review_due_count']} |",
-        f"| Future-dated items | {summary['future_item_date_total']} |",
+        f"| Future-dated items beyond effective feed tolerance | {summary['future_item_date_total']} |",
+        f"| Tolerated feed-specific future-date items | {summary['future_date_exception_total']} across {summary['future_date_exception_feed_count']} feeds |",
         f"| Failed feeds | {summary['failed_feed_count']} |",
         f"| Cross-run drift baseline available | {'Yes' if summary['drift_baseline_available'] else 'No — this run establishes it'} |",
         f"| Cross-run drift warnings | {summary['regression_warning_count']} ({summary['regression_critical_count']} critical) |",
@@ -807,10 +876,10 @@ def generate_report(args: argparse.Namespace) -> int:
         f"Duplicate-story clusters are reported for Apple Intelligence deduplication within a {DUPLICATE_STORY_WINDOW_DAYS:g}-day publication window. A feed crosses the noise gate when it has at least "
         f"{MIN_ITEMS_FOR_NOISE} items and more than {DUPLICATE_RATE_LIMIT:.0%} repeated item titles or links.",
         "",
-        "Every retained item must have a non-empty title and a parseable publication/update date. Item-link transport is reported separately: direct feed endpoints must remain HTTPS, while legacy HTTP article links are warnings rather than hard failures when the feed itself is a verified HTTPS RSS/XML source. The Nasdaq Trade Halts feed is a deliberate structured-alert exception only for per-item URLs: its entries contain halt fields and titles but no per-item URLs.",
+        "Every retained item must have a non-empty title and a parseable publication/update date. Item-link transport is reported separately: direct feed endpoints must remain HTTPS, while legacy HTTP article links are warnings rather than hard failures when the feed itself is a verified HTTPS RSS/XML source. Explicit structured-alert policies are deliberate exceptions for per-item-link or duplicate-title noise review when repeated ticker, series or state-transition records are the payload itself; the current set covers Nasdaq Trade Halts, BCB Exchange Rate, BCB Open Market Statistics and KrCERT/CC Cyber Crisis Alert Level. The catalogue-update policy separately covers first-party statistical update records whose repeated dataset titles and links are the data-change payload rather than editorial duplication. The scheduled-calendar policy covers first-party meeting calendars whose repeated event titles are schedule records rather than editorial duplication; their item links and scoped future-date tolerance remain independently validated. Event-driven operational-alert feeds may legitimately have zero current items; when their manifest contains a documented freshness reason, valid RSS/XML and no active alert, the empty state is accepted and reported separately rather than treated as stale.",
         f"Mobile refresh telemetry measures the full response body and compressed/wire transfer separately. Feed bodies over {MOBILE_REVIEW_BYTES // 1024} KB are flagged for review, bodies over 1 MB are marked large, and fetches over {MOBILE_SLOW_SECONDS:.0f} seconds are flagged as slow. The validator also reuses a local ETag/Last-Modified cache and reports conditional 304 responses; NetNewsWire refreshes can be smaller when servers honor validators.",
         "When a profile declares a device budget, the current audit enforces its feed-count, full-body payload, mobile-review and interrupting-notification limits. The payload budget uses full response bodies so conditional 304 responses cannot hide a profile that has grown too large.",
-        "Normal feeds must have a detectable item date within the configured age window. Event-driven feeds require a documented freshness reason and have a manifest-level stale-review deadline; they still must pass every other structural and integrity check.",
+        f"Normal feeds must have a detectable item date within the configured age window. Future-dated items are rejected beyond the configured {FUTURE_DATE_TOLERANCE_MINUTES:g}-minute global clock-skew tolerance; a feed may declare a larger scoped tolerance only with a documented publisher-specific reason, and tolerated items remain visible in the exception count below. This accommodates a verified source quirk without accepting materially future content elsewhere. Event-driven feeds require a documented freshness reason and have a manifest-level stale-review deadline; they still must pass every other structural and integrity check.",
         "The manifest is the source of truth for feed identity, folder, profile, freshness and notification policy. The validator compares it with both the OPML and the source table, including ordered metadata fields.",
         "",
         "## Feed health",
@@ -935,6 +1004,16 @@ def generate_report(args: argparse.Namespace) -> int:
             for detail in payload["failed_feeds"]
         )
 
+    if future_date_exceptions:
+        lines.extend(["", "## Tolerated future-date exceptions", ""])
+        lines.append(
+            "These items exceed the global clock-skew tolerance but fall within a feed-specific tolerance justified in the manifest; they remain a maintenance watch rather than a hard validation failure."
+        )
+        lines.extend(
+            f"- **{md(detail['feed_title'] or detail['url'])}** — {detail['future_date_exception_count']} item(s); effective tolerance {detail['future_date_tolerance_minutes']:g} minutes; {md(detail['future_date_reason'] or 'reason not recorded')}."
+            for detail in future_date_exceptions
+        )
+
     if metadata_mismatches:
         lines.extend(["", "## Metadata mismatches", ""])
         lines.extend(
@@ -946,7 +1025,7 @@ def generate_report(args: argparse.Namespace) -> int:
         "",
         "## Coverage audit",
         "",
-        "- **Finance**: US, UK, Irish, euro-area and global market context; SEC, CFTC, Federal Reserve speeches and monetary policy, ECB press, market operations and statistical releases, Central Bank of Ireland, EBA, AMLA, ESRB, Bank of England, HM Treasury, FCA, Eurostat, ONS, BIS and European Commission sanctions guidance; Nasdaq trade halts and Equity Trader Alerts; EUR/USD and EUR/GBP reference data. BEA was tested but rejected for one malformed historical item link.",
+        "- **Finance**: US, UK, Irish, euro-area and global market context; SEC, CFTC, Federal Reserve speeches and monetary policy, ECB press, market operations and statistical releases, Central Bank of Ireland, EBA, ESMA, AMLA, ESRB, Bank of England, HM Treasury, HMRC, FCA, APRA, Australian Treasury, Eurostat, ONS, BIS and European Commission sanctions guidance; Nasdaq trade halts and Equity Trader Alerts; Euronext Market Status and Athens Market Notices; EUR/USD and EUR/GBP reference data. BEA was tested but rejected for one malformed historical item link.",
         "- **Cyber**: Ireland NCSC, CISA, CISA ICS, CERT-EU, UK NCSC, CERT/CC, NIST, Microsoft, Mandiant, Unit 42, GitHub Security Blog, Cisco PSIRT, Cisco Talos, OpenSSF and CrowdStrike, plus independent incident reporting and technical research.",
         "- **Ireland/EU/UK/US scope**: present in official alerts, regulation, macro data and market coverage.",
         f"- **Coverage-gap decisions**: see [Coverage-Gap-Assessment.md]({markdown_reference('docs/Coverage-Gap-Assessment.md')}) for tested candidates, exact rejection reasons and next-addition triggers.",
@@ -957,7 +1036,7 @@ def generate_report(args: argparse.Namespace) -> int:
         "",
         "**Optional:** Central Bank of Ireland News, Federal Reserve Monetary Policy, ECB Press, Bank of England News, EBA News, AMLA News & Press, ESRB Press, UK NCSC All Updates, CISA ICS Advisories and Cisco PSIRT.",
         "",
-        "**Off and summarize in batches:** commercial market news, RTÉ/BBC business news, CFTC regulatory releases, ECB market operations and statistical releases, Eurostat/ONS/BIS data, EBA/AMLA/ESRB context, European Commission sanctions guidance, Federal Reserve speeches, Bank of England Publications, CERT/CC vulnerability notes, incident reporting, research feeds including GitHub Security Blog, exchange-rate data and broad regulatory context.",
+        "**Off and summarize in batches:** Euronext Market Status and Athens Market Notices, commercial market news, RTÉ/BBC business news, CFTC regulatory releases, ECB market operations and statistical releases, Eurostat/ONS/BIS data, EBA/ESMA/AMLA/ESRB context, European Commission sanctions guidance, Federal Reserve speeches, Bank of England Publications, CERT/CC vulnerability notes, incident reporting, research feeds including GitHub Security Blog, exchange-rate data and broad regulatory context.",
         "",
         "## Strong candidates retained outside the OPML",
         "",
@@ -967,12 +1046,11 @@ def generate_report(args: argparse.Namespace) -> int:
         "- **Euronext Dublin notices**: official notices are available through Euronext web/portal services, but no verified direct public RSS/Atom feed was retained.",
         "- **UK NCSC Reports feed**: valid, but it overlaps the retained UK NCSC All Updates feed; adding both would duplicate stories.",
         "- **CISA Known Exploited Vulnerabilities catalogue**: useful for a separate structured-data monitor, but not a direct RSS/Atom feed.",
-        "- **U.S. Treasury press releases**: valuable official fiscal and macro context, but no verified direct HTTPS RSS/Atom endpoint was retained.",
+        "- **U.S. Treasury press releases**: valuable official fiscal and macro context; the currently reachable root RSS endpoint is a narrow SSBCI/technical-assistance stream rather than a useful general press-release feed, so the press-release page remains the reference.",
         "- **Apple security releases**: valuable for iPhone security, but the official page is HTML rather than a direct RSS/Atom feed.",
         "- **Federal Reserve H.10 XML feed**: reachable and current, but rejected because its 92-entry stream had 40.2% repeated titles and 100% repeated item links; its HTML page was not used either.",
         "- **BLS Latest Numbers `https://www.bls.gov/feed/bls_latest.rss`**: authoritative US macro feed, but the current endpoint returned HTTP 403 and was not imported.",
         "- **ECB Yield Curve `https://www.ecb.europa.eu/rss/yc.html`**: valid RSS, but the newest actual data item is from 2017 and therefore fails the recent-content rule.",
-        "- **ESMA `https://www.esma.europa.eu/rss.xml`**: direct HTTPS RSS and useful EU market-regulator coverage, but its current items contain no detectable publication date; it fails the date-integrity requirement and remains a web reference.",
         "- **BEA News Releases `https://apps.bea.gov/rss/rss.xml`**: useful official US macro coverage, but one historical item contains a schemeless `www.bea.gov/...` link; alternate BEA paths did not provide a clean RSS feed, so it was not imported.",
         "- **FINRA RSS feeds**: FINRA documents official feeds, but the published endpoints are HTTP-only and the HTTPS transport did not provide a reliable XML response; none were imported.",
         "- **NYSE trading halts**: NYSE provides a live web page and CSV/email or proprietary market-data services, not a verified direct public RSS/Atom feed; it remains a web reference.",

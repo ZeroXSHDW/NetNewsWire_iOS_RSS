@@ -25,6 +25,8 @@ git diff --check
 
 `make check` includes the repository hygiene gate. It scans tracked files for runtime state, high-confidence credentials and machine-specific absolute paths before a change is published.
 
+When the manifest and generated artifacts are intentionally frozen for an integration handoff, run `make check-frozen` instead. It runs the non-mutating lint, documentation, hygiene, test, shell-syntax and whitespace checks without invoking `make package` or rewriting committed artifacts.
+
 When network access is available, run all live profile audits as well:
 
 ```sh
