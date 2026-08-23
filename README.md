@@ -26,7 +26,7 @@ The repository contains **34 finance feeds** and **28 cybersecurity feeds**. Fou
 | **Apple Shortcuts** | Optional | Receives selected articles from NetNewsWire and passes them to the digest workflow. |
 | **Apple Intelligence** | Optional | Runs the Shortcuts **Use Model** step on supplied article text; it is not required for reading RSS. |
 | **Apple Notes** | Optional | Stores a dated copy of the reviewed digest. |
-| **Mac + Python 3.11/3.12, `make` and zsh** | Maintainer only | Regenerates bundles, prepares digest input and runs offline checks. |
+| **Mac + Python 3.11/3.12, `make`, zsh and actionlint** | Maintainer only | Regenerates bundles, prepares digest input and runs offline and workflow checks. |
 | **`curl` + `xmllint` (libxml2)** | Live validation only | Fetches direct feed endpoints and verifies their XML. |
 
 You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
@@ -390,9 +390,12 @@ The generated `shortcut-digest.txt` is convenient for a Shortcut text action. Th
 ```bash
 make help           # show the project commands
 make check          # offline generation, lint, docs, hygiene, tests and syntax checks
+make workflow-lint  # lint GitHub Actions workflows with actionlint
 make hygiene        # scan tracked files for secrets, local paths and runtime state
 make validate-all   # live validation for Master, iPhone Lite and iPhone Air
 ```
+
+CI downloads actionlint 1.7.12 over HTTPS and verifies its SHA-256 before linting the workflow. Local maintainers should install actionlint 1.7.12 or set `ACTIONLINT` to an equivalent executable.
 
 You can also run `make validate`, `make validate-lite` or `make validate-air` when you only need one profile.
 

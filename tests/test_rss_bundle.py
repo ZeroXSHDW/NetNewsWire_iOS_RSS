@@ -742,6 +742,20 @@ class ValidationHistoryTest(unittest.TestCase):
             self.assertFalse(history_path.exists())
 
 
+class WorkflowContractTest(unittest.TestCase):
+    def test_workflow_lint_job_is_hash_pinned_and_read_only(self) -> None:
+        workflow = (ROOT / ".github/workflows/rss-validation.yml").read_text(encoding="utf-8")
+        self.assertIn("workflow-lint:", workflow)
+        self.assertIn("persist-credentials: false", workflow)
+        self.assertIn("ACTIONLINT_VERSION: 1.7.12", workflow)
+        self.assertIn(
+            "ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+            workflow,
+        )
+        self.assertIn("sha256sum --check --status", workflow)
+        self.assertIn('"${RUNNER_TEMP}/actionlint"', workflow)
+
+
 class RepositoryHygieneTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

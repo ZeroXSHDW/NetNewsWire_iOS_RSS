@@ -1,14 +1,16 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help generate package lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check
+.PHONY: help generate package lint docs-check hygiene test compile syntax workflow-lint validate validate-lite validate-air validate-all check
 
 PYTHON ?= python3
+ACTIONLINT ?= actionlint
 
 help:
 	@printf '%s\n' \
 		'NetNewsWire Finance + Cyber bundle' \
 		'  make package       Generate all profiles and refresh the AirDrop handoff' \
 		'  make check         Run offline generation, lint, docs, hygiene and tests' \
+		'  make workflow-lint Run actionlint against GitHub Actions workflows' \
 		'  make hygiene       Scan tracked files for secrets, local paths and runtime state' \
 		'  make validate-all  Run live validation for Master, iPhone Lite and Air' \
 		'  make validate      Run live validation for the Master profile' \
@@ -33,6 +35,14 @@ compile:
 
 syntax:
 	zsh -n validate-rss-bundle.sh
+
+workflow-lint:
+	@if command -v "$(ACTIONLINT)" >/dev/null 2>&1; then \
+		"$(ACTIONLINT)"; \
+	else \
+		printf '%s\n' 'actionlint is required; install v1.7.12 or set ACTIONLINT=/path/to/actionlint' >&2; \
+		exit 1; \
+	fi
 
 lint:
 	$(PYTHON) validate-manifest.py --manifest feed-manifest.json --root .

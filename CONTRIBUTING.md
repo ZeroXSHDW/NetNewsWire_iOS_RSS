@@ -20,10 +20,12 @@ Run the offline gate before opening a pull request:
 
 ```sh
 make check
+make workflow-lint
 git diff --check
 ```
 
 `make check` includes the repository hygiene gate. It scans tracked files for runtime state, high-confidence credentials and machine-specific absolute paths before a change is published.
+`make workflow-lint` runs actionlint against the GitHub Actions workflow; CI verifies the downloaded actionlint archive before running the same check.
 
 When network access is available, run all live profile audits as well:
 
