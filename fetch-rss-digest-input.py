@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import gzip
+import io
 import json
 import re
 import sys
@@ -38,6 +39,7 @@ from state_utils import atomic_write_text, file_lock, lock_path
 
 DEFAULT_USER_AGENT = "NetNewsWire-Finance-Cyber/2.0 local-rss-digest"
 MAX_SAFE_XML_BYTES = 32 * 1024 * 1024
+TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524}
 
 # The public European Parliament RSS endpoint returns an AWS WAF challenge to
 # the collector's descriptive user-agent.  The same endpoint is valid RSS
@@ -65,12 +67,36 @@ def load_state(path: Path) -> dict:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         raise ValueError("RSS fetch state must be a JSON object")
+    version = data.get("version", 1)
+    if isinstance(version, bool) or not isinstance(version, int) or version != 1:
+        raise ValueError("RSS fetch state version must be 1")
     feeds = data.get("feeds", {})
     if not isinstance(feeds, dict):
         raise ValueError("RSS fetch state feeds field must be an object")
+    if any(not isinstance(value, dict) for value in feeds.values()):
+        raise ValueError("RSS fetch state feed entries must be objects")
+    last_run = data.get("last_run", "")
+    if not isinstance(last_run, str):
+        raise ValueError("RSS fetch state last_run field must be a string")
     data["version"] = 1
     data["feeds"] = feeds
+    data["last_run"] = last_run
     return data
+
+
+def decode_response_body(body: bytes, *, content_encoding: str, max_bytes: int) -> bytes:
+    """Decode a response without allowing compressed input to expand unboundedly."""
+
+    if "gzip" not in content_encoding.lower():
+        return body
+    try:
+        with gzip.GzipFile(fileobj=io.BytesIO(body)) as stream:
+            decoded = stream.read(max_bytes + 1)
+    except (OSError, EOFError) as exc:
+        raise gzip.BadGzipFile(str(exc)) from exc
+    if len(decoded) > max_bytes:
+        raise ValueError(f"decompressed response exceeds {max_bytes} bytes")
+    return decoded
 
 
 def _feed_items(root: ET.Element) -> tuple[str, list[ET.Element]]:
@@ -135,7 +161,7 @@ def parse_feed_bytes(
             resolved_link = urljoin(str(feed.get("url", "")), link)
             if url_is_web(resolved_link):
                 link = resolved_link
-        raw_date = item_date_raw(element).strip()
+        raw_date = item_date_raw(element, base_url=str(feed.get("url", ""))).strip()
         parsed_date = parse_date(raw_date) if raw_date else None
         if not title or not url_is_web(link) or parsed_date is None:
             skipped += 1
@@ -175,6 +201,14 @@ def _state_after(
             "last_error": error,
         }
     )
+    previous_failures = previous.get("consecutive_failures", 0)
+    if isinstance(previous_failures, bool) or not isinstance(previous_failures, int) or previous_failures < 0:
+        previous_failures = 0
+    if error:
+        state["consecutive_failures"] = previous_failures + 1
+        state["last_failure"] = checked_at
+    else:
+        state["consecutive_failures"] = 0
     if etag:
         state["etag"] = etag
     if last_modified:
@@ -197,6 +231,7 @@ def _result_base(feed: dict) -> dict:
         "feed_title": "",
         "elapsed_seconds": 0.0,
         "error": "",
+        "retry_count": 0,
         "articles": [],
         "state": {},
     }
@@ -210,6 +245,8 @@ def fetch_feed(
     max_response_bytes: int,
     max_items: int,
     user_agent: str,
+    retries: int = 2,
+    retry_backoff_seconds: float = 0.5,
 ) -> dict:
     """Fetch one feed and return articles plus the next cache state."""
 
@@ -228,25 +265,38 @@ def fetch_feed(
     request = urllib.request.Request(str(feed["url"]), headers=headers)
 
     try:
-        try:
-            response_context = urllib.request.urlopen(request, timeout=timeout)
-        except urllib.error.HTTPError as exc:
-            if exc.code == 304:
-                result.update(
-                    {
-                        "status": 304,
-                        "not_modified": True,
-                        "elapsed_seconds": round(time.perf_counter() - started, 3),
-                        "state": _state_after(
-                            previous_state,
-                            checked_at=checked_at,
-                            status=304,
-                            effective_url=str(feed["url"]),
-                        ),
-                    }
-                )
-                return result
-            raise
+        attempt = 0
+        while True:
+            try:
+                response_context = urllib.request.urlopen(request, timeout=timeout)
+                break
+            except urllib.error.HTTPError as exc:
+                result["status"] = exc.code
+                if exc.code == 304:
+                    result.update(
+                        {
+                            "status": 304,
+                            "not_modified": True,
+                            "retry_count": attempt,
+                            "elapsed_seconds": round(time.perf_counter() - started, 3),
+                            "state": _state_after(
+                                previous_state,
+                                checked_at=checked_at,
+                                status=304,
+                                effective_url=str(feed["url"]),
+                            ),
+                        }
+                    )
+                    return result
+                if exc.code not in TRANSIENT_HTTP_STATUS_CODES or attempt >= retries:
+                    raise
+            except (OSError, urllib.error.URLError):
+                if attempt >= retries:
+                    raise
+            attempt += 1
+            result["retry_count"] = attempt
+            if retry_backoff_seconds:
+                time.sleep(min(5.0, retry_backoff_seconds * (2 ** (attempt - 1))))
 
         with response_context as response:
             status = int(getattr(response, "status", response.getcode()))
@@ -266,8 +316,13 @@ def fetch_feed(
             body = response.read(max_response_bytes + 1)
             if len(body) > max_response_bytes:
                 raise ValueError(f"response exceeds {max_response_bytes} bytes")
-            if "gzip" in content_type.lower() or str(response.headers.get("Content-Encoding", "")).lower() == "gzip":
-                body = gzip.decompress(body)
+            content_encoding = str(response.headers.get("Content-Encoding", ""))
+            if "gzip" in content_type.lower() or "gzip" in content_encoding.lower():
+                body = decode_response_body(
+                    body,
+                    content_encoding="gzip",
+                    max_bytes=max_response_bytes,
+                )
             articles, skipped, feed_title = parse_feed_bytes(body, feed, max_items=max_items)
             etag = str(response.headers.get("ETag", "")).strip()
             last_modified = str(response.headers.get("Last-Modified", "")).strip()
@@ -276,6 +331,7 @@ def fetch_feed(
                     "feed_title": feed_title,
                     "article_count": len(articles),
                     "skipped_item_count": skipped,
+                    "retry_count": attempt,
                     "articles": articles,
                     "elapsed_seconds": round(time.perf_counter() - started, 3),
                     "state": _state_after(
@@ -293,6 +349,7 @@ def fetch_feed(
         result.update(
             {
                 "error": str(exc),
+                "retry_count": int(result.get("retry_count", 0)),
                 "elapsed_seconds": round(time.perf_counter() - started, 3),
                 "state": _state_after(
                     previous_state,
@@ -315,6 +372,8 @@ def collect_feeds(
     max_items: int,
     workers: int,
     user_agent: str,
+    retries: int = 2,
+    retry_backoff_seconds: float = 0.5,
 ) -> tuple[list[dict], dict]:
     results: list[dict | None] = [None] * len(feeds)
 
@@ -330,6 +389,8 @@ def collect_feeds(
                 max_response_bytes=max_response_bytes,
                 max_items=max_items,
                 user_agent=user_agent,
+                retries=retries,
+                retry_backoff_seconds=retry_backoff_seconds,
             )
         except Exception as exc:  # Keep one bad endpoint from aborting the batch.
             result = _result_base(feed)
@@ -364,6 +425,12 @@ def collect_feeds(
         ),
         "feeds_not_modified": sum(1 for result in complete_results if result["not_modified"]),
         "feeds_failed": sum(1 for result in complete_results if result["error"]),
+        "feeds_with_consecutive_failures": sum(
+            1
+            for result in complete_results
+            if int(result["state"].get("consecutive_failures", 0)) > 0
+        ),
+        "retry_count_total": sum(int(result.get("retry_count", 0)) for result in complete_results),
         "article_candidates": len(articles),
         "generated_at": state["last_run"],
     }
@@ -379,6 +446,8 @@ def main() -> int:
     parser.add_argument("--timeout", type=float, default=20.0)
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--max-items-per-feed", type=int, default=20)
+    parser.add_argument("--retries", type=int, default=2, help="retry transient network/HTTP failures per feed")
+    parser.add_argument("--retry-backoff-seconds", type=float, default=0.5)
     parser.add_argument("--max-response-bytes", type=int, help="override manifest response limit")
     parser.add_argument("--user-agent", default=DEFAULT_USER_AGENT)
     parser.add_argument("--dry-run", action="store_true", help="do not update fetch state")
@@ -391,6 +460,10 @@ def main() -> int:
             raise ValueError("--workers must be between 1 and 32")
         if args.max_items_per_feed < 1:
             raise ValueError("--max-items-per-feed must be at least 1")
+        if args.retries < 0:
+            raise ValueError("--retries must not be negative")
+        if args.retry_backoff_seconds < 0:
+            raise ValueError("--retry-backoff-seconds must not be negative")
         if args.max_response_bytes is not None and args.max_response_bytes < 1:
             raise ValueError("--max-response-bytes must be positive")
         manifest = load_manifest(args.manifest)
@@ -401,6 +474,8 @@ def main() -> int:
         ]
         validation = manifest.get("validation", {})
         max_response_bytes = args.max_response_bytes or int(validation.get("max_response_bytes", 16 * 1024 * 1024))
+        if max_response_bytes > MAX_SAFE_XML_BYTES:
+            raise ValueError(f"max response bytes must not exceed {MAX_SAFE_XML_BYTES}")
 
         lock = file_lock(lock_path(args.state))
         lock_acquired = False
@@ -416,6 +491,8 @@ def main() -> int:
                 max_items=args.max_items_per_feed,
                 workers=args.workers,
                 user_agent=args.user_agent,
+                retries=args.retries,
+                retry_backoff_seconds=args.retry_backoff_seconds,
             )
             summary = report["summary"]
             payload = {
@@ -446,6 +523,7 @@ def main() -> int:
                             "skipped_item_count",
                             "feed_title",
                             "elapsed_seconds",
+                            "retry_count",
                             "error",
                         )
                     }

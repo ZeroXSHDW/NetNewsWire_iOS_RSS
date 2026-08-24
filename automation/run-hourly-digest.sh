@@ -9,56 +9,272 @@ SOURCE_PROFILE=${NETNEWSWIRE_SOURCE_PROFILE:-master}
 DIGEST_PROFILE=${NETNEWSWIRE_DIGEST_PROFILE:-master}
 SHORTCUT_NAME=${SHORTCUT_NAME:-"Daily Finance + Cyber Digest"}
 AI_OUTPUT_PATH=${NETNEWSWIRE_AI_OUTPUT:-"$RUNTIME_DIR/apple-intelligence-output.txt"}
+HEALTH_PATH=${NETNEWSWIRE_HEALTH_PATH:-"$RUNTIME_DIR/health.json"}
+LOG_PATH=${NETNEWSWIRE_LOG_PATH:-}
+LOG_MAX_BYTES=${NETNEWSWIRE_LOG_MAX_BYTES:-1048576}
 # The macOS Shortcuts command has a smaller practical request ceiling than
 # the raw file argument suggests. Keep a wide margin for the shortcut wrapper
 # and Apple Intelligence's input envelope; override only after testing locally.
 SHORTCUT_MAX_INPUT_BYTES=${NETNEWSWIRE_SHORTCUT_MAX_INPUT_BYTES:-4000}
+SHORTCUT_TIMEOUT_SECONDS=${NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS:-900}
 
 RUN_SHORTCUT=0
-if [ "${1:-}" = "--run-shortcut" ]; then
-  RUN_SHORTCUT=1
-fi
+case "${1:-}" in
+  "") ;;
+  --run-shortcut) RUN_SHORTCUT=1 ;;
+  --help|-h)
+    cat <<'USAGE'
+Usage: run-hourly-digest.sh [--run-shortcut]
+
+Prepare the bounded hourly digest in the configured runtime directory.
+With --run-shortcut, pass each bounded batch to the named macOS Shortcut and
+write the combined Apple Intelligence output.
+
+Environment overrides:
+  NETNEWSWIRE_DIGEST_DIR, NETNEWSWIRE_SOURCE_PROFILE, NETNEWSWIRE_DIGEST_PROFILE
+  NETNEWSWIRE_HEALTH_PATH, NETNEWSWIRE_LOG_PATH, NETNEWSWIRE_LOG_MAX_BYTES
+  SHORTCUT_NAME, PYTHON_BIN, NETNEWSWIRE_SHORTCUT_MAX_INPUT_BYTES
+  NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS
+USAGE
+    exit 0
+    ;;
+  *)
+    echo "hourly digest: unknown option '$1' (try --help)" >&2
+    exit 2
+    ;;
+esac
 
 FETCH_STATE_PATH="$RUNTIME_DIR/fetch-state.json"
 DIGEST_STATE_PATH="$RUNTIME_DIR/digest-state.json"
+RUN_LOCK_DIR="$RUNTIME_DIR/.hourly-run.lock"
 STATE_BACKUP_DIR=""
 SHORTCUT_BATCH_DIR=""
 AI_OUTPUT_TMP=""
 HAD_FETCH_STATE=0
 HAD_DIGEST_STATE=0
+STATE_BACKUP_FAILED=0
+RUN_LOCK_HELD=0
+HEALTH_ACTIVE=0
+HEALTH_FINALIZED=0
+RUN_ID=""
+RUN_STARTED_AT=""
+
+validate_python() {
+  if ! "$PYTHON_BIN" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' >/dev/null 2>&1; then
+    echo "hourly digest: Python 3.11 or newer is required; set PYTHON_BIN to a supported interpreter" >&2
+    exit 2
+  fi
+}
+
+acquire_run_lock() {
+  if mkdir "$RUN_LOCK_DIR" 2>/dev/null; then
+    RUN_LOCK_HELD=1
+    printf '%s\n' "$$" > "$RUN_LOCK_DIR/pid"
+    return 0
+  fi
+
+  owner_pid=$(sed -n '1p' "$RUN_LOCK_DIR/pid" 2>/dev/null || true)
+  case "$owner_pid" in
+    ''|*[!0-9]*)
+      echo "hourly digest: run lock has no valid owner; inspect before removing: $RUN_LOCK_DIR" >&2
+      exit 75
+      ;;
+    *)
+      if kill -0 "$owner_pid" 2>/dev/null; then
+        echo "hourly digest: another run is active (pid $owner_pid)" >&2
+        exit 75
+      fi
+      ;;
+  esac
+
+  rm -f "$RUN_LOCK_DIR/pid"
+  if ! rmdir "$RUN_LOCK_DIR" 2>/dev/null; then
+    echo "hourly digest: could not clear stale run lock: $RUN_LOCK_DIR" >&2
+    exit 75
+  fi
+  if ! mkdir "$RUN_LOCK_DIR" 2>/dev/null; then
+    echo "hourly digest: another run acquired the lock" >&2
+    exit 75
+  fi
+  RUN_LOCK_HELD=1
+  printf '%s\n' "$$" > "$RUN_LOCK_DIR/pid"
+}
+
+release_run_lock() {
+  if [ "$RUN_LOCK_HELD" -eq 1 ]; then
+    rm -f "$RUN_LOCK_DIR/pid" || true
+    rmdir "$RUN_LOCK_DIR" 2>/dev/null || true
+    RUN_LOCK_HELD=0
+  fi
+}
+
+prune_runtime_temporary_directories() {
+  for stale in \
+    "$RUNTIME_DIR"/.shortcut-batches.* \
+    "$RUNTIME_DIR"/.hourly-state.* \
+    "$RUNTIME_DIR"/.hourly-rss-*; do
+    [ -d "$stale" ] || continue
+    rm -rf "$stale"
+  done
+}
+
+rotate_log_and_redirect() {
+  [ -n "$LOG_PATH" ] || return 0
+  case "$LOG_MAX_BYTES" in
+    ''|*[!0-9]*) echo "hourly digest: NETNEWSWIRE_LOG_MAX_BYTES must be numeric" >&2; exit 2 ;;
+  esac
+  if [ "$LOG_MAX_BYTES" -lt 1 ]; then
+    echo "hourly digest: NETNEWSWIRE_LOG_MAX_BYTES must be positive" >&2
+    exit 2
+  fi
+  mkdir -p "$(dirname "$LOG_PATH")"
+  if [ -f "$LOG_PATH" ]; then
+    current_bytes=$(wc -c < "$LOG_PATH" | tr -d '[:space:]')
+    if [ "$current_bytes" -gt "$LOG_MAX_BYTES" ]; then
+      rm -f "$LOG_PATH.2"
+      if [ -f "$LOG_PATH.1" ]; then
+        mv -f "$LOG_PATH.1" "$LOG_PATH.2"
+      fi
+      mv -f "$LOG_PATH" "$LOG_PATH.1"
+    fi
+  fi
+  exec >> "$LOG_PATH" 2>&1
+}
+
+trim_active_log() {
+  [ -n "$LOG_PATH" ] || return 0
+  case "$LOG_MAX_BYTES" in
+    ''|*[!0-9]*) return 0 ;;
+  esac
+  PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" "$PYTHON_BIN" - "$LOG_PATH" "$LOG_MAX_BYTES" <<'PY' || true
+import sys
+from pathlib import Path
+
+from state_utils import atomic_write_bytes
+
+path = Path(sys.argv[1])
+limit = int(sys.argv[2])
+if path.is_file():
+    data = path.read_bytes()
+    if len(data) > limit:
+        atomic_write_bytes(path, data[-limit:])
+PY
+}
+
+write_health_running() {
+  "$PYTHON_BIN" "$ROOT/runtime_health.py" \
+    --path "$HEALTH_PATH" \
+    --status running \
+    --run-id "$RUN_ID" \
+    --started-at "$RUN_STARTED_AT"
+}
+
+write_health_failed() {
+  failure_status=$1
+  "$PYTHON_BIN" "$ROOT/runtime_health.py" \
+    --path "$HEALTH_PATH" \
+    --status failed \
+    --run-id "$RUN_ID" \
+    --started-at "$RUN_STARTED_AT" \
+    --exit-code "$failure_status" \
+    --message "hourly digest exited with status $failure_status" || true
+}
+
+write_health_succeeded() {
+  "$PYTHON_BIN" "$ROOT/runtime_health.py" \
+    --path "$HEALTH_PATH" \
+    --status succeeded \
+    --run-id "$RUN_ID" \
+    --started-at "$RUN_STARTED_AT" \
+    --package "$RUNTIME_DIR/hourly-digest-input.json"
+}
+
+restore_state_file() {
+  backup_path=$1
+  destination_path=$2
+  if [ -f "$backup_path" ]; then
+    restore_tmp="$destination_path.restore.$$"
+    if cp -p "$backup_path" "$restore_tmp" && mv -f "$restore_tmp" "$destination_path"; then
+      :
+    else
+      rm -f "$restore_tmp" || true
+    fi
+  else
+    rm -f "$destination_path" || true
+  fi
+}
+
+backup_state_file() {
+  source_path=$1
+  destination_path=$2
+  backup_tmp="$destination_path.tmp.$$"
+  if cp -p "$source_path" "$backup_tmp" && mv -f "$backup_tmp" "$destination_path"; then
+    return 0
+  fi
+  rm -f "$backup_tmp" || true
+  return 1
+}
 
 cleanup() {
   status=$?
-  if [ "$RUN_SHORTCUT" -eq 1 ] && [ "$status" -ne 0 ] && [ -n "$STATE_BACKUP_DIR" ]; then
+  if [ "$HEALTH_ACTIVE" -eq 1 ] && [ "$HEALTH_FINALIZED" -eq 0 ] && [ "$status" -ne 0 ]; then
+    write_health_failed "$status"
+  fi
+  if [ "$RUN_SHORTCUT" -eq 1 ] && [ "$status" -ne 0 ] && [ "$STATE_BACKUP_FAILED" -eq 0 ] && [ -n "$STATE_BACKUP_DIR" ]; then
     if [ "$HAD_FETCH_STATE" -eq 1 ]; then
-      cp -p "$STATE_BACKUP_DIR/fetch-state.json" "$FETCH_STATE_PATH"
+      restore_state_file "$STATE_BACKUP_DIR/fetch-state.json" "$FETCH_STATE_PATH"
     else
-      rm -f "$FETCH_STATE_PATH"
+      rm -f "$FETCH_STATE_PATH" || true
     fi
     if [ "$HAD_DIGEST_STATE" -eq 1 ]; then
-      cp -p "$STATE_BACKUP_DIR/digest-state.json" "$DIGEST_STATE_PATH"
+      restore_state_file "$STATE_BACKUP_DIR/digest-state.json" "$DIGEST_STATE_PATH"
     else
-      rm -f "$DIGEST_STATE_PATH"
+      rm -f "$DIGEST_STATE_PATH" || true
     fi
   fi
   if [ -n "$AI_OUTPUT_TMP" ]; then
-    rm -f "$AI_OUTPUT_TMP"
+    rm -f "$AI_OUTPUT_TMP" || true
   fi
   if [ -n "$SHORTCUT_BATCH_DIR" ]; then
-    rm -rf "$SHORTCUT_BATCH_DIR"
+    rm -rf "$SHORTCUT_BATCH_DIR" || true
   fi
   if [ -n "$STATE_BACKUP_DIR" ]; then
-    rm -rf "$STATE_BACKUP_DIR"
+    rm -rf "$STATE_BACKUP_DIR" || true
   fi
+  trim_active_log
+  release_run_lock
   exit "$status"
 }
 
 trap cleanup EXIT
+trap 'exit 143' HUP INT TERM
 DIGEST_MAX_ITEMS=${NETNEWSWIRE_DIGEST_MAX_ITEMS:-36}
 DIGEST_MAX_ITEM_CHARS=${NETNEWSWIRE_DIGEST_MAX_ITEM_CHARS:-5000}
 DIGEST_MAX_TOTAL_CHARS=${NETNEWSWIRE_DIGEST_MAX_TOTAL_CHARS:-110000}
 
 mkdir -p "$RUNTIME_DIR"
+validate_python
+case "$SHORTCUT_TIMEOUT_SECONDS" in
+  ''|*[!0-9.]*) echo "hourly digest: NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS must be numeric" >&2; exit 2 ;;
+esac
+if ! "$PYTHON_BIN" -c 'import sys; raise SystemExit(0 if float(sys.argv[1]) > 0 else 1)' "$SHORTCUT_TIMEOUT_SECONDS" >/dev/null 2>&1; then
+  echo "hourly digest: NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS must be positive" >&2
+  exit 2
+fi
+acquire_run_lock
+NETNEWSWIRE_RUN_LOCK_OWNER=$$
+export NETNEWSWIRE_RUN_LOCK_OWNER
+RUN_ID="$$-$(date +%s)"
+RUN_STARTED_AT=$(
+  "$PYTHON_BIN" -c 'from datetime import datetime, timezone; print(datetime.now(timezone.utc).isoformat(timespec="seconds"))'
+)
+prune_runtime_temporary_directories
+rotate_log_and_redirect
+HEALTH_ACTIVE=1
+if ! write_health_running; then
+  echo "hourly digest: could not write running health record" >&2
+  exit 5
+fi
 
 if [ "$RUN_SHORTCUT" -eq 1 ]; then
   if ! command -v shortcuts >/dev/null 2>&1; then
@@ -71,12 +287,20 @@ if [ "$RUN_SHORTCUT" -eq 1 ]; then
   fi
   STATE_BACKUP_DIR=$(mktemp -d "$RUNTIME_DIR/.hourly-state.XXXXXX")
   if [ -e "$FETCH_STATE_PATH" ]; then
-    cp -p "$FETCH_STATE_PATH" "$STATE_BACKUP_DIR/fetch-state.json"
     HAD_FETCH_STATE=1
+    if ! backup_state_file "$FETCH_STATE_PATH" "$STATE_BACKUP_DIR/fetch-state.json"; then
+      STATE_BACKUP_FAILED=1
+      echo "hourly digest: could not create an atomic fetch-state backup" >&2
+      exit 5
+    fi
   fi
   if [ -e "$DIGEST_STATE_PATH" ]; then
-    cp -p "$DIGEST_STATE_PATH" "$STATE_BACKUP_DIR/digest-state.json"
     HAD_DIGEST_STATE=1
+    if ! backup_state_file "$DIGEST_STATE_PATH" "$STATE_BACKUP_DIR/digest-state.json"; then
+      STATE_BACKUP_FAILED=1
+      echo "hourly digest: could not create an atomic digest-state backup" >&2
+      exit 5
+    fi
   fi
 fi
 
@@ -198,9 +422,11 @@ PY
     BATCH_OUTPUT="$SHORTCUT_BATCH_DIR/output-$(printf '%03d' "$BATCH_INDEX").txt"
     BATCH_BYTES=$(wc -c < "$BATCH_INPUT" | tr -d ' ')
     echo "hourly digest: sending Apple Intelligence batch $BATCH_INDEX/$BATCH_COUNT (${BATCH_BYTES} bytes)"
-    shortcuts run "$SHORTCUT_NAME" \
-      --input-path "$BATCH_INPUT" \
-      --output-path "$BATCH_OUTPUT"
+    "$PYTHON_BIN" "$ROOT/automation/run-shortcut.py" \
+      "$SHORTCUT_NAME" \
+      "$BATCH_INPUT" \
+      "$BATCH_OUTPUT" \
+      --timeout "$SHORTCUT_TIMEOUT_SECONDS"
     if [ ! -s "$BATCH_OUTPUT" ]; then
       echo "hourly digest: the Shortcut produced no Apple Intelligence output for batch $BATCH_INDEX/$BATCH_COUNT" >&2
       exit 4
@@ -221,3 +447,9 @@ PY
     exit 4
   fi
 fi
+
+if ! write_health_succeeded; then
+  echo "hourly digest: could not write successful health record" >&2
+  exit 5
+fi
+HEALTH_FINALIZED=1

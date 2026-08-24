@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import gzip
+import tempfile
 import urllib.error
 import unittest
 from pathlib import Path
@@ -21,10 +23,18 @@ def load_collector():
 
 
 class FakeResponse:
-    def __init__(self, body: bytes, *, status: int = 200, headers: dict[str, str] | None = None) -> None:
+    def __init__(
+        self,
+        body: bytes,
+        *,
+        status: int = 200,
+        headers: dict[str, str] | None = None,
+        effective_url: str = "https://example.test/feed.xml",
+    ) -> None:
         self.body = body
         self.status = status
         self.headers = headers or {"Content-Type": "application/rss+xml"}
+        self.effective_url = effective_url
 
     def __enter__(self):
         return self
@@ -36,7 +46,7 @@ class FakeResponse:
         return self.status
 
     def geturl(self) -> str:
-        return "https://example.test/feed.xml"
+        return self.effective_url
 
     def read(self, limit: int = -1) -> bytes:
         return self.body if limit < 0 else self.body[:limit]
@@ -96,6 +106,128 @@ class HourlyCollectorTest(unittest.TestCase):
         self.assertTrue(result["not_modified"])
         self.assertEqual(result["status"], 304)
         self.assertEqual(result["state"]["last_status"], 304)
+
+    def test_fetch_bounds_gzip_expansion_before_xml_parsing(self) -> None:
+        collector = load_collector()
+        body = b"<rss><channel><title>" + (b"x" * 20000) + b"</title></channel></rss>"
+        response = FakeResponse(
+            gzip.compress(body),
+            headers={
+                "Content-Type": "application/rss+xml",
+                "Content-Encoding": "gzip",
+            },
+        )
+        feed = {"title": "Compressed fixture", "url": "https://example.test/feed.xml"}
+
+        with mock.patch.object(collector.urllib.request, "urlopen", return_value=response):
+            result = collector.fetch_feed(
+                feed,
+                {},
+                timeout=2,
+                max_response_bytes=1024,
+                max_items=10,
+                user_agent="test-agent",
+            )
+
+        self.assertIn("decompressed response exceeds", result["error"])
+        self.assertEqual(result["state"]["last_status"], 200)
+
+    def test_fetch_rejects_an_insecure_redirect(self) -> None:
+        collector = load_collector()
+        response = FakeResponse(
+            b"<rss><channel><title>Fixture</title></channel></rss>",
+            effective_url="http://example.test/feed.xml",
+        )
+        feed = {"title": "Redirect fixture", "url": "https://example.test/feed.xml"}
+
+        with mock.patch.object(collector.urllib.request, "urlopen", return_value=response):
+            result = collector.fetch_feed(
+                feed,
+                {},
+                timeout=2,
+                max_response_bytes=1024,
+                max_items=10,
+                user_agent="test-agent",
+                retries=0,
+            )
+
+        self.assertIn("redirected to non-HTTPS", result["error"])
+        self.assertEqual(result["status"], 200)
+
+    def test_fetch_classifies_a_timeout_as_a_failed_feed(self) -> None:
+        collector = load_collector()
+        feed = {"title": "Timeout fixture", "url": "https://example.test/feed.xml"}
+
+        with mock.patch.object(
+            collector.urllib.request,
+            "urlopen",
+            side_effect=TimeoutError("timed out"),
+        ):
+            result = collector.fetch_feed(
+                feed,
+                {},
+                timeout=2,
+                max_response_bytes=1024,
+                max_items=10,
+                user_agent="test-agent",
+                retries=0,
+            )
+
+        self.assertIn("timed out", result["error"])
+        self.assertEqual(result["state"]["consecutive_failures"], 1)
+
+    def test_fetch_bounds_an_uncompressed_response(self) -> None:
+        collector = load_collector()
+        response = FakeResponse(b"x" * 2048)
+        feed = {"title": "Oversized fixture", "url": "https://example.test/feed.xml"}
+
+        with mock.patch.object(collector.urllib.request, "urlopen", return_value=response):
+            result = collector.fetch_feed(
+                feed,
+                {},
+                timeout=2,
+                max_response_bytes=1024,
+                max_items=10,
+                user_agent="test-agent",
+                retries=0,
+            )
+
+        self.assertIn("response exceeds", result["error"])
+
+    def test_fetch_retries_transient_http_failures_and_tracks_the_attempt(self) -> None:
+        collector = load_collector()
+        feed = {"title": "Transient fixture", "url": "https://example.test/feed.xml"}
+        transient = urllib.error.HTTPError(feed["url"], 503, "Unavailable", {}, None)
+        response = FakeResponse(b"<rss><channel><title>Fixture</title></channel></rss>")
+
+        with mock.patch.object(
+            collector.urllib.request,
+            "urlopen",
+            side_effect=[transient, response],
+        ) as urlopen, mock.patch.object(collector.time, "sleep") as sleep:
+            result = collector.fetch_feed(
+                feed,
+                {},
+                timeout=2,
+                max_response_bytes=1024,
+                max_items=10,
+                user_agent="test-agent",
+                retries=1,
+                retry_backoff_seconds=0.25,
+            )
+
+        self.assertEqual(urlopen.call_count, 2)
+        self.assertEqual(sleep.call_count, 1)
+        self.assertEqual(result["retry_count"], 1)
+        self.assertEqual(result["status"], 200)
+
+    def test_fetch_rejects_unknown_state_version(self) -> None:
+        collector = load_collector()
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "fetch-state.json"
+            path.write_text('{"version": 99, "feeds": {}}\n', encoding="utf-8")
+            with self.assertRaises(ValueError):
+                collector.load_state(path)
 
     def test_fetch_uses_endpoint_identity_for_european_parliament_rss(self) -> None:
         collector = load_collector()

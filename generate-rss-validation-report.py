@@ -509,6 +509,11 @@ def generate_report(args: argparse.Namespace) -> int:
     future_date_exceptions = [
         detail for detail in details if int(detail["future_date_exception_count"]) > 0
     ]
+    attention_feeds = [
+        detail
+        for detail in details
+        if detail["stale_review_due"] or int(detail["future_item_date_count"]) > 0
+    ]
 
     current_snapshots = {
         str(snapshot["url"]): snapshot
@@ -750,7 +755,8 @@ def generate_report(args: argparse.Namespace) -> int:
         "manifest": portable_path(manifest_path, report_root),
         "validator": validator_display_path,
         "summary": summary,
-        "failed_feeds": [detail for detail in details if detail["passed"] != "yes" or detail["stale_review_due"] or detail["future_item_date_count"]],
+        "failed_feeds": [detail for detail in details if detail["passed"] != "yes"],
+        "attention_feeds": attention_feeds,
         "metadata_mismatches": metadata_mismatches,
         "stale_review_failures": stale_review_failures,
         "future_date_failures": future_date_failures,
@@ -1002,6 +1008,13 @@ def generate_report(args: argparse.Namespace) -> int:
         lines.extend(
             f"- `{detail['url']}` — HTTP {detail['http_code']}, root `{detail['root'] or 'unavailable'}`, recent `{detail['recent']}`, stale review due `{detail['stale_review_due']}`, future dates `{detail['future_item_date_count']}`."
             for detail in payload["failed_feeds"]
+        )
+
+    if payload["attention_feeds"]:
+        lines.extend(["", "## Feed attention", ""])
+        lines.extend(
+            f"- `{detail['url']}` — stale review due `{detail['stale_review_due']}`, future dates `{detail['future_item_date_count']}`."
+            for detail in payload["attention_feeds"]
         )
 
     if future_date_exceptions:

@@ -17,8 +17,9 @@ report_generator="$script_dir/generate-rss-validation-report.py"
 validation_profile="${VALIDATION_PROFILE:-master}"
 validation_cache_dir="${VALIDATION_CACHE_DIR:-$script_dir/.rss-validation-cache}"
 validation_history_file="${VALIDATION_HISTORY_FILE:-$script_dir/.validation-history.json}"
+python_bin="${PYTHON_BIN:-python3}"
 
-for required_command in curl xmllint python3; do
+for required_command in curl xmllint "$python_bin"; do
   if ! command -v "$required_command" >/dev/null 2>&1; then
     print -u2 "Required command not found: $required_command"
     exit 2
@@ -45,7 +46,7 @@ if [[ ! -f "$report_generator" ]]; then
   exit 2
 fi
 
-if ! validation_config_line=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$manifest_file_path" <<'PY'
+if ! validation_config_line=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" "$python_bin" - "$manifest_file_path" <<'PY'
 import sys
 
 from bundle_config import load_manifest, validation_settings
@@ -78,6 +79,10 @@ validation_lock_dir="${validation_cache_dir}.lock"
 if ! mkdir "$validation_lock_dir" 2>/dev/null; then
   existing_pid=''
   [[ -f "$validation_lock_dir/pid" ]] && existing_pid="$(<"$validation_lock_dir/pid")"
+  if [[ -z "$existing_pid" || "$existing_pid" == *[!0-9]* ]]; then
+    print -u2 "RSS validation lock has no valid owner; inspect before removing: $validation_lock_dir"
+    exit 2
+  fi
   if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null; then
     print -u2 "Another RSS validation is using the shared cache/history: $validation_lock_dir (pid $existing_pid)"
     exit 2
@@ -90,6 +95,9 @@ if ! mkdir "$validation_lock_dir" 2>/dev/null; then
   fi
 fi
 print -r -- "$$" > "$validation_lock_dir/pid"
+for stale_cache_tmp in "$validation_cache_dir"/*.tmp.*(N); do
+  rm -f "$stale_cache_tmp"
+done
 
 temp_dir=''
 cleanup() {
@@ -128,7 +136,7 @@ field_separator=$'\t'
 # before curl receives them. The second field records the freshness policy, the
 # third carries any explicit item-link policy, and the fourth is the stable
 # manifest/OPML display title used when a publisher omits its channel title.
-PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$bundle_file" "$opml_urls_file" <<'PY'
+PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" "$python_bin" - "$bundle_file" "$opml_urls_file" <<'PY'
 import sys
 
 from rss_validation import safe_xml_root
@@ -164,7 +172,7 @@ while IFS=$'\t' read -r feed_url freshness_policy item_link_policy manifest_titl
   total=$((total + 1))
   feed_file="$temp_dir/feed-$total.xml"
   headers_file="$temp_dir/headers-$total.txt"
-  cache_key=$(python3 "$script_dir/rss_validation.py" cache-key "$feed_url")
+  cache_key=$("$python_bin" "$script_dir/rss_validation.py" cache-key "$feed_url")
   cache_body="$validation_cache_dir/$cache_key.xml"
   cache_meta="$validation_cache_dir/$cache_key.meta"
   cached_url=''
@@ -323,7 +331,7 @@ while IFS=$'\t' read -r feed_url freshness_policy item_link_policy manifest_titl
     # section exceeds its parser limit. Fall back to the shared Python
     # parser, which rejects DTD/entity declarations and enforces its own
     # bounded XML size before extracting the same feed metadata.
-    python_xml_metadata=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$feed_file" <<'PY' 2>/dev/null || true
+    python_xml_metadata=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" "$python_bin" - "$feed_file" <<'PY' 2>/dev/null || true
 import sys
 
 from rss_validation import extract_feed, local_name, safe_xml_root
@@ -357,7 +365,7 @@ PY
   # gate; the shared Python report parser already uses the same rule.
   if [[ "$xml_valid" == 'yes' ]] \
     && [[ "$item_link" != http://* && "$item_link" != https://* ]]; then
-    python_xml_metadata=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$feed_file" "$effective_url" <<'PY' 2>/dev/null || true
+    python_xml_metadata=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" "$python_bin" - "$feed_file" "$effective_url" <<'PY' 2>/dev/null || true
 import sys
 
 from rss_validation import extract_feed, local_name, safe_xml_root
@@ -389,13 +397,13 @@ PY
   # manifest-authored display title so NetNewsWire and the validator retain a
   # stable identity while still requiring every item title/date/link to pass.
   [[ -n "$feed_title" ]] || feed_title="$manifest_title"
-  feed_inspection=$(python3 "$script_dir/rss_validation.py" inspect "$feed_file" 2>/dev/null || true)
+  feed_inspection=$("$python_bin" "$script_dir/rss_validation.py" inspect "$feed_file" "$feed_url" 2>/dev/null || true)
   latest_date="${feed_inspection%%$'\t'*}"
   inspection_rest="${feed_inspection#*$'\t'}"
   parse_seconds="${inspection_rest%%$'\t'*}"
   [[ "$latest_date" == "$feed_inspection" ]] && latest_date=''
   [[ -n "$parse_seconds" && "$parse_seconds" != "$inspection_rest" ]] || parse_seconds='0'
-  item_count=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" python3 - "$feed_file" <<'PY' 2>/dev/null || true
+  item_count=$(PYTHONPATH="$script_dir${PYTHONPATH:+:$PYTHONPATH}" "$python_bin" - "$feed_file" <<'PY' 2>/dev/null || true
 import sys
 
 from rss_validation import extract_feed, safe_xml_root
@@ -406,10 +414,10 @@ print(len(items))
 PY
   )
   [[ "$item_count" =~ ^[0-9]+$ ]] || item_count=''
-  age_days=$(python3 "$script_dir/rss_validation.py" age-days "$latest_date" 2>/dev/null || true)
+  age_days=$("$python_bin" "$script_dir/rss_validation.py" age-days "$latest_date" 2>/dev/null || true)
   recent_content='no'
   if [[ -n "$age_days" ]]; then
-    recent_content=$(python3 - "$age_days" "$max_age_days" "$freshness_policy" <<'PY' 2>/dev/null || true
+    recent_content=$("$python_bin" - "$age_days" "$max_age_days" "$freshness_policy" <<'PY' 2>/dev/null || true
 import sys
 age = float(sys.argv[1])
 limit = float(sys.argv[2])
@@ -445,8 +453,17 @@ PY
   fi
 
   if [[ "$http_code" == '200' && -s "$feed_file" && "$xml_valid" == 'yes' && ( "$feed_root" == 'rss' || "$feed_root" == 'feed' || "$feed_root" == 'rdf:RDF' || "$feed_root" == 'RDF' ) ]]; then
-    cp "$feed_file" "$cache_body"
-    print -r -- "$(cache_meta_safe "$feed_url")${field_separator}$(cache_meta_safe "$etag")${field_separator}$(cache_meta_safe "$last_modified")${field_separator}$(cache_meta_safe "$content_type")${field_separator}$(cache_meta_safe "$content_encoding")${field_separator}$(cache_meta_safe "$effective_url")" > "$cache_meta"
+    cache_body_tmp="$cache_body.tmp.$$"
+    cache_meta_tmp="$cache_meta.tmp.$$"
+    if cp "$feed_file" "$cache_body_tmp" && mv -f "$cache_body_tmp" "$cache_body"; then
+      if print -r -- "$(cache_meta_safe "$feed_url")${field_separator}$(cache_meta_safe "$etag")${field_separator}$(cache_meta_safe "$last_modified")${field_separator}$(cache_meta_safe "$content_type")${field_separator}$(cache_meta_safe "$content_encoding")${field_separator}$(cache_meta_safe "$effective_url")" > "$cache_meta_tmp" && mv -f "$cache_meta_tmp" "$cache_meta"; then
+        :
+      else
+        rm -f "$cache_meta_tmp"
+      fi
+    else
+      rm -f "$cache_body_tmp"
+    fi
   fi
 
   passed_flag='no'
@@ -476,7 +493,7 @@ mkdir -p "$report_candidate_dir"
 # directory, so the Markdown report's machine-readable link survives the move.
 report_candidate_markdown="$report_candidate_dir/${report_markdown_file:t}"
 report_candidate_json="$report_candidate_dir/${report_json_file:t}"
-REPORT_LINK_DIRECTORY="${report_markdown_file:h}" python3 "$report_generator" \
+REPORT_LINK_DIRECTORY="${report_markdown_file:h}" "$python_bin" "$report_generator" \
   "$bundle_file" \
   "$source_table_file" \
   "$manifest_file" \
@@ -497,17 +514,19 @@ if [[ -s "$report_candidate_markdown" && -s "$report_candidate_json" ]]; then
   report_ready='yes'
 else
   print -u2 "Validation report generation did not produce a complete current report; preserving the previous report files."
-  [[ "$report_status" == '0' ]] && report_status=2
+  if [ "$report_status" = '0' ]; then
+    report_status=2
+  fi
 fi
 
 record_status=0
 if [[ "$report_ready" == 'yes' ]]; then
-  python3 "$script_dir/record-validation-result.py" \
+  "$python_bin" "$script_dir/record-validation-result.py" \
     --report "$report_json_file" \
     --history "$validation_history_file" \
     --profile "$validation_profile" \
     --current-run \
-    --healthy "$([[ "$report_status" == '0' ]] && print yes || print no)" || record_status=$?
+    --healthy "$([ "$report_status" = '0' ] && print yes || print no)" || record_status=$?
 else
   record_status=2
 fi

@@ -24,6 +24,10 @@ FORBIDDEN_TRACKED_PARTS = {
     "__pycache__",
     ".rss-validation-cache",
     ".rss-validation-cache.lock",
+    ".pytest_cache",
+    ".venv",
+    "venv",
+    "htmlcov",
 }
 SENSITIVE_NAME_PATTERNS = (
     re.compile(r"(^|/)\.env(?:\..*)?$", re.IGNORECASE),
@@ -93,6 +97,8 @@ def path_findings(relative_path: Path) -> list[str]:
     if relative_path.name in FORBIDDEN_TRACKED_NAMES:
         findings.append("tracked runtime state")
     if any(part in FORBIDDEN_TRACKED_PARTS for part in relative_path.parts):
+        findings.append("tracked runtime state")
+    if relative_path.suffix == ".log" or relative_path.name.endswith(".lock"):
         findings.append("tracked runtime state")
     for pattern in SENSITIVE_NAME_PATTERNS:
         if pattern.search(path_text):

@@ -8,6 +8,8 @@ on:
       - "**/*.json"
       - "**/*.opml"
       - "**/*.md"
+      - "**/*.txt"
+      - "**/*.plist"
       - "Makefile"
       - ".github/workflows/rss-validation.yml"
   pull_request:
@@ -17,6 +19,8 @@ on:
       - "**/*.json"
       - "**/*.opml"
       - "**/*.md"
+      - "**/*.txt"
+      - "**/*.plist"
       - "Makefile"
       - ".github/workflows/rss-validation.yml"
   workflow_dispatch:
@@ -47,11 +51,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install zsh
         run: sudo apt-get update && sudo apt-get install --yes zsh
+      - name: Check maintainer environment
+        run: make doctor
+      - name: Show project status
+        run: make status
       - name: Run deterministic checks
         run: make check
       - name: Ensure generated artifacts are committed
         run: |
           git diff --exit-code -- \
+            artifacts/AirDrop/README.txt \
             artifacts/AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
             artifacts/opml/NetNewsWire-Finance-Cyber.opml \
             artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md \
@@ -73,6 +82,8 @@ jobs:
           python-version: "3.12"
       - name: Install XML validator and zsh
         run: sudo apt-get update && sudo apt-get install --yes libxml2-utils zsh
+      - name: Check live-validation environment
+        run: make doctor-live
       - name: Restore RSS cache and drift baseline
         uses: actions/cache/restore@v6
         with:
@@ -85,7 +96,7 @@ jobs:
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
-        run: git diff --exit-code -- artifacts/opml/NetNewsWire-Finance-Cyber.opml artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md artifacts/notifications/NetNewsWire-Notification-Profile.md artifacts/notifications/NetNewsWire-Notification-Profile.json
+        run: git diff --exit-code -- artifacts/AirDrop/README.txt artifacts/opml/NetNewsWire-Finance-Cyber.opml artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md artifacts/notifications/NetNewsWire-Notification-Profile.md artifacts/notifications/NetNewsWire-Notification-Profile.json
       - name: Lint manifest and generated artifacts
         run: make lint
       - name: Run deterministic tests
@@ -96,6 +107,9 @@ jobs:
         run: make validate-lite
       - name: Validate iPhone Air bundle
         run: make validate-air
+      - name: Show project status after live validation
+        if: always()
+        run: make status
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v7

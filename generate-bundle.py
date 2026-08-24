@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import os
 import sys
@@ -20,6 +21,7 @@ from bundle_config import (
     profile_config,
     profile_settings,
 )
+from state_utils import atomic_write_bytes, atomic_write_text
 
 
 def load_manifest(path: Path) -> dict:
@@ -75,8 +77,9 @@ def write_opml(data: dict, feeds: list[dict], destination: Path, profile: str) -
 
     ET.indent(root, space="  ")
     tree = ET.ElementTree(root)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    tree.write(destination, encoding="utf-8", xml_declaration=True)
+    buffer = io.BytesIO()
+    tree.write(buffer, encoding="utf-8", xml_declaration=True)
+    atomic_write_bytes(destination, buffer.getvalue())
 
 
 def escape_markdown(value: object) -> str:
@@ -170,8 +173,7 @@ def write_source_table(
         "Run `make check`, `make validate`, `make validate-lite` and `make validate-air` after manifest changes and during the monthly live health review.",
         "",
     ])
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(destination, "\n".join(lines))
 
 
 def notification_matrix_data(data: dict) -> dict:
@@ -301,16 +303,69 @@ def write_notification_matrix(
         f"See [NetNewsWire setup and notification plan]({links['setup']}) for the operating rationale and [daily digest workflow]({links['digest']}) for batch review.",
         "",
     ])
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(destination, "\n".join(lines))
 
 
 def write_notification_json(data: dict, destination: Path) -> None:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(
+    atomic_write_text(
+        destination,
         json.dumps(notification_matrix_data(data), indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
     )
+
+
+def _format_bytes(value: int) -> str:
+    """Format a byte budget for the plain-text handoff note."""
+
+    if value % (1024 * 1024) == 0:
+        return f"{value // (1024 * 1024)} MiB"
+    if value % 1024 == 0:
+        return f"{value // 1024} KiB"
+    return f"{value} bytes"
+
+
+def write_airdrop_readme(data: dict, destination: Path, profile: str = "iphone-air") -> None:
+    """Write a small, manifest-backed handoff note beside a ready-to-import OPML."""
+
+    config = profile_config(data, profile)
+    feeds = selected_feeds(data, profile)
+    budget = profile_device_budget(config)
+    urgent_feeds = [feed["title"] for feed in feeds if feed["notification"] == "on"]
+    lines = [
+        "NETNEWSWIRE — FINANCE + CYBER — IPHONE AIR",
+        "",
+        "This is the ready-to-import daily profile for NetNewsWire on iPhone.",
+        "",
+        "Required app:",
+        "  NetNewsWire for iOS",
+        "",
+        "Optional digest apps:",
+        "  Apple Shortcuts + Apple Intelligence + Apple Notes",
+        "",
+        "File to open:",
+        f"  {Path(config['opml_file']).name}",
+        "",
+        "Profile:",
+        f"  - {len(feeds)} feeds: Finance and Cyber Security folders",
+        f"  - {len(urgent_feeds)} official alert notifications recommended",
+        f"  - {_format_bytes(budget['max_total_payload_bytes'])} total and {_format_bytes(budget['max_single_payload_bytes'])} per-feed mobile refresh limits",
+        "  - Generated from feed-manifest.json; run make validate-air for current endpoint health",
+        "",
+        "Recommended notification feeds:",
+        *[f"  - {title}" for title in urgent_feeds],
+        "",
+        "On iPhone:",
+        "  1. Open the .opml file in Files.",
+        "  2. Use Share and choose NetNewsWire, or choose Open in NetNewsWire.",
+        "  3. Import it once into the intended NetNewsWire account.",
+        "  4. Refresh and confirm the Finance and Cyber Security folders.",
+        f"  5. Enable notifications manually for the {len(urgent_feeds)} feeds listed above only.",
+        "",
+        "Important:",
+        "  OPML import is additive. If an older copy is already in NetNewsWire,",
+        "  remove or separate it first so subscriptions are not duplicated.",
+        "",
+    ]
+    atomic_write_text(destination, "\n".join(lines))
 
 
 def main() -> int:
@@ -323,6 +378,7 @@ def main() -> int:
     parser.add_argument("--source-table", type=Path)
     parser.add_argument("--notification-table", type=Path)
     parser.add_argument("--notification-json", type=Path)
+    parser.add_argument("--airdrop-readme", type=Path, help="write the manifest-backed AirDrop handoff note")
     args = parser.parse_args()
 
     try:
@@ -368,11 +424,17 @@ def main() -> int:
             )
         if args.notification_json:
             write_notification_json(data, args.notification_json)
+        if args.airdrop_readme:
+            write_airdrop_readme(data, args.airdrop_readme)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"generate-bundle: {exc}", file=sys.stderr)
         return 2
 
-    print(f"profiles={' '.join(generated_profiles)} notification_matrix={'yes' if args.notification_table or args.notification_json else 'no'}")
+    print(
+        f"profiles={' '.join(generated_profiles)} "
+        f"notification_matrix={'yes' if args.notification_table or args.notification_json else 'no'} "
+        f"airdrop_readme={'yes' if args.airdrop_readme else 'no'}"
+    )
     return 0
 
 

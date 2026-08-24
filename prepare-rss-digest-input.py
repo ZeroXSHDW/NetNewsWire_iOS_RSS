@@ -307,13 +307,17 @@ def load_state(path: Path) -> dict:
     if not isinstance(data, dict):
         raise ValueError("digest state must be a JSON object")
     version = data.get("version", 1)
-    if isinstance(version, bool) or not isinstance(version, int):
-        raise ValueError("digest state version must be an integer")
-    data["version"] = max(2, version)
+    if isinstance(version, bool) or not isinstance(version, int) or version not in {1, 2}:
+        raise ValueError("digest state version must be 1 or 2")
+    data["version"] = 2
     data.setdefault("last_run", "")
     data.setdefault("seen", {})
+    if not isinstance(data["last_run"], str):
+        raise ValueError("digest state last_run field must be a string")
     if not isinstance(data["seen"], dict):
         raise ValueError("digest state seen field must be an object")
+    if any(not isinstance(key, str) or not isinstance(value, dict) for key, value in data["seen"].items()):
+        raise ValueError("digest state seen entries must be string keys and objects")
     return data
 
 

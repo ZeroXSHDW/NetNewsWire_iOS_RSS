@@ -4,26 +4,41 @@
   "profiles": {
     "master": {
       "label": "Master",
-      "feed_count": 536,
+      "feed_count": 672,
       "recommended": false,
       "device_budget": {},
       "notification_counts": {
         "on": 4,
         "optional": 12,
         "optional-french": 1,
-        "off": 519
+        "off": 655
       },
       "feed_ids": [
         "finance-01-core-market-trading-nasdaq-trader-trade-halts",
         "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
         "finance-01-core-market-trading-euronext-market-status",
         "finance-01-core-market-trading-euronext-athens-market-notices",
+        "finance-01-core-market-trading-hkex-news-releases",
+        "finance-01-core-market-trading-hkex-regulatory-announcements",
+        "finance-01-core-market-trading-hkex-market-communications",
+        "finance-01-core-market-trading-hkex-sehk-trading-rules",
+        "finance-01-core-market-trading-jpx-market-news",
+        "finance-01-core-market-trading-jpx-news-releases",
+        "finance-01-core-market-trading-jpx-equity-trading-halts",
+        "finance-01-core-market-trading-jpx-derivatives-trading-halts",
+        "finance-01-core-market-trading-jpx-unclear-information-alerts",
+        "finance-01-core-market-trading-twse-news-chinese",
+        "finance-01-core-market-trading-twse-rules-regulations-english",
+        "finance-01-core-market-trading-taifex-press-releases-english",
+        "finance-01-core-market-trading-taifex-notices-english",
         "finance-01-core-market-trading-bbc-business",
         "finance-01-core-market-trading-bloomberg-markets",
         "finance-01-core-market-trading-financial-times-markets",
         "finance-01-core-market-trading-marketwatch-top-stories",
         "finance-01-core-market-trading-rte-business",
         "finance-01-core-market-trading-the-wall-street-journal-markets",
+        "finance-01-core-market-trading-cme-globex-electronic-trading-notices",
+        "finance-01-core-market-trading-boursa-kuwait-market-message",
         "finance-02-core-official-macro-central-bank-of-ireland-news",
         "finance-02-core-official-macro-european-central-bank-press",
         "finance-02-core-official-macro-european-banking-authority-news",
@@ -75,6 +90,9 @@
         "finance-02-core-official-macro-federal-reserve-speeches",
         "finance-02-core-official-macro-bank-of-korea-press-releases",
         "finance-02-core-official-macro-bank-of-korea-monetary-policy-decisions",
+        "finance-02-core-official-macro-korea-financial-services-commission-press-releases-korean",
+        "finance-02-core-official-macro-korea-financial-services-commission-explanations-korean",
+        "finance-02-core-official-macro-korea-financial-services-commission-notices-korean",
         "finance-02-core-official-macro-bangko-sentral-ng-pilipinas-media-releases",
         "finance-02-core-official-macro-bangko-sentral-ng-pilipinas-issuances",
         "finance-02-core-official-macro-bangko-sentral-ng-pilipinas-public-advisories",
@@ -157,6 +175,26 @@
         "finance-02-core-official-macro-global-affairs-canada-news",
         "finance-02-core-official-macro-defence-investment-agency-news",
         "finance-02-core-official-macro-canadian-security-intelligence-service-news",
+        "finance-02-core-official-macro-south-african-reserve-bank-news-publications",
+        "finance-02-core-official-macro-south-african-revenue-service-latest-news",
+        "finance-02-core-official-macro-central-bank-of-the-republic-of-turkiye-press-releases-english",
+        "finance-02-core-official-macro-nepal-rastra-bank-media-releases",
+        "finance-02-core-official-macro-nepal-rastra-bank-circulars",
+        "finance-02-core-official-macro-bank-of-ghana-news",
+        "finance-02-core-official-macro-central-bank-of-kenya-news-releases",
+        "finance-02-core-official-macro-central-bank-of-eswatini-news-releases",
+        "finance-02-core-official-macro-kenya-capital-markets-authority-news-releases",
+        "finance-02-core-official-macro-ghana-sec-public-notices",
+        "finance-02-core-official-macro-central-bank-of-lesotho-monetary-policy-statements",
+        "finance-02-core-official-macro-bank-of-russia-english-whats-new",
+        "finance-02-core-official-macro-bank-of-russia-english-news-and-comments",
+        "finance-02-core-official-macro-bank-of-russia-english-press-releases",
+        "finance-02-core-official-macro-canadian-investment-regulatory-organization-news-enforcement",
+        "finance-02-core-official-macro-acer-energy-market-and-remit-news",
+        "finance-02-core-official-macro-european-commission-single-market-industry-smes-news",
+        "finance-02-core-official-macro-chile-servicio-de-impuestos-internos-news",
+        "finance-02-core-official-macro-qatar-news-agency-economy-local",
+        "finance-02-core-official-macro-vietnam-official-gazette-new-issues",
         "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
@@ -199,10 +237,13 @@
         "finance-03-optional-data-ireland-eu-uk-statistics-canada-business-performance-and-ownership",
         "finance-03-optional-data-ireland-eu-uk-us-census-bureau-economic-indicators",
         "finance-03-optional-data-ireland-eu-uk-comreg-news-and-publications",
+        "finance-03-optional-data-ireland-eu-uk-berec-latest-news-press-releases-publications",
         "finance-03-optional-data-ireland-eu-uk-houses-of-the-oireachtas-press-releases",
         "finance-03-optional-data-ireland-eu-uk-houses-of-the-oireachtas-dail-schedule",
         "finance-03-optional-data-ireland-eu-uk-houses-of-the-oireachtas-seanad-schedule",
         "finance-03-optional-data-ireland-eu-uk-houses-of-the-oireachtas-committee-schedule",
+        "finance-03-optional-data-ireland-eu-uk-iaasa-news",
+        "finance-03-optional-data-ireland-eu-uk-pensions-authority-news",
         "finance-04-optional-global-data-research-african-development-bank-news-events",
         "finance-04-optional-global-data-research-who-africa-featured-news",
         "finance-04-optional-global-data-research-asian-infrastructure-investment-bank-news",
@@ -210,6 +251,10 @@
         "finance-04-optional-global-data-research-asian-development-bank-news-releases",
         "finance-04-optional-global-data-research-asian-development-bank-publications",
         "finance-04-optional-global-data-research-banco-de-la-republica-news-research-spanish",
+        "finance-04-optional-global-data-research-banco-de-la-republica-news-research-english-route",
+        "finance-04-optional-global-data-research-central-bank-of-sri-lanka-monetary-policy-review",
+        "finance-04-optional-global-data-research-central-bank-of-sri-lanka-weekly-economic-indicators",
+        "finance-04-optional-global-data-research-central-bank-of-sri-lanka-monthly-economic-indicators",
         "finance-04-optional-global-data-research-reserve-bank-australia-daily-exchange-rates",
         "finance-04-optional-global-data-research-reserve-bank-australia-media-releases",
         "finance-04-optional-global-data-research-reserve-bank-australia-speeches",
@@ -240,6 +285,9 @@
         "finance-04-optional-global-data-research-european-investment-bank-news",
         "finance-04-optional-global-data-research-european-investment-bank-publications",
         "finance-04-optional-global-data-research-european-investment-bank-blog",
+        "finance-04-optional-global-data-research-european-investment-bank-projects-to-be-financed",
+        "finance-04-optional-global-data-research-european-investment-bank-project-procurement",
+        "finance-04-optional-global-data-research-european-investment-bank-board-and-institutional-events",
         "finance-04-optional-global-data-research-apple-newsroom",
         "finance-04-optional-global-data-research-apple-developer-news",
         "finance-04-optional-global-data-research-european-commission-harmonised-standards",
@@ -310,6 +358,7 @@
         "finance-04-optional-global-data-research-european-food-safety-authority-news",
         "finance-04-optional-global-data-research-european-food-safety-authority-publications",
         "finance-04-optional-global-data-research-european-patent-office-news",
+        "finance-04-optional-global-data-research-european-patent-office-communications-from-boards-of-appeal",
         "finance-04-optional-global-data-research-uk-national-audit-office-news",
         "finance-04-optional-global-data-research-us-gao-budget-spending-reports",
         "finance-04-optional-global-data-research-us-gao-financial-markets-institutions-reports",
@@ -321,6 +370,7 @@
         "finance-04-optional-global-data-research-cepr-discussion-papers",
         "finance-04-optional-global-data-research-tax-foundation-research-commentary",
         "finance-04-optional-global-data-research-oecd-ecoscope-economics-department-blog",
+        "finance-04-optional-global-data-research-oecd-ai-ai-wonk",
         "finance-04-optional-global-data-research-deutsche-bundesbank-discussion-papers",
         "finance-04-optional-global-data-research-deutsche-bundesbank-latest-announcements",
         "finance-04-optional-global-data-research-deutsche-bundesbank-speeches-interviews-contributions",
@@ -407,6 +457,8 @@
         "finance-04-optional-global-data-research-european-union-agency-for-railways-news",
         "finance-04-optional-global-data-research-eurofound-news",
         "finance-04-optional-global-data-research-united-nations-office-at-geneva-meeting-summaries",
+        "finance-04-optional-global-data-research-united-nations-office-at-geneva-press-releases",
+        "finance-04-optional-global-data-research-united-nations-office-at-geneva-press-conference-announcements",
         "finance-04-optional-global-data-research-caribbean-development-bank-news-releases",
         "finance-04-optional-global-data-research-afreximbank-research-journal-of-african-trade",
         "finance-04-optional-global-data-research-us-courts-judiciary-news",
@@ -414,13 +466,89 @@
         "finance-04-optional-global-data-research-eurogroup-meetings",
         "finance-04-optional-global-data-research-european-council-meetings",
         "finance-04-optional-global-data-research-council-of-the-eu-transport-telecommunications-energy-meetings",
+        "finance-04-optional-global-data-research-council-of-the-eu-agriculture-fisheries-meetings",
+        "finance-04-optional-global-data-research-council-of-the-eu-competitiveness-meetings",
+        "finance-04-optional-global-data-research-council-of-the-eu-environment-meetings",
+        "finance-04-optional-global-data-research-council-of-the-eu-foreign-affairs-meetings",
+        "finance-04-optional-global-data-research-council-of-the-eu-general-affairs-meetings",
         "finance-04-optional-global-data-research-uk-government-national-security-news-communications",
         "finance-04-optional-global-data-research-european-commission-representation-in-ireland-news",
         "finance-04-optional-global-data-research-european-union-agency-for-fundamental-rights-publications",
         "finance-04-optional-global-data-research-japan-securities-and-exchange-surveillance-commission-press-releases",
+        "finance-04-optional-global-data-research-japan-securities-and-exchange-surveillance-commission-press-releases-japanese",
+        "finance-04-optional-global-data-research-japan-certified-public-accountants-and-auditing-oversight-board-news-japanese",
         "finance-04-optional-global-data-research-federal-register-ofac-sanctions-notices",
         "finance-04-optional-global-data-research-federal-register-fincen-aml-financial-crime-notices",
         "finance-04-optional-global-data-research-federal-register-occ-banking-rules-notices",
+        "finance-04-optional-global-data-research-hong-kong-sfc-press-releases",
+        "finance-04-optional-global-data-research-hong-kong-sfc-circulars",
+        "finance-04-optional-global-data-research-hong-kong-sfc-consultations-conclusions",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-atlanta-macroblog",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-atlanta-working-papers",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-economic-updates",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-news-releases",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-speeches",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-new-york-liberty-street-economics",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-richmond-press-room",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-richmond-research",
+        "finance-04-optional-global-data-research-federal-reserve-bank-of-san-francisco-news-research",
+        "finance-04-optional-global-data-research-bank-of-canada-sparks-at-bank-articles",
+        "finance-04-optional-global-data-research-bank-of-canada-staff-analytical-papers",
+        "finance-04-optional-global-data-research-bank-of-canada-staff-working-papers",
+        "finance-04-optional-global-data-research-asian-development-bank-blogs",
+        "finance-04-optional-global-data-research-asian-development-bank-research-publications",
+        "finance-04-optional-global-data-research-asian-development-bank-evaluation",
+        "finance-04-optional-global-data-research-asian-development-bank-features",
+        "finance-04-optional-global-data-research-cna-business",
+        "finance-04-optional-global-data-research-cna-asia",
+        "finance-04-optional-global-data-research-south-african-department-science-technology-innovation-news",
+        "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-publications-english",
+        "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-data-english",
+        "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-remarks-by-governor-english",
+        "finance-04-optional-global-data-research-nepal-rastra-bank-monetary-policy",
+        "finance-04-optional-global-data-research-cvm-board-decisions",
+        "finance-04-optional-global-data-research-cvm-legislation",
+        "finance-04-optional-global-data-research-cvm-public-consultations",
+        "finance-04-optional-global-data-research-cvm-collegiate-bulletins",
+        "finance-04-optional-global-data-research-singapore-food-agency-food-alerts-recalls",
+        "finance-04-optional-global-data-research-singapore-food-agency-newsroom",
+        "finance-04-optional-global-data-research-singapore-food-agency-trade-circulars",
+        "finance-04-optional-global-data-research-new-zealand-treasury-publications",
+        "finance-04-optional-global-data-research-new-zealand-treasury-regulatory-impact-statements",
+        "finance-04-optional-global-data-research-new-zealand-treasury-data-and-charts",
+        "finance-04-optional-global-data-research-reserve-bank-of-new-zealand-news-releases",
+        "finance-04-optional-global-data-research-peterson-institute-for-international-economics-updates",
+        "finance-04-optional-global-data-research-european-commission-joint-research-centre-news-updates",
+        "finance-04-optional-global-data-research-european-commission-international-partnerships-news",
+        "finance-04-optional-global-data-research-uk-ons-national-statistical-blog",
+        "finance-04-optional-global-data-research-taiwan-national-treasury-administration-latest-news",
+        "finance-04-optional-global-data-research-taiwan-national-treasury-administration-important-measures",
+        "finance-04-optional-global-data-research-itu-global-digital-and-telecoms-news",
+        "finance-04-optional-global-data-research-wipo-press-releases",
+        "finance-04-optional-global-data-research-wipo-economics-innovation-policy-news",
+        "finance-04-optional-global-data-research-european-commission-defence-industry-space-latest-news",
+        "finance-04-optional-global-data-research-european-commission-civil-protection-humanitarian-aid-news",
+        "finance-04-optional-global-data-research-uk-office-for-budget-responsibility-research-statistics",
+        "finance-04-optional-global-data-research-irish-fiscal-advisory-council-beyond-the-budget",
+        "finance-04-optional-global-data-research-european-commission-eu-finance-podcast-the-future-of-finance",
+        "finance-04-optional-global-data-research-european-parliament-research-service-think-tank",
+        "finance-04-optional-global-data-research-united-nations-development-programme-asia-pacific-news-centre",
+        "finance-04-optional-global-data-research-united-nations-economic-commission-for-africa-news",
+        "finance-04-optional-global-data-research-african-union-news-events",
+        "finance-04-optional-global-data-research-ipcc-news",
+        "finance-04-optional-global-data-research-un-water-news",
+        "finance-04-optional-global-data-research-un-habitat-news",
+        "finance-04-optional-global-data-research-east-african-community-press-releases",
+        "finance-04-optional-global-data-research-comesa-news",
+        "finance-04-optional-global-data-research-pacific-islands-forum-media-releases-and-news",
+        "finance-04-optional-global-data-research-ecowas-news",
+        "finance-04-optional-global-data-research-mercosur-news",
+        "finance-04-optional-global-data-research-igad-news",
+        "finance-04-optional-global-data-research-comcec-news",
+        "finance-04-optional-global-data-research-apec-press",
+        "finance-04-optional-global-data-research-statistical-office-republic-slovenia-releases",
+        "finance-04-optional-global-data-research-statistics-norway-upcoming-statistical-releases",
+        "finance-04-optional-global-data-research-statistics-norway-statbank-table-updates",
         "finance-05-optional-uk-regulation-warnings-bank-of-england-prudential-regulation-publications",
         "finance-05-optional-uk-regulation-warnings-fca-news",
         "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
@@ -488,7 +616,6 @@
         "cyber-security-04-optional-specialist-alerts-research-jamestown-eurasia-terrorism-analysis",
         "cyber-security-04-optional-specialist-alerts-research-atlantic-council-global-security-geopolitics",
         "cyber-security-04-optional-specialist-alerts-research-fdd-national-security-foreign-policy-analysis",
-        "cyber-security-04-optional-specialist-alerts-research-lawfare-cybersecurity-tech",
         "cyber-security-04-optional-specialist-alerts-research-council-of-the-eu-justice-home-affairs-meetings",
         "cyber-security-04-optional-specialist-alerts-research-uk-government-cyber-security-news-communications",
         "cyber-security-04-optional-specialist-alerts-research-uk-government-cyber-security-research-statistics",
@@ -496,6 +623,15 @@
         "cyber-security-04-optional-specialist-alerts-research-eu-lisa-news-and-updates",
         "cyber-security-04-optional-specialist-alerts-research-eu-lisa-publications",
         "cyber-security-04-optional-specialist-alerts-research-canadian-centre-for-cyber-security-guidance-news-events",
+        "cyber-security-04-optional-specialist-alerts-research-thaicert-english-news-advisories",
+        "cyber-security-04-optional-specialist-alerts-research-international-crisis-group-horn-of-africa",
+        "cyber-security-04-optional-specialist-alerts-research-council-on-foreign-relations-analysis-podcasts",
+        "cyber-security-04-optional-specialist-alerts-research-lowy-institute-the-interpreter",
+        "cyber-security-04-optional-specialist-alerts-research-international-criminal-court-news",
+        "cyber-security-04-optional-specialist-alerts-research-un-ocha-humanitarian-affairs-news",
+        "cyber-security-04-optional-specialist-alerts-research-reliefweb-humanitarian-updates",
+        "cyber-security-04-optional-specialist-alerts-research-opcw-chemical-security-disarmament-news",
+        "cyber-security-04-optional-specialist-alerts-research-european-data-protection-board-publications",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-guidance-documents",
         "cyber-security-01-core-ireland-eu-official-alerts-swiss-ncsc-press-releases-german",
@@ -526,9 +662,9 @@
         "cyber-security-01-core-ireland-eu-official-alerts-cert-hr-news-croatian",
         "cyber-security-01-core-ireland-eu-official-alerts-estonian-ria-cybersecurity-news-estonian",
         "cyber-security-01-core-ireland-eu-official-alerts-acn-csirt-italia-security-updates-italian",
-        "cyber-security-01-core-ireland-eu-official-alerts-cis-ms-isac-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-communications-security-establishment-news",
         "cyber-security-01-core-ireland-eu-official-alerts-canadian-centre-for-cyber-security-alerts-advisories",
+        "cyber-security-01-core-ireland-eu-official-alerts-lithuania-nksc-news-lithuanian",
         "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
         "cyber-security-02-core-news-incident-reporting-the-hacker-news",
         "cyber-security-02-core-news-incident-reporting-cyberscoop",
@@ -554,10 +690,10 @@
     },
     "iphone-lite": {
       "label": "iPhone Lite",
-      "feed_count": 118,
+      "feed_count": 120,
       "recommended": false,
       "device_budget": {
-        "max_feeds": 118,
+        "max_feeds": 120,
         "max_total_payload_bytes": 4194304,
         "max_single_payload_bytes": 614400,
         "max_review_feeds": 6,
@@ -567,7 +703,7 @@
         "on": 4,
         "optional": 9,
         "optional-french": 1,
-        "off": 104
+        "off": 106
       },
       "feed_ids": [
         "finance-01-core-market-trading-nasdaq-trader-trade-halts",
@@ -616,6 +752,7 @@
         "finance-02-core-official-macro-federal-reserve-banking-applications",
         "finance-02-core-official-macro-occ-bulletins",
         "finance-02-core-official-macro-bank-of-canada-press-releases",
+        "finance-02-core-official-macro-osfi-news",
         "finance-02-core-official-macro-bank-of-canada-market-notices",
         "finance-02-core-official-macro-fintrac-news",
         "finance-02-core-official-macro-reserve-bank-of-india-press-releases",
@@ -629,6 +766,7 @@
         "finance-02-core-official-macro-global-affairs-canada-news",
         "finance-02-core-official-macro-defence-investment-agency-news",
         "finance-02-core-official-macro-canadian-security-intelligence-service-news",
+        "finance-02-core-official-macro-bank-of-russia-english-press-releases",
         "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
@@ -661,9 +799,11 @@
         "finance-04-optional-global-data-research-european-maritime-safety-agency-latest-news",
         "finance-04-optional-global-data-research-european-commission-oceans-fisheries-news",
         "finance-04-optional-global-data-research-european-union-agency-for-railways-news",
-        "finance-04-optional-global-data-research-eurofound-news",
         "finance-04-optional-global-data-research-us-courts-judiciary-news",
         "finance-04-optional-global-data-research-european-council-meetings",
+        "finance-04-optional-global-data-research-cvm-legislation",
+        "finance-04-optional-global-data-research-cvm-collegiate-bulletins",
+        "finance-04-optional-global-data-research-singapore-food-agency-food-alerts-recalls",
         "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
         "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
@@ -673,13 +813,10 @@
         "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
         "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
         "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
-        "cyber-security-01-core-ireland-eu-official-alerts-cisa-news",
         "cyber-security-01-core-ireland-eu-official-alerts-european-data-protection-board-news",
         "cyber-security-01-core-ireland-eu-official-alerts-centre-for-cybersecurity-belgium-advisories",
-        "cyber-security-01-core-ireland-eu-official-alerts-cis-ms-isac-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-communications-security-establishment-news",
         "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
-        "cyber-security-02-core-news-incident-reporting-cyberscoop",
         "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
         "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
         "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
@@ -687,7 +824,8 @@
         "cyber-security-03-core-technical-research-github-security-blog",
         "cyber-security-04-optional-specialist-alerts-research-uk-department-for-science-innovation-and-technology-activity-on-gov-uk",
         "cyber-security-04-optional-specialist-alerts-research-rusi-latest-commentary",
-        "cyber-security-04-optional-specialist-alerts-research-sipri-global-security-arms-control"
+        "cyber-security-04-optional-specialist-alerts-research-sipri-global-security-arms-control",
+        "cyber-security-04-optional-specialist-alerts-research-european-data-protection-board-publications"
       ]
     },
     "iphone-air": {
@@ -695,7 +833,7 @@
       "feed_count": 125,
       "recommended": true,
       "device_budget": {
-        "max_feeds": 125,
+        "max_feeds": 127,
         "max_total_payload_bytes": 4194304,
         "max_single_payload_bytes": 614400,
         "max_review_feeds": 6,
@@ -711,7 +849,6 @@
         "finance-01-core-market-trading-nasdaq-trader-trade-halts",
         "finance-01-core-market-trading-nasdaq-trader-equity-trader-alerts",
         "finance-01-core-market-trading-euronext-market-status",
-        "finance-01-core-market-trading-bloomberg-markets",
         "finance-02-core-official-macro-central-bank-of-ireland-news",
         "finance-02-core-official-macro-european-central-bank-press",
         "finance-02-core-official-macro-european-banking-authority-news",
@@ -755,6 +892,7 @@
         "finance-02-core-official-macro-federal-reserve-banking-applications",
         "finance-02-core-official-macro-occ-bulletins",
         "finance-02-core-official-macro-bank-of-canada-press-releases",
+        "finance-02-core-official-macro-osfi-news",
         "finance-02-core-official-macro-bank-of-canada-market-notices",
         "finance-02-core-official-macro-fintrac-news",
         "finance-02-core-official-macro-reserve-bank-of-india-press-releases",
@@ -769,6 +907,7 @@
         "finance-02-core-official-macro-global-affairs-canada-news",
         "finance-02-core-official-macro-defence-investment-agency-news",
         "finance-02-core-official-macro-canadian-security-intelligence-service-news",
+        "finance-02-core-official-macro-bank-of-russia-english-press-releases",
         "finance-03-optional-data-ireland-eu-uk-ecb-usd-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-gbp-reference-rate",
         "finance-03-optional-data-ireland-eu-uk-ecb-statistical-releases",
@@ -804,9 +943,11 @@
         "finance-04-optional-global-data-research-european-maritime-safety-agency-latest-news",
         "finance-04-optional-global-data-research-european-commission-oceans-fisheries-news",
         "finance-04-optional-global-data-research-european-union-agency-for-railways-news",
-        "finance-04-optional-global-data-research-eurofound-news",
         "finance-04-optional-global-data-research-us-courts-judiciary-news",
         "finance-04-optional-global-data-research-european-council-meetings",
+        "finance-04-optional-global-data-research-cvm-legislation",
+        "finance-04-optional-global-data-research-cvm-collegiate-bulletins",
+        "finance-04-optional-global-data-research-singapore-food-agency-food-alerts-recalls",
         "finance-05-optional-uk-regulation-warnings-fca-scam-warnings",
         "finance-05-optional-uk-regulation-warnings-ofsi-financial-sanctions-blog",
         "cyber-security-01-core-ireland-eu-official-alerts-ireland-ncsc-alerts-advisories",
@@ -816,14 +957,10 @@
         "cyber-security-01-core-ireland-eu-official-alerts-cert-fr-security-alerts-french",
         "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-news",
         "cyber-security-01-core-ireland-eu-official-alerts-ncsc-uk-all-updates",
-        "cyber-security-01-core-ireland-eu-official-alerts-cisa-news",
         "cyber-security-01-core-ireland-eu-official-alerts-european-data-protection-board-news",
         "cyber-security-01-core-ireland-eu-official-alerts-centre-for-cybersecurity-belgium-advisories",
-        "cyber-security-01-core-ireland-eu-official-alerts-acn-csirt-italia-security-updates-italian",
-        "cyber-security-01-core-ireland-eu-official-alerts-cis-ms-isac-advisories",
         "cyber-security-01-core-ireland-eu-official-alerts-communications-security-establishment-news",
         "cyber-security-02-core-news-incident-reporting-bleepingcomputer",
-        "cyber-security-02-core-news-incident-reporting-cyberscoop",
         "cyber-security-02-core-news-incident-reporting-the-record-cybersecurity-news",
         "cyber-security-03-core-technical-research-cert-cc-vulnerability-notes",
         "cyber-security-03-core-technical-research-nist-cybersecurity-insights",
@@ -832,7 +969,8 @@
         "cyber-security-04-optional-specialist-alerts-research-cert-eu-threat-intelligence",
         "cyber-security-04-optional-specialist-alerts-research-uk-department-for-science-innovation-and-technology-activity-on-gov-uk",
         "cyber-security-04-optional-specialist-alerts-research-rusi-latest-commentary",
-        "cyber-security-04-optional-specialist-alerts-research-sipri-global-security-arms-control"
+        "cyber-security-04-optional-specialist-alerts-research-sipri-global-security-arms-control",
+        "cyber-security-04-optional-specialist-alerts-research-european-data-protection-board-publications"
       ]
     }
   },
@@ -898,6 +1036,201 @@
       }
     },
     {
+      "id": "finance-01-core-market-trading-hkex-news-releases",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "HKEX — News Releases",
+      "url": "https://www.hkex.com.hk/Services/RSS-Feeds/News-Releases?sc_lang=en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange/market-development",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-hkex-regulatory-announcements",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "HKEX — Regulatory Announcements",
+      "url": "https://www.hkex.com.hk/Services/RSS-Feeds/regulatory-announcements?sc_lang=en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-regulation/enforcement",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-hkex-market-communications",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "HKEX — Market Communications",
+      "url": "https://www.hkex.com.hk/Services/RSS-Feeds/market-communications?sc_lang=en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange/market-operations",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-hkex-sehk-trading-rules",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "HKEX — SEHK Trading Rules",
+      "url": "https://www.hkex.com.hk/Services/RSS-Feeds/Updates-to-Trading-Rules-of-SEHK?sc_lang=en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-rule-change",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-jpx-market-news",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "JPX — Market News",
+      "url": "https://www.jpx.co.jp/english/rss/markets_news.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-market-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-jpx-news-releases",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "JPX — News Releases",
+      "url": "https://www.jpx.co.jp/english/rss/jpx-news.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-news-release",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-jpx-equity-trading-halts",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "JPX — Equity Trading Halts",
+      "url": "https://www.jpx.co.jp/english/rss/equities-suspended.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-jpx-derivatives-trading-halts",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "JPX — Derivatives Trading Halts",
+      "url": "https://www.jpx.co.jp/english/rss/derivatives-suspended.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-jpx-unclear-information-alerts",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "JPX — Alerts on Unclear Information",
+      "url": "https://www.jpx.co.jp/english/rss/alerts.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-market-integrity-alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-twse-news-chinese",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "TWSE — News (Chinese)",
+      "url": "https://www.twse.com.tw/rwd/zh/news/feed?type=rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-market-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-twse-rules-regulations-english",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "TWSE — Rules & Regulations News (English)",
+      "url": "https://twse-regulation.twse.com.tw/EN/RSS.aspx",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange-rule-change",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-taifex-press-releases-english",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "TAIFEX — Press Releases (English)",
+      "url": "https://www.taifex.com.tw/enl/eng11/RSS1",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "derivatives-exchange-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-taifex-notices-english",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "TAIFEX — Notices (English)",
+      "url": "https://www.taifex.com.tw/enl/eng11/RSS2",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "derivatives-exchange-notice",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-01-core-market-trading-bbc-business",
       "section": "Finance",
       "folder": "01 — Core — Market & Trading",
@@ -924,7 +1257,7 @@
       "profiles": {
         "master": true,
         "iphone-lite": false,
-        "iphone-air": true
+        "iphone-air": false
       }
     },
     {
@@ -1753,6 +2086,51 @@
       }
     },
     {
+      "id": "finance-02-core-official-macro-korea-financial-services-commission-press-releases-korean",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Korea Financial Services Commission — Press Releases (Korean)",
+      "url": "https://www.fsc.go.kr/about/fsc_bbs_rss/?fid=0111",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "financial-regulator/policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-korea-financial-services-commission-explanations-korean",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Korea Financial Services Commission — Explanations (Korean)",
+      "url": "https://www.fsc.go.kr/about/fsc_bbs_rss/?fid=0112",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "financial-regulator/clarification",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-korea-financial-services-commission-notices-korean",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Korea Financial Services Commission — Notices (Korean)",
+      "url": "https://www.fsc.go.kr/about/fsc_bbs_rss/?fid=0114",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "financial-regulator/notice",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-02-core-official-macro-bangko-sentral-ng-pilipinas-media-releases",
       "section": "Finance",
       "folder": "02 — Core — Official & Macro",
@@ -2123,8 +2501,8 @@
       "signal_type": "prudential-supervision/financial-stability",
       "profiles": {
         "master": true,
-        "iphone-lite": false,
-        "iphone-air": false
+        "iphone-lite": true,
+        "iphone-air": true
       }
     },
     {
@@ -3223,6 +3601,66 @@
       }
     },
     {
+      "id": "finance-04-optional-global-data-research-banco-de-la-republica-news-research-english-route",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Banco de la República — News & Research (English route)",
+      "url": "https://www.banrep.gov.co/en/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/news-research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-sri-lanka-monetary-policy-review",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of Sri Lanka — Monetary Policy Review",
+      "url": "https://www.cbsl.gov.lk/en/press/press-releases/mprrss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/monetary-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-sri-lanka-weekly-economic-indicators",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of Sri Lanka — Weekly Economic Indicators",
+      "url": "https://www.cbsl.gov.lk/en/statistics/economic-indicators/weirss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/macro-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-sri-lanka-monthly-economic-indicators",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of Sri Lanka — Monthly Economic Indicators",
+      "url": "https://www.cbsl.gov.lk/en/statistics/economic-indicators/meirss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/macro-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-04-optional-global-data-research-reserve-bank-australia-daily-exchange-rates",
       "section": "Finance",
       "folder": "04 — Optional — Global Data & Research",
@@ -3666,6 +4104,51 @@
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "development-finance/analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-investment-bank-projects-to-be-financed",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Investment Bank — Projects to be Financed",
+      "url": "https://www.eib.org/en/projects/pipelines/index.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/project-pipeline",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-investment-bank-project-procurement",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Investment Bank — Project Procurement",
+      "url": "https://www.eib.org/en/about/procurement/index.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/procurement",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-investment-bank-board-and-institutional-events",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Investment Bank — Board and Institutional Events",
+      "url": "https://www.eib.org/en/events/index.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/calendar",
       "profiles": {
         "master": true,
         "iphone-lite": false,
@@ -4723,6 +5206,21 @@
       }
     },
     {
+      "id": "finance-04-optional-global-data-research-european-patent-office-communications-from-boards-of-appeal",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Patent Office — Communications from the Boards of Appeal",
+      "url": "https://www.epo.org/en/law-and-practice/boards-of-appeal/communications/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "intellectual-property/patent-law",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-05-optional-uk-regulation-warnings-bank-of-england-prudential-regulation-publications",
       "section": "Finance",
       "folder": "05 — Optional — UK Regulation & Warnings",
@@ -5151,6 +5649,21 @@
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "official-macro/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-oecd-ai-ai-wonk",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "OECD.AI — AI Wonk",
+      "url": "https://wp.oecd.ai/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "ai-policy/security-research",
       "profiles": {
         "master": true,
         "iphone-lite": false,
@@ -5723,8 +6236,8 @@
       "signal_type": "official-cyber/news",
       "profiles": {
         "master": true,
-        "iphone-lite": true,
-        "iphone-air": true
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -5918,8 +6431,8 @@
       "signal_type": "news/policy",
       "profiles": {
         "master": true,
-        "iphone-lite": true,
-        "iphone-air": true
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -6804,7 +7317,7 @@
       "profiles": {
         "master": true,
         "iphone-lite": false,
-        "iphone-air": true
+        "iphone-air": false
       }
     },
     {
@@ -7952,7 +8465,7 @@
       "section": "Finance",
       "folder": "04 — Optional — Global Data & Research",
       "title": "European Court of Human Rights — Chamber Judgments and Decisions (English)",
-      "url": "https://hudoc.echr.coe.int/app/transform/rss?length=20&library=echreng&query=contentsitename%3AECHR+AND+languageisocode%3AENG+AND+%28%28importance%3D%221%22%29+OR+%28importance%3D%222%22%29+OR+%28importance%3D%223%22%29%29+AND+documentcollectionid%3D%22CHAMBER%22&rankingModelId=11111111-0000-0000-0000-000000000000&sort=kpdate+Descending&start=0",
+      "url": "https://hudoc.echr.coe.int/app/transform/rss?length=20&library=echreng&query=contentsitename%3AECHR+AND+languageisocode%3AENG+AND+%28importance%3A1+OR+importance%3A2+OR+importance%3A3%29+AND+doctypebranch%3ACHAMBER&rankingModelId=11111111-0000-0000-0000-000000000000&sort=kpdate+Descending&start=0",
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "human-rights/civil-liberties-law",
@@ -8153,8 +8666,8 @@
       "signal_type": "labour-market/social-policy",
       "profiles": {
         "master": true,
-        "iphone-lite": true,
-        "iphone-air": true
+        "iphone-lite": false,
+        "iphone-air": false
       }
     },
     {
@@ -8166,6 +8679,36 @@
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "multilateral-policy/human-rights",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-united-nations-office-at-geneva-press-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "United Nations Office at Geneva — Press Releases",
+      "url": "https://www.ungeneva.org/news-media/press-releases-list/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "multilateral-policy/human-rights",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-united-nations-office-at-geneva-press-conference-announcements",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "United Nations Office at Geneva — Press Conference Announcements",
+      "url": "https://www.ungeneva.org/news-media/press-conferences-list/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "multilateral-policy/media-calendar",
       "profiles": {
         "master": true,
         "iphone-lite": false,
@@ -8308,21 +8851,6 @@
       }
     },
     {
-      "id": "cyber-security-01-core-ireland-eu-official-alerts-cis-ms-isac-advisories",
-      "section": "Cyber Security",
-      "folder": "01 — Core — Ireland, EU & Official Alerts",
-      "title": "CIS — MS-ISAC Advisories",
-      "url": "https://www.cisecurity.org/feed/advisories",
-      "notification": "off",
-      "notification_display": "Off; summarize",
-      "signal_type": "vulnerability/advisory",
-      "profiles": {
-        "master": true,
-        "iphone-lite": true,
-        "iphone-air": true
-      }
-    },
-    {
       "id": "cyber-security-04-optional-specialist-alerts-research-euiss-news-publications",
       "section": "Cyber Security",
       "folder": "04 — Optional — Specialist Alerts & Research",
@@ -8421,21 +8949,6 @@
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "security/geopolitical-research",
-      "profiles": {
-        "master": true,
-        "iphone-lite": false,
-        "iphone-air": false
-      }
-    },
-    {
-      "id": "cyber-security-04-optional-specialist-alerts-research-lawfare-cybersecurity-tech",
-      "section": "Cyber Security",
-      "folder": "04 — Optional — Specialist Alerts & Research",
-      "title": "Lawfare — Cybersecurity & Tech",
-      "url": "https://www.lawfaremedia.org/feeds/cybersecurity-tech",
-      "notification": "off",
-      "notification_display": "Off; summarize",
-      "signal_type": "security/cyber-policy-research",
       "profiles": {
         "master": true,
         "iphone-lite": false,
@@ -8593,6 +9106,81 @@
       }
     },
     {
+      "id": "finance-04-optional-global-data-research-council-of-the-eu-agriculture-fisheries-meetings",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Council of the EU — Agriculture & Fisheries Meetings",
+      "url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=agri",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-policy/agri-food-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-council-of-the-eu-competitiveness-meetings",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Council of the EU — Competitiveness Meetings",
+      "url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=compet",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-policy/competitiveness-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-council-of-the-eu-environment-meetings",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Council of the EU — Environment Meetings",
+      "url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=envi",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-policy/environment-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-council-of-the-eu-foreign-affairs-meetings",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Council of the EU — Foreign Affairs Meetings",
+      "url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=fac",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-policy/geopolitical-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-council-of-the-eu-general-affairs-meetings",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Council of the EU — General Affairs Meetings",
+      "url": "https://www.consilium.europa.eu/en/rss/meetings.ashx?cat=gac",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-policy/institutional-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-04-optional-global-data-research-uk-government-national-security-news-communications",
       "section": "Finance",
       "folder": "04 — Optional — Global Data & Research",
@@ -8683,6 +9271,21 @@
       }
     },
     {
+      "id": "finance-03-optional-data-ireland-eu-uk-berec-latest-news-press-releases-publications",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "BEREC — Latest News, Press Releases & Publications",
+      "url": "https://www.berec.europa.eu/en/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "telecoms/digital-regulation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-03-optional-data-ireland-eu-uk-houses-of-the-oireachtas-press-releases",
       "section": "Finance",
       "folder": "03 — Optional — Data, Ireland, EU & UK",
@@ -8736,6 +9339,36 @@
       "notification": "off",
       "notification_display": "Off; summarize",
       "signal_type": "ireland/parliamentary-oversight-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-iaasa-news",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "IAASA — News",
+      "url": "https://iaasa.ie/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "irish/audit-accounting-supervision",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-03-optional-data-ireland-eu-uk-pensions-authority-news",
+      "section": "Finance",
+      "folder": "03 — Optional — Data, Ireland, EU & UK",
+      "title": "Pensions Authority — News",
+      "url": "https://pensionsauthority.ie/news_press/latest_news/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "irish/pensions-regulation",
       "profiles": {
         "master": true,
         "iphone-lite": false,
@@ -8833,6 +9466,36 @@
       }
     },
     {
+      "id": "finance-04-optional-global-data-research-japan-securities-and-exchange-surveillance-commission-press-releases-japanese",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Japan Securities and Exchange Surveillance Commission — Press Releases (Japanese)",
+      "url": "https://www.fsa.go.jp/sescReportList_rss2.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-supervision/market-conduct",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-japan-certified-public-accountants-and-auditing-oversight-board-news-japanese",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Japan Certified Public Accountants and Auditing Oversight Board — News (Japanese)",
+      "url": "https://www.fsa.go.jp/cpaaobNewsList_rss2.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "audit-oversight/financial-regulation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
       "id": "finance-04-optional-global-data-research-federal-register-ofac-sanctions-notices",
       "section": "Finance",
       "folder": "04 — Optional — Global Data & Research",
@@ -8875,6 +9538,1521 @@
         "master": true,
         "iphone-lite": false,
         "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-hong-kong-sfc-press-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Hong Kong SFC — Press Releases",
+      "url": "https://www.sfc.hk/en/RSS-Feeds/Press-releases",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/market-conduct",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-hong-kong-sfc-circulars",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Hong Kong SFC — Circulars",
+      "url": "https://www.sfc.hk/en/RSS-Feeds/Circulars",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/supervisory-circulars",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-hong-kong-sfc-consultations-conclusions",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Hong Kong SFC — Consultations & Conclusions",
+      "url": "https://www.sfc.hk/en/RSS-Feeds/Consultations-and-Conclusions",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/consultations",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-atlanta-macroblog",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Atlanta — Macroblog",
+      "url": "https://www.atlantafed.org/rss/macroblog",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "macro/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-atlanta-working-papers",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Atlanta — Working Papers",
+      "url": "https://www.atlantafed.org/rss/wps",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/working-papers",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-economic-updates",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Dallas — Economic Updates",
+      "url": "https://www.dallasfed.org/rss/updates.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "regional-macro/data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-news-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Dallas — News Releases",
+      "url": "https://www.dallasfed.org/rss/releases.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-dallas-speeches",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Dallas — Speeches",
+      "url": "https://www.dallasfed.org/rss/speeches.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-policy/speeches",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-new-york-liberty-street-economics",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of New York — Liberty Street Economics",
+      "url": "https://libertystreeteconomics.newyorkfed.org/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/macro",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-richmond-press-room",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Richmond — Press Room",
+      "url": "https://www.richmondfed.org/press_room?cc_view=rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-richmond-research",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of Richmond — Research",
+      "url": "https://www.richmondfed.org/research?cc_view=rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/regional",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-federal-reserve-bank-of-san-francisco-news-research",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Federal Reserve Bank of San Francisco — News & Research",
+      "url": "https://www.frbsf.org/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/regional",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bank-of-canada-sparks-at-bank-articles",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Bank of Canada — Sparks at Bank Articles",
+      "url": "https://www.bankofcanada.ca/content_type/sparks-at-bank-article/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bank-of-canada-staff-analytical-papers",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Bank of Canada — Staff Analytical Papers",
+      "url": "https://www.bankofcanada.ca/content_type/staff-analytical-paper/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/applied-papers",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-bank-of-canada-staff-working-papers",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Bank of Canada — Staff Working Papers",
+      "url": "https://www.bankofcanada.ca/content_type/working-papers/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/working-papers",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-asian-development-bank-blogs",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Asian Development Bank — Blogs",
+      "url": "https://feeds.feedburner.com/adb_blogs",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-asian-development-bank-research-publications",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Asian Development Bank — Research Publications",
+      "url": "https://feeds.feedburner.com/research-publications",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-asian-development-bank-evaluation",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Asian Development Bank — Evaluation",
+      "url": "https://feeds.feedburner.com/adb_evaluation",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/evaluation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-asian-development-bank-features",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Asian Development Bank — Features",
+      "url": "https://feeds.feedburner.com/adb_features",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/feature-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cna-business",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CNA — Business",
+      "url": "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6936",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news/business-asia",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cna-asia",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CNA — Asia",
+      "url": "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "news/geopolitical-asia",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-south-african-reserve-bank-news-publications",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "South African Reserve Bank — News & Publications",
+      "url": "https://www.resbank.co.za/bin/sarb/solr/publications/rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news-and-publications",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-south-african-revenue-service-latest-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "South African Revenue Service — Latest News",
+      "url": "https://www.sars.gov.za/feed/?post_type=latest_news",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "tax-customs/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-south-african-department-science-technology-innovation-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "South African Department of Science, Technology and Innovation — News",
+      "url": "https://www.dsti.gov.za/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "science-technology-policy/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-publications-english",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of the Republic of Türkiye — Publications (English)",
+      "url": "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB%2BEN/Bottom%2BMenu/Other/RSS/Publications",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-research/publications",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-data-english",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of the Republic of Türkiye — Data (English)",
+      "url": "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB%2BEN/Bottom%2BMenu/Other/RSS/Data",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/statistical-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-central-bank-of-the-republic-of-turkiye-remarks-by-governor-english",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Central Bank of the Republic of Türkiye — Remarks by Governor (English)",
+      "url": "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB%2BEN/Bottom%2BMenu/Other/RSS/Remarks%2Bby%2BGovernor",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank-policy/speeches",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-central-bank-of-the-republic-of-turkiye-press-releases-english",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of the Republic of Türkiye — Press Releases (English)",
+      "url": "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB%2BEN/Bottom%2BMenu/Other/RSS/Press%2BReleases",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-nepal-rastra-bank-media-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Nepal Rastra Bank — Media Releases",
+      "url": "https://www.nrb.org.np/category/media-releases/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-nepal-rastra-bank-circulars",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Nepal Rastra Bank — Circulars",
+      "url": "https://www.nrb.org.np/category/circulars/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "banking-regulation/circulars",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-nepal-rastra-bank-monetary-policy",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Nepal Rastra Bank — Monetary Policy",
+      "url": "https://www.nrb.org.np/category/monetary-policy/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/monetary-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-bank-of-ghana-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of Ghana — News",
+      "url": "https://www.bog.gov.gh/news/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-central-bank-of-kenya-news-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of Kenya — News & Releases",
+      "url": "https://www.centralbank.go.ke/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news-and-surveys",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-central-bank-of-eswatini-news-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of Eswatini — News & Releases",
+      "url": "https://www.centralbank.org.sz/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/official-news-and-statistics",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-kenya-capital-markets-authority-news-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Kenya Capital Markets Authority — News & Releases",
+      "url": "https://www.cma.or.ke/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "capital-markets-regulation/official-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-ghana-sec-public-notices",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Ghana Securities & Exchange Commission — Public Notices",
+      "url": "https://sec.gov.gh/category/public-notice/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/investor-alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-central-bank-of-lesotho-monetary-policy-statements",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Central Bank of Lesotho — Monetary Policy Statements",
+      "url": "https://centralbank.org.ls/category/monetary-policy-statements/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/monetary-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-thaicert-english-news-advisories",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "ThaiCERT — English News & Advisories",
+      "url": "https://www.thaicert.or.th/en/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "national-csirt/threat-news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-01-core-ireland-eu-official-alerts-lithuania-nksc-news-lithuanian",
+      "section": "Cyber Security",
+      "folder": "01 — Core — Ireland, EU & Official Alerts",
+      "title": "Lithuania NKSC — News (Lithuanian)",
+      "url": "https://nksc.lrv.lt/lt/naujienos/rss/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "national-csirt/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-bank-of-russia-english-whats-new",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of Russia — English What’s New",
+      "url": "https://cbr.ru/rss/EngRssNews",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/macro-statistics-and-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-bank-of-russia-english-news-and-comments",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of Russia — English News and Comments",
+      "url": "https://cbr.ru/rss/engeventrss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/policy-commentary",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-bank-of-russia-english-press-releases",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Bank of Russia — English Press Releases",
+      "url": "https://cbr.ru/rss/EngRssPress",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "central-bank/press-release",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cvm-board-decisions",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CVM — Board Decisions",
+      "url": "https://conteudo.cvm.gov.br/feed/decisoes.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/board-decisions",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cvm-legislation",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CVM — Legislation",
+      "url": "https://conteudo.cvm.gov.br/feed/legislacao.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/legislation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cvm-public-consultations",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CVM — Public Consultations",
+      "url": "https://conteudo.cvm.gov.br/feed/audiencias.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/consultations",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-cvm-collegiate-bulletins",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "CVM — Collegiate Bulletins",
+      "url": "https://conteudo.cvm.gov.br/feed/informativos_colegiado.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "securities-regulation/board-bulletins",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-singapore-food-agency-food-alerts-recalls",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Singapore Food Agency — Food Alerts & Recalls",
+      "url": "https://www.sfa.gov.sg/rss/annual-listing-food-alerts",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "food-safety/recall-alert",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-singapore-food-agency-newsroom",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Singapore Food Agency — Newsroom",
+      "url": "https://www.sfa.gov.sg/rss/newsroom",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "food-security/food-safety/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-singapore-food-agency-trade-circulars",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Singapore Food Agency — Trade Circulars",
+      "url": "https://www.sfa.gov.sg/rss/annual-listing-circulars",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "food-supply/trade-regulation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-new-zealand-treasury-publications",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "New Zealand Treasury — Publications",
+      "url": "https://www.treasury.govt.nz/feeds/publications",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "new-zealand/fiscal-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-new-zealand-treasury-regulatory-impact-statements",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "New Zealand Treasury — Regulatory Impact Statements",
+      "url": "https://www.treasury.govt.nz/feeds/regulatory-impact-statements",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "new-zealand/regulatory-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-new-zealand-treasury-data-and-charts",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "New Zealand Treasury — Data and Charts",
+      "url": "https://www.treasury.govt.nz/feeds/data-charts",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "new-zealand/economic-data",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-reserve-bank-of-new-zealand-news-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Reserve Bank of New Zealand — News Releases",
+      "url": "https://www.rbnz.govt.nz/feeds/news",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "new-zealand/central-bank-prudential-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-peterson-institute-for-international-economics-updates",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Peterson Institute for International Economics — Updates",
+      "url": "https://www.piie.com/rss/update.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "global-economic-policy/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-commission-joint-research-centre-news-updates",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Commission Joint Research Centre — News & Updates",
+      "url": "https://joint-research-centre.ec.europa.eu/node/2/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "european-policy/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-commission-international-partnerships-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Commission — International Partnerships News",
+      "url": "https://international-partnerships.ec.europa.eu/node/2/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "global-gateway/investment-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-uk-ons-national-statistical-blog",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "UK ONS — National Statistical Blog",
+      "url": "https://blog.ons.gov.uk/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "uk-statistics/methodology",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-cme-globex-electronic-trading-notices",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "CME Globex — Electronic Trading Notices",
+      "url": "https://feeds.feedburner.com/GlobexAdvisories",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "derivatives/market-operations",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-taiwan-national-treasury-administration-latest-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Taiwan National Treasury Administration — Latest News",
+      "url": "https://www.nta.gov.tw/eng/Rss/2639",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "sovereign-finance/public-debt",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-taiwan-national-treasury-administration-important-measures",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Taiwan National Treasury Administration — Important Measures",
+      "url": "https://www.nta.gov.tw/eng/Rss/320",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "sovereign-finance/fiscal-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-canadian-investment-regulatory-organization-news-enforcement",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Canadian Investment Regulatory Organization — News & Enforcement",
+      "url": "https://www.ciro.ca/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "canadian-securities/investor-protection",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-itu-global-digital-and-telecoms-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "ITU — Global Digital and Telecoms News",
+      "url": "https://www.itu.int/hub/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "global-telecoms/digital-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-wipo-press-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "WIPO — Press Releases",
+      "url": "https://www.wipo.int/pressroom/en/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "intellectual-property/innovation-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-wipo-economics-innovation-policy-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "WIPO — Economics and Innovation Policy News",
+      "url": "https://www.wipo.int/en/web/economics/news/-/journal/rss/743893/7224673",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "innovation-economics/intangible-investment",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-acer-energy-market-and-remit-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "ACER — Energy Market and REMIT News",
+      "url": "https://www.acer.europa.eu/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "energy-market-regulation/electricity-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-european-commission-single-market-industry-smes-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "European Commission — Single Market, Industry & SMEs News",
+      "url": "https://single-market-economy.ec.europa.eu/node/2/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "single-market/industrial-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-commission-defence-industry-space-latest-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Commission — Defence Industry & Space Latest News",
+      "url": "https://defence-industry-space.ec.europa.eu/node/123/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-defence-industry/space-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-commission-civil-protection-humanitarian-aid-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Commission — Civil Protection & Humanitarian Aid News",
+      "url": "https://civil-protection-humanitarian-aid.ec.europa.eu/node/2/rss_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-crisis-response/humanitarian-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-uk-office-for-budget-responsibility-research-statistics",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "UK Office for Budget Responsibility — Research & Statistics",
+      "url": "https://www.gov.uk/search/research-and-statistics.atom?content_store_document_type=all_research_and_statistics&organisations%5B%5D=office-for-budget-responsibility",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "uk-fiscal-watchdog/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-irish-fiscal-advisory-council-beyond-the-budget",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Irish Fiscal Advisory Council — Beyond the Budget",
+      "url": "https://fiscalcouncil.substack.com/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "irish-fiscal-watchdog/research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-commission-eu-finance-podcast-the-future-of-finance",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Commission — EU Finance Podcast: The Future of Finance",
+      "url": "https://webgate.ec.europa.eu/beluga2/application/api/podcasts/rss?ref=C-000007",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "eu-finance/podcast-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-chile-servicio-de-impuestos-internos-news",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Chile Servicio de Impuestos Internos — News",
+      "url": "https://www.sii.cl/pagina/actualizada/noticias/rss/siinot_rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "tax-authority/news",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-qatar-news-agency-economy-local",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Qatar News Agency — Economy Local",
+      "url": "https://qna.org.qa/en/Pages/RSS-Feeds/Economy-Local",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "sovereign-news/economy-and-markets",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-01-core-market-trading-boursa-kuwait-market-message",
+      "section": "Finance",
+      "folder": "01 — Core — Market & Trading",
+      "title": "Boursa Kuwait — Market Message",
+      "url": "https://rss.boursakuwait.com.kw/rss/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "exchange/issuer-disclosure",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-02-core-official-macro-vietnam-official-gazette-new-issues",
+      "section": "Finance",
+      "folder": "02 — Core — Official & Macro",
+      "title": "Vietnam Official Gazette — New Issues",
+      "url": "https://congbao.chinhphu.vn/cac-so-cong-bao-moi-dang.rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "sovereign-news/legal-regulatory",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-international-crisis-group-horn-of-africa",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "International Crisis Group — Horn of Africa",
+      "url": "https://www.crisisgroup.org/rss/9",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/geopolitical-risk-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-council-on-foreign-relations-analysis-podcasts",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Council on Foreign Relations — Analysis & Podcasts",
+      "url": "https://www.cfr.org/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/geopolitical-risk-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-european-parliament-research-service-think-tank",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "European Parliament Research Service — Think Tank",
+      "url": "https://epthinktank.eu/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "official-eu-policy-research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-united-nations-development-programme-asia-pacific-news-centre",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "United Nations Development Programme — Asia-Pacific News Centre",
+      "url": "https://www.undp.org/feeds/news-centre/96/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-policy/climate-finance-ai-governance",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-lowy-institute-the-interpreter",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "Lowy Institute — The Interpreter",
+      "url": "https://www.lowyinstitute.org/the-interpreter/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/geopolitical-risk-analysis",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-international-criminal-court-news",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "International Criminal Court — News",
+      "url": "https://www.icc-cpi.int/rss/news/all",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/international-justice",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-un-ocha-humanitarian-affairs-news",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "UN OCHA — Humanitarian Affairs News",
+      "url": "https://www.unocha.org/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/humanitarian-early-warning",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-reliefweb-humanitarian-updates",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "ReliefWeb — Humanitarian Updates",
+      "url": "https://reliefweb.int/updates/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/humanitarian-early-warning",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-opcw-chemical-security-disarmament-news",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "OPCW — Chemical Security & Disarmament News",
+      "url": "https://www.opcw.org/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "security/chemical-security-nonproliferation",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-united-nations-economic-commission-for-africa-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "United Nations Economic Commission for Africa — News",
+      "url": "https://uneca.org/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "development-finance/african-macro",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-african-union-news-events",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "African Union — News & Events",
+      "url": "https://au.int/en/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "african-policy/trade-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-ipcc-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "IPCC — News",
+      "url": "https://www.ipcc.ch/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "climate-assessment/science-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-un-water-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "UN-Water — News",
+      "url": "https://www.unwater.org/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "water-security/climate-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-un-habitat-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "UN-Habitat — News",
+      "url": "https://unhabitat.org/rss.xml",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "urban-development/climate-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-east-african-community-press-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "East African Community — Press Releases",
+      "url": "https://www.eac.int/press-releases?format=feed&type=rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "east-african-integration/trade-monetary-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-comesa-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "COMESA — News",
+      "url": "https://www.comesa.int/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "african-integration/trade-digital-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-pacific-islands-forum-media-releases-and-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Pacific Islands Forum — Media Releases and News",
+      "url": "https://forumsec.org/taxonomy/term/53/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "pacific-regionalism/climate-trade-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-ecowas-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "ECOWAS — News",
+      "url": "https://www.ecowas.int/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "west-african-integration/trade-energy-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-mercosur-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "MERCOSUR — News",
+      "url": "https://www.mercosur.int/feed",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "south-american-integration/trade-policy",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-igad-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "IGAD — News",
+      "url": "https://igad.int/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "horn-of-africa/peace-trade-health-security",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-comcec-news",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "COMCEC — News",
+      "url": "https://www.comcec.org/feed/",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "oic-economic-cooperation/trade-finance-development",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-apec-press",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "APEC — Press",
+      "url": "https://www.apec.org/feeds/rss",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "apec-economic-cooperation/trade-development",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-statistical-office-republic-slovenia-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Statistical Office of the Republic of Slovenia — Releases",
+      "url": "https://www.stat.si/StatWeb/en/Rss/rss?days=7&fields=all",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "official-statistics/slovenian-macro",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-statistics-norway-upcoming-statistical-releases",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Statistics Norway — Upcoming Statistical Releases",
+      "url": "https://www.ssb.no/en/rss/statkal",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "official-statistics/release-calendar",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "finance-04-optional-global-data-research-statistics-norway-statbank-table-updates",
+      "section": "Finance",
+      "folder": "04 — Optional — Global Data & Research",
+      "title": "Statistics Norway — StatBank Table Updates",
+      "url": "https://www.ssb.no/en/rss/statbank",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "official-statistics/data-updates",
+      "profiles": {
+        "master": true,
+        "iphone-lite": false,
+        "iphone-air": false
+      }
+    },
+    {
+      "id": "cyber-security-04-optional-specialist-alerts-research-european-data-protection-board-publications",
+      "section": "Cyber Security",
+      "folder": "04 — Optional — Specialist Alerts & Research",
+      "title": "European Data Protection Board — Publications",
+      "url": "https://www.edpb.europa.eu/feed/publications_en",
+      "notification": "off",
+      "notification_display": "Off; summarize",
+      "signal_type": "privacy/regulatory-research",
+      "profiles": {
+        "master": true,
+        "iphone-lite": true,
+        "iphone-air": true
       }
     }
   ]

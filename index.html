@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#19251f" />
+    <meta
+      name="description"
+      content="A curated NetNewsWire feed library for iPhone, iPad and Mac: 672 finance and cybersecurity RSS sources, organized into practical import profiles."
+    />
+    <meta property="og:title" content="NetNewsWire iPhone Library" />
+    <meta
+      property="og:description"
+      content="672 curated finance and cybersecurity RSS feeds, ready for NetNewsWire across iPhone, iPad and Mac."
+    />
+    <meta property="og:type" content="website" />
+    <title>NetNewsWire iPhone Library · Finance + Cyber RSS</title>
+    <link rel="stylesheet" href="./site.css" />
+    <script src="./site.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="NetNewsWire iPhone library home">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span class="brand-copy">
+            <span class="brand-kicker">NetNewsWire</span>
+            <strong>iPhone library</strong>
+          </span>
+        </a>
+        <nav class="nav-links" aria-label="Sections">
+          <a href="#library">Library</a>
+          <a href="#profiles">Profiles</a>
+          <a href="#import">Import guide</a>
+          <a href="https://zerodevllc.eu/rss" target="_blank" rel="noreferrer">Live monitor ↗</a>
+        </nav>
+        <div class="manifest-status" id="manifest-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>manifest linked · MIT free software</span>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow eyebrow-light">Curated RSS · built for NetNewsWire</p>
+              <h1 id="hero-title">Make room for the signal.</h1>
+              <p class="hero-lede">
+                A deliberate reading shelf for markets, policy and cyber security — arranged like it has already landed on your iPhone.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-dark" href="#library">Browse the library <span aria-hidden="true">↘</span></a>
+                <a class="button button-outline" href="#profiles">Choose a profile</a>
+              </div>
+              <div class="hero-footnote">
+                <span class="footnote-mark" aria-hidden="true">↗</span>
+                <span>Source of truth: <strong>feed-manifest.json</strong> · latest validation <strong id="hero-validated">23 Aug 2026</strong></span>
+              </div>
+            </div>
+
+            <div class="phone-stage" aria-label="Preview of the NetNewsWire iPhone feed view">
+              <div class="phone-glow phone-glow-one" aria-hidden="true"></div>
+              <div class="phone-glow phone-glow-two" aria-hidden="true"></div>
+              <div class="phone" aria-hidden="true">
+                <div class="phone-frame">
+                  <div class="phone-notch"></div>
+                  <div class="phone-screen">
+                    <div class="phone-statusbar">
+                      <span>9:41</span>
+                      <span class="phone-status-icons">▮▮▮ ◉</span>
+                    </div>
+                    <div class="phone-appbar">
+                      <span class="phone-app-title">Feeds</span>
+                      <span class="phone-edit">Edit</span>
+                    </div>
+                    <div class="phone-search"><span aria-hidden="true">⌕</span> Search feeds</div>
+                    <div class="phone-section-label">ON MY IPHONE</div>
+                    <div class="phone-folder phone-folder-selected">
+                      <span class="phone-folder-icon">◒</span>
+                      <span><b>All Feeds</b><small id="phone-all-count">672 feeds</small></span>
+                      <em>›</em>
+                    </div>
+                    <div class="phone-folder">
+                      <span class="phone-folder-icon finance-icon">◈</span>
+                      <span><b>Finance</b><small id="phone-finance-count">556 feeds</small></span>
+                      <em>›</em>
+                    </div>
+                    <div class="phone-folder">
+                      <span class="phone-folder-icon cyber-icon">✦</span>
+                      <span><b>Cyber Security</b><small id="phone-cyber-count">116 feeds</small></span>
+                      <em>›</em>
+                    </div>
+                    <div class="phone-section-label phone-focus-label">QUIET SIGNALS</div>
+                    <div class="phone-story">
+                      <span class="phone-story-dot orange-dot"></span>
+                      <span><b>Nasdaq Trader</b><small>Trade Halts</small></span>
+                      <strong>2</strong>
+                    </div>
+                    <div class="phone-story">
+                      <span class="phone-story-dot blue-dot"></span>
+                      <span><b>European Central Bank</b><small>Press</small></span>
+                      <strong>4</strong>
+                    </div>
+                    <div class="phone-story">
+                      <span class="phone-story-dot purple-dot"></span>
+                      <span><b>CISA</b><small>Cybersecurity alerts</small></span>
+                      <strong>1</strong>
+                    </div>
+                    <div class="phone-bottom-nav">
+                      <span class="phone-bottom-active">◒<small>Feeds</small></span>
+                      <span>▤<small>Starred</small></span>
+                      <span>⚙<small>Settings</small></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="phone-caption"><span class="caption-line"></span> your signal shelf, at a glance</div>
+            </div>
+          </div>
+
+          <div class="hero-stats" aria-label="Feed library totals">
+            <div class="hero-stat hero-stat-total">
+              <strong id="hero-total">672</strong>
+              <span>total RSS feeds</span>
+            </div>
+            <div class="hero-stat">
+              <strong id="hero-finance">556</strong>
+              <span>finance sources</span>
+            </div>
+            <div class="hero-stat">
+              <strong id="hero-cyber">116</strong>
+              <span>cyber security sources</span>
+            </div>
+            <div class="hero-stat hero-stat-note">
+              <strong id="hero-alerts">4</strong>
+              <span>interrupting alerts</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="manifest-note" aria-label="How the library works">
+          <div class="manifest-note-mark" aria-hidden="true">01</div>
+          <div>
+            <p class="eyebrow">One manifest, three ways to read</p>
+            <p>
+              Every entry below comes from the project manifest. The Master profile keeps the full research set; the two iPhone profiles are curated subsets with the same folders and feed URLs, ready to import as OPML.
+            </p>
+          </div>
+          <a class="text-link" href="#import">See how to import <span aria-hidden="true">↗</span></a>
+        </section>
+
+        <section class="library-section" id="library" aria-labelledby="library-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">The feed library</p>
+              <h2 id="library-title">Every feed, one place.</h2>
+            </div>
+            <p class="section-heading-note" id="results-label">Showing 672 feeds in the Master inventory</p>
+          </div>
+
+          <div class="library-layout">
+            <aside class="filter-panel" aria-label="Feed library filters">
+              <div class="filter-panel-top">
+                <span class="filter-label">Viewing</span>
+                <span class="filter-live"><span class="mini-dot" aria-hidden="true"></span> live manifest</span>
+              </div>
+              <div class="profile-tabs" role="tablist" aria-label="Import profiles">
+                <button class="profile-tab is-active" type="button" role="tab" aria-selected="true" data-profile="master">
+                  <span><b>Master</b><small>full coverage</small></span><strong data-profile-count="master">672</strong>
+                </button>
+                <button class="profile-tab" type="button" role="tab" aria-selected="false" data-profile="iphone-air">
+                  <span><b>iPhone Air</b><small>recommended daily</small></span><strong data-profile-count="iphone-air">125</strong>
+                </button>
+                <button class="profile-tab" type="button" role="tab" aria-selected="false" data-profile="iphone-lite">
+                  <span><b>iPhone Lite</b><small>lower-noise mobile</small></span><strong data-profile-count="iphone-lite">120</strong>
+                </button>
+              </div>
+
+              <div class="filter-divider"></div>
+              <div class="filter-label">Narrow the shelf</div>
+              <div class="section-tabs" role="tablist" aria-label="Feed sections">
+                <button class="section-tab is-active" type="button" data-section="all" aria-selected="true"><span>All sources</span><strong data-section-count="all">672</strong></button>
+                <button class="section-tab" type="button" data-section="Finance" aria-selected="false"><span>Finance</span><strong data-section-count="Finance">556</strong></button>
+                <button class="section-tab" type="button" data-section="Cyber Security" aria-selected="false"><span>Cyber Security</span><strong data-section-count="Cyber Security">116</strong></button>
+              </div>
+
+              <label class="search-field" for="feed-search">
+                <span aria-hidden="true">⌕</span>
+                <input id="feed-search" type="search" placeholder="Search feeds" autocomplete="off" />
+                <kbd>/</kbd>
+              </label>
+
+              <div class="filter-panel-footer">
+                <span class="legend-dot legend-alert" aria-hidden="true"></span>
+                <span>notification on</span>
+                <span class="legend-dot legend-quiet" aria-hidden="true"></span>
+                <span>reading / digest</span>
+              </div>
+            </aside>
+
+            <div class="library-main">
+              <div class="library-toolbar">
+                <div>
+                  <span class="toolbar-kicker" id="active-profile-kicker">MASTER INVENTORY</span>
+                  <strong id="active-profile-title">672 feeds arranged in folders</strong>
+                </div>
+                <span class="toolbar-result" id="toolbar-result">9 folders · 2 sections</span>
+              </div>
+              <div class="feed-list" id="feed-list" aria-live="polite">
+                <div class="loading-state"><span class="loading-dot"></span> Loading the manifest…</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="profiles-section" id="profiles" aria-labelledby="profiles-title">
+          <div class="section-heading section-heading-dark">
+            <div>
+              <p class="eyebrow eyebrow-light">Choose your pocket</p>
+              <h2 id="profiles-title">Two phone-sized cuts. One complete library.</h2>
+            </div>
+            <p class="section-heading-note">Import one profile at a time — OPML imports are additive.</p>
+          </div>
+          <div class="profile-cards" id="profile-cards">
+            <article class="profile-card profile-card-air">
+              <div class="profile-card-top"><span class="profile-card-index">01</span><span class="profile-badge">Recommended</span></div>
+              <p class="profile-card-kicker">iPhone Air</p>
+              <h3>Broad enough for the morning. Quiet enough for the day.</h3>
+              <div class="profile-card-count"><strong>127</strong><span>feeds</span></div>
+              <a class="profile-card-link" href="artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml">Download OPML <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="profile-card profile-card-lite">
+              <div class="profile-card-top"><span class="profile-card-index">02</span><span class="profile-badge badge-muted">Lightweight</span></div>
+              <p class="profile-card-kicker">iPhone Lite</p>
+              <h3>A smaller refresh for focused reading on the move.</h3>
+              <div class="profile-card-count"><strong>120</strong><span>feeds</span></div>
+              <a class="profile-card-link" href="artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml">Download OPML <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="profile-card profile-card-master">
+              <div class="profile-card-top"><span class="profile-card-index">03</span><span class="profile-badge badge-muted">Full shelf</span></div>
+              <p class="profile-card-kicker">Master</p>
+              <h3>The complete research shelf for rebuilding every profile.</h3>
+              <div class="profile-card-count"><strong>672</strong><span>feeds</span></div>
+              <a class="profile-card-link" href="artifacts/opml/NetNewsWire-Finance-Cyber.opml">Download OPML <span aria-hidden="true">↗</span></a>
+            </article>
+          </div>
+        </section>
+
+        <section class="import-section" id="import" aria-labelledby="import-title">
+          <div class="import-intro">
+            <p class="eyebrow">From this page to your iPhone</p>
+            <h2 id="import-title">A three-minute setup for a calmer feed reader.</h2>
+            <p>Pick a profile, download its OPML file, and let NetNewsWire handle the rest.</p>
+          </div>
+          <div class="import-steps">
+            <div class="import-step"><span>01</span><div><h3>Choose</h3><p>Start with <a href="#profiles">iPhone Air</a> for the recommended daily mix, or go lighter.</p></div></div>
+            <div class="import-step"><span>02</span><div><h3>Import</h3><p>In NetNewsWire: Feeds → Settings → Import Subscriptions.</p></div></div>
+            <div class="import-step"><span>03</span><div><h3>Read</h3><p>Refresh once and find the Finance and Cyber Security folders already in place.</p></div></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-brand"><span class="brand-mark small-mark" aria-hidden="true"><span></span></span><span>NetNewsWire Finance + Cyber RSS</span></div>
+        <p>MIT free software · privacy-conscious RSS organization · <a href="https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS" target="_blank" rel="noreferrer">live README</a> · <a href="https://zerodevllc.eu/rss" target="_blank" rel="noreferrer">Cloudflare monitor</a></p>
+        <a class="back-to-top" href="#top">Back to top ↑</a>
+      </footer>
+    </div>
+  </body>
+</html>

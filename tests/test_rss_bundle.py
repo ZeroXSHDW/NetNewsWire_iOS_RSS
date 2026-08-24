@@ -4,12 +4,14 @@ import json
 import importlib.util
 import copy
 import os
+import plistlib
 import subprocess
 import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from unittest import mock
 from zoneinfo import ZoneInfo
 
 from bundle_config import (
@@ -36,9 +38,275 @@ from rss_validation import (
     similar_titles,
     source_table_entries,
 )
+from runtime_health import write_health
+import state_utils
+from state_utils import atomic_write_text, directory_lock
 
 
 ROOT = Path(__file__).resolve().parents[1]
+_PROJECT_STATUS_SPEC = importlib.util.spec_from_file_location(
+    "project_status_cli",
+    ROOT / "project-status.py",
+)
+if _PROJECT_STATUS_SPEC is None or _PROJECT_STATUS_SPEC.loader is None:
+    raise RuntimeError("cannot load project-status.py")
+_PROJECT_STATUS_MODULE = importlib.util.module_from_spec(_PROJECT_STATUS_SPEC)
+_PROJECT_STATUS_SPEC.loader.exec_module(_PROJECT_STATUS_MODULE)
+build_status = _PROJECT_STATUS_MODULE.build_status
+_HOURLY_RUNNER_SPEC = importlib.util.spec_from_file_location(
+    "hourly_digest_runner",
+    ROOT / "run-hourly-rss-digest.py",
+)
+if _HOURLY_RUNNER_SPEC is None or _HOURLY_RUNNER_SPEC.loader is None:
+    raise RuntimeError("cannot load run-hourly-rss-digest.py")
+_HOURLY_RUNNER_MODULE = importlib.util.module_from_spec(_HOURLY_RUNNER_SPEC)
+_HOURLY_RUNNER_SPEC.loader.exec_module(_HOURLY_RUNNER_MODULE)
+
+
+class ProjectStatusTest(unittest.TestCase):
+    def test_status_matches_manifest_and_committed_snapshots(self) -> None:
+        status = build_status(ROOT)
+        manifest = load_manifest(ROOT / "feed-manifest.json")
+
+        self.assertIn(status["status"], {"ready", "attention"})
+        self.assertEqual(status["manifest"]["feed_count"], len(manifest["feeds"]))
+        self.assertEqual(
+            sum(status["manifest"]["section_counts"].values()),
+            len(manifest["feeds"]),
+        )
+        self.assertEqual(status["profiles"]["master"]["feed_count"], len(manifest["feeds"]))
+        self.assertEqual(
+            status["artifacts"]["present_count"],
+            status["artifacts"]["expected_count"],
+        )
+        self.assertEqual(
+            status["validation"]["master"]["feed_count"],
+            status["profiles"]["master"]["feed_count"],
+        )
+
+    def test_status_contains_machine_readable_validation_details(self) -> None:
+        status = build_status(ROOT)
+        self.assertIn("findings", status)
+        self.assertIn("validation", status)
+        self.assertIn("generated_at_local", status["validation"]["master"])
+
+    def test_status_does_not_call_attention_entries_failed(self) -> None:
+        report = {
+            "summary": {"failed_feed_count": 1},
+            "feeds": [],
+            "failed_feeds": [
+                {"feed_title": "Broken feed", "passed": "no"},
+                {"feed_title": "Tolerated future feed", "passed": "yes"},
+            ],
+        }
+        details = _PROJECT_STATUS_MODULE._report_summary(
+            report,
+            expected_count=2,
+            path=ROOT / "report.json",
+            root=ROOT,
+        )
+        self.assertEqual(details["failed_count"], 1)
+        self.assertEqual(details["failure_names"], ["Broken feed"])
+        self.assertEqual(details["attention_count"], 2)
+
+
+class RuntimeReliabilityTest(unittest.TestCase):
+    def test_atomic_write_preserves_previous_value_when_replace_is_interrupted(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            destination = Path(temporary) / "state.json"
+            destination.write_text("old\n", encoding="utf-8")
+            with mock.patch.object(state_utils.os, "replace", side_effect=OSError("interrupted")):
+                with self.assertRaises(OSError):
+                    atomic_write_text(destination, "new\n")
+            self.assertEqual(destination.read_text(encoding="utf-8"), "old\n")
+            self.assertEqual(list(destination.parent.glob(f".{destination.name}.*.tmp")), [])
+
+    def test_health_preserves_last_success_after_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            health_path = directory / "health.json"
+            package_path = directory / "package.json"
+            package_path.write_text(
+                json.dumps(
+                    {
+                        "article_count": 3,
+                        "collection": {
+                            "status": "partial",
+                            "source_profile": "master",
+                            "feeds_considered": 10,
+                            "feeds_succeeded": 9,
+                            "feeds_failed": 1,
+                            "article_candidates": 12,
+                        },
+                        "articles": [
+                            {
+                                "title": "PRIVATE ARTICLE BODY",
+                                "summary": "should never enter health.json",
+                                "link": "https://example.test/private",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            write_health(
+                health_path,
+                status="running",
+                run_id="run-1",
+                started_at="2026-08-24T08:00:00+00:00",
+            )
+            write_health(
+                health_path,
+                status="succeeded",
+                run_id="run-1",
+                started_at="2026-08-24T08:00:00+00:00",
+                finished_at="2026-08-24T08:01:00+00:00",
+                package_path=package_path,
+            )
+            write_health(
+                health_path,
+                status="failed",
+                run_id="run-2",
+                started_at="2026-08-24T08:30:00+00:00",
+                finished_at="2026-08-24T08:30:05+00:00",
+                exit_code=124,
+                message="timeout",
+            )
+            payload = json.loads(health_path.read_text(encoding="utf-8"))
+            health_text = health_path.read_text(encoding="utf-8")
+
+        self.assertEqual(payload["status"], "failed")
+        self.assertEqual(payload["last_success_run_id"], "run-1")
+        self.assertEqual(payload["article_count"], None)
+        self.assertNotIn("PRIVATE ARTICLE BODY", health_text)
+        self.assertNotIn("should never enter health.json", health_text)
+
+    def test_interrupted_state_transaction_restores_previous_state(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            state_path = directory / "fetch-state.json"
+            transaction = directory / ".hourly-commit.crashed"
+            transaction.mkdir()
+            state_path.write_text("new\n", encoding="utf-8")
+            (transaction / "fetch-state.backup").write_text("old\n", encoding="utf-8")
+            (transaction / "journal.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "status": "prepared",
+                        "states": [
+                            {
+                                "destination": str(state_path),
+                                "present": True,
+                                "backup": "fetch-state.backup",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            _HOURLY_RUNNER_MODULE._recover_state_transactions(directory)
+            self.assertEqual(state_path.read_text(encoding="utf-8"), "old\n")
+            self.assertFalse(transaction.exists())
+
+    def test_pipeline_lock_rejects_a_second_owner(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            lock_directory = Path(temporary) / ".hourly-run.lock"
+            with directory_lock(lock_directory):
+                with self.assertRaises(TimeoutError):
+                    with directory_lock(lock_directory, timeout_seconds=0):
+                        pass
+
+    def test_pipeline_lock_does_not_steal_an_ownerless_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            lock_directory = Path(temporary) / ".hourly-run.lock"
+            lock_directory.mkdir()
+            with self.assertRaises(TimeoutError):
+                with directory_lock(lock_directory, timeout_seconds=0):
+                    pass
+
+    def test_shortcut_runner_returns_timeout_without_accepting_stale_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            fake_bin = directory / "bin"
+            fake_bin.mkdir()
+            shortcut_command = fake_bin / "shortcuts"
+            shortcut_command.write_text("#!/bin/sh\nsleep 1\n", encoding="utf-8")
+            shortcut_command.chmod(0o755)
+            input_path = directory / "input.txt"
+            output_path = directory / "output.txt"
+            input_path.write_text("input\n", encoding="utf-8")
+            output_path.write_text("stale\n", encoding="utf-8")
+            environment = os.environ.copy()
+            environment["PATH"] = f"{fake_bin}:{environment.get('PATH', '')}"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "automation/run-shortcut.py"),
+                    "Digest",
+                    str(input_path),
+                    str(output_path),
+                    "--timeout",
+                    "0.05",
+                ],
+                cwd=ROOT,
+                env=environment,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 124)
+            self.assertFalse(output_path.exists())
+
+    def test_hourly_wrapper_trims_active_log_after_a_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            environment = os.environ.copy()
+            environment.update(
+                {
+                    "NETNEWSWIRE_DIGEST_DIR": str(directory),
+                    "NETNEWSWIRE_LOG_PATH": str(directory / "hourly.log"),
+                    "NETNEWSWIRE_LOG_MAX_BYTES": "10",
+                    "NETNEWSWIRE_SOURCE_PROFILE": "does-not-exist",
+                    "PYTHON_BIN": sys.executable,
+                }
+            )
+            result = subprocess.run(
+                ["/bin/sh", str(ROOT / "automation/run-hourly-digest.sh")],
+                cwd=ROOT,
+                env=environment,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertLessEqual((directory / "hourly.log").stat().st_size, 10)
+            health = json.loads((directory / "health.json").read_text(encoding="utf-8"))
+            self.assertEqual(health["status"], "failed")
+            self.assertFalse((directory / ".hourly-run.lock").exists())
+
+    def test_launch_agent_template_contains_timeout_and_bounded_log_settings(self) -> None:
+        template = (
+            ROOT / "automation/com.netnewswire.finance-cyber.hourly-digest.plist.template"
+        ).read_text(encoding="utf-8")
+        for marker, value in {
+            "__STAGED_ROOT__": "/tmp/hourly-app",
+            "__RUNTIME_DIR__": "/tmp/hourly-runtime",
+            "__PYTHON_BIN__": "/usr/bin/python3",
+            "__INTERVAL__": "1800",
+            "__JOB_TIMEOUT__": "3600",
+            "__SHORTCUT_NAME__": "Digest",
+            "__SHORTCUT_TIMEOUT__": "900",
+            "__LOG_MAX_BYTES__": "1048576",
+        }.items():
+            template = template.replace(marker, value)
+        payload = plistlib.loads(template.encode("utf-8"))
+        self.assertEqual(payload["TimeOut"], 3600)
+        self.assertEqual(payload["ThrottleInterval"], 60)
+        self.assertEqual(
+            payload["EnvironmentVariables"]["NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS"],
+            "900",
+        )
+        self.assertTrue(payload["StandardOutPath"].endswith("/hourly.log"))
+
 
 
 class ValidationHelpersTest(unittest.TestCase):
@@ -107,6 +375,18 @@ class ValidationHelpersTest(unittest.TestCase):
         _, items = extract_feed(root, base_url="https://example.test/rss/feed.xml")
         self.assertEqual(items[0]["link"], "https://example.test/news/archived-release")
 
+    def test_rss_prefers_relative_title_anchor_over_malformed_link(self) -> None:
+        root = ET.fromstring(
+            """<rss version="2.0"><channel><title>Example</title>
+              <item><title><a href="/news/official-release">Official release</a></title>
+              <link>https://example.test/%3Ca%20href%3D%22/news/official-release%22%3EOfficial%20release%3C/a%3E</link>
+              <pubDate>Fri, 08/14/2026 - 16:01</pubDate></item>
+            </channel></rss>"""
+        )
+        _, items = extract_feed(root, base_url="https://example.test/rss.xml")
+        self.assertEqual(items[0]["link"], "https://example.test/news/official-release")
+        self.assertEqual(items[0]["date"].isoformat(), "2026-08-14T16:01:00+00:00")
+
     def test_rss_extraction_uses_direct_channel_items(self) -> None:
         root = ET.fromstring(
             """<rss version="2.0"><channel><title>Example</title>
@@ -136,6 +416,37 @@ class ValidationHelpersTest(unittest.TestCase):
         )
         _, items = extract_feed(root)
         self.assertEqual(items[0]["date"].isoformat(), "2026-07-30T05:20:00+00:00")
+
+    def test_cbsl_rss_uses_only_explicit_report_dates_when_item_dates_are_omitted(self) -> None:
+        root = ET.fromstring(
+            """<rss version="2.0"><channel><title>Central Bank of Sri Lanka</title>
+              <item><title>Weekly Economic Indicators -21 August 2026</title>
+              <link>https://www.cbsl.gov.lk/sites/default/files/WEI_20260821_e.pdf</link></item>
+              <item><title>Monthly Economic Indicators - June 2026</title>
+              <link>https://www.cbsl.gov.lk/sites/default/files/MEI_202606_e.pdf</link></item>
+              <item><title>Monetary Policy Review - No. 4 of 2026</title>
+              <link>https://www.cbsl.gov.lk/sites/default/files/press_20260722_Monetary_Policy_Review.pdf</link></item>
+            </channel></rss>"""
+        )
+        _, items = extract_feed(root, base_url="https://www.cbsl.gov.lk/en/statistics/economic-indicators/weirss")
+        self.assertEqual(
+            [item["date"].isoformat() for item in items],
+            [
+                "2026-08-21T00:00:00+00:00",
+                "2026-06-01T00:00:00+00:00",
+                "2026-07-22T00:00:00+00:00",
+            ],
+        )
+
+    def test_embedded_date_fallback_is_not_used_for_other_hosts(self) -> None:
+        root = ET.fromstring(
+            """<rss version="2.0"><channel><title>Other</title>
+              <item><title>Weekly Economic Indicators -21 August 2026</title>
+              <link>https://example.test/WEI_20260821_e.pdf</link></item>
+            </channel></rss>"""
+        )
+        _, items = extract_feed(root, base_url="https://example.test/feed.xml")
+        self.assertIsNone(items[0]["date"])
 
     def test_normalization_removes_tracking_and_punctuation(self) -> None:
         self.assertEqual(
@@ -344,7 +655,7 @@ class ManifestConfigurationTest(unittest.TestCase):
     def test_device_profile_inheritance_and_budget_are_explicit(self) -> None:
         manifest = load_manifest(ROOT / "feed-manifest.json")
         self.assertEqual(profile_inheritance(manifest, "iphone-air"), ("iphone-lite",))
-        self.assertEqual(profile_device_budget(profile_settings(manifest)["iphone-air"])["max_feeds"], 125)
+        self.assertEqual(profile_device_budget(profile_settings(manifest)["iphone-air"])["max_feeds"], 127)
         self.assertEqual(profile_digest_budget(profile_settings(manifest)["iphone-air"])["max_items"], 30)
         invalid = copy.deepcopy(manifest)
         invalid["profiles"]["iphone-air"]["device_budget"]["max_single_payload_bytes"] = 5 * 1024 * 1024
@@ -426,10 +737,10 @@ class GeneratedArtifactsTest(unittest.TestCase):
             artifacts[profile] = (opml, table)
 
         self.assertEqual(len(artifacts["master"][0]), len(manifest["feeds"]))
-        self.assertEqual(len(artifacts["iphone-lite"][0]), 118)
+        self.assertEqual(len(artifacts["iphone-lite"][0]), 120)
         self.assertEqual(len(artifacts["iphone-air"][0]), 125)
         air_budget = profile_device_budget(profiles["iphone-air"])
-        self.assertEqual(air_budget["max_feeds"], 125)
+        self.assertEqual(air_budget["max_feeds"], 127)
         promoted_ids = {
             "finance-02-core-official-macro-federal-reserve-other-announcements",
             "finance-02-core-official-macro-federal-reserve-banking-applications",
@@ -443,6 +754,9 @@ class GeneratedArtifactsTest(unittest.TestCase):
             "finance-02-core-official-macro-banca-ditalia-news-english",
             "finance-02-core-official-macro-norges-bank-press-releases",
             "finance-01-core-market-trading-euronext-market-status",
+            "finance-04-optional-global-data-research-cvm-legislation",
+            "finance-04-optional-global-data-research-cvm-collegiate-bulletins",
+            "finance-04-optional-global-data-research-singapore-food-agency-food-alerts-recalls",
         }
         for feed in manifest["feeds"]:
             if feed["id"] in promoted_ids:
@@ -471,6 +785,12 @@ class GeneratedArtifactsTest(unittest.TestCase):
         )
         self.assertFalse(profile_includes_feed(manifest, "iphone-lite", bbc_business))
         self.assertFalse(profile_includes_feed(manifest, "iphone-air", bbc_business))
+        cyberscoop = next(
+            feed for feed in manifest["feeds"]
+            if feed["id"] == "cyber-security-02-core-news-incident-reporting-cyberscoop"
+        )
+        self.assertFalse(profile_includes_feed(manifest, "iphone-lite", cyberscoop))
+        self.assertFalse(profile_includes_feed(manifest, "iphone-air", cyberscoop))
         un_news = next(
             feed for feed in manifest["feeds"]
             if feed["id"] == "finance-04-optional-global-data-research-un-news-economic-development"
@@ -582,7 +902,7 @@ class GeneratedArtifactsTest(unittest.TestCase):
                 if feed["id"] == "finance-01-core-market-trading-nasdaq-trader-trade-halts"
             )
             self.assertTrue(trade_halt_matrix["profiles"]["iphone-air"])
-            self.assertEqual(matrix["profiles"]["iphone-air"]["device_budget"]["max_feeds"], 125)
+            self.assertEqual(matrix["profiles"]["iphone-air"]["device_budget"]["max_feeds"], 127)
             self.assertIn("## Import checklist", table_path.read_text(encoding="utf-8"))
 
     def test_manifest_lint_accepts_committed_artifacts(self) -> None:
@@ -611,6 +931,9 @@ class GeneratedArtifactsTest(unittest.TestCase):
         air_file = ROOT / profile_settings(manifest)["iphone-air"]["opml_file"]
         handoff_file = ROOT / "artifacts" / "AirDrop" / air_file.name
         self.assertEqual(air_file.read_bytes(), handoff_file.read_bytes())
+        handoff_readme = ROOT / "artifacts" / "AirDrop" / "README.txt"
+        self.assertIn("125 feeds", handoff_readme.read_text(encoding="utf-8"))
+        self.assertNotIn("50 feeds", handoff_readme.read_text(encoding="utf-8"))
 
     def test_report_generator_is_import_safe_and_writes_portable_paths(self) -> None:
         module_path = ROOT / "generate-rss-validation-report.py"
@@ -1281,6 +1604,34 @@ class DigestPreparationTest(unittest.TestCase):
             self.assertNotIn("Traceback", result.stderr)
             self.assertFalse(output_path.exists())
 
+    def test_digest_rejects_future_state_version_without_resetting_it(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            input_path = directory / "articles.json"
+            state_path = directory / "state.json"
+            input_path.write_text("[]\n", encoding="utf-8")
+            original = '{"version": 99, "last_run": "", "seen": {}}\n'
+            state_path.write_text(original, encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "prepare-rss-digest-input.py"),
+                    "--input",
+                    str(input_path),
+                    "--state",
+                    str(state_path),
+                    "--output",
+                    str(directory / "digest.json"),
+                    "--dry-run",
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("version must be 1 or 2", result.stderr)
+            self.assertEqual(state_path.read_text(encoding="utf-8"), original)
+
 
 class ValidationHistoryTest(unittest.TestCase):
     def test_history_counts_consecutive_failures_and_resets(self) -> None:
@@ -1312,6 +1663,38 @@ class ValidationHistoryTest(unittest.TestCase):
             subprocess.run(command, check=True, cwd=ROOT)
             history = json.loads(history_path.read_text(encoding="utf-8"))
             self.assertEqual(history["profiles"]["master"]["consecutive_failures"], 0)
+
+    def test_history_rejects_future_schema_version_without_resetting_it(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            report_path = directory / "report.json"
+            history_path = directory / "history.json"
+            report_path.write_text(
+                json.dumps({"summary": {"failed_feed_count": 0}}),
+                encoding="utf-8",
+            )
+            original = '{"version": 99, "profiles": {}}\n'
+            history_path.write_text(original, encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "record-validation-result.py"),
+                    "--report",
+                    str(report_path),
+                    "--history",
+                    str(history_path),
+                    "--profile",
+                    "master",
+                    "--healthy",
+                    "yes",
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("version must be 1 or 2", result.stdout)
+            self.assertEqual(history_path.read_text(encoding="utf-8"), original)
 
     def test_history_rejects_stale_current_report(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help generate package hourly-digest lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check check-frozen
+.PHONY: help doctor doctor-live status generate package hourly-digest lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check check-frozen
 
 PYTHON ?= python3
 MANIFEST := feed-manifest.json
@@ -13,6 +13,9 @@ AIRDROP_ROOT := artifacts/AirDrop
 help:
 	@printf '%s\n' \
 		'NetNewsWire Finance + Cyber bundle' \
+		'  make doctor        Check local prerequisites for offline work' \
+		'  make doctor-live   Check prerequisites including curl and xmllint' \
+		'  make status        Show manifest, artifact and validation snapshot status' \
 		'  make package       Generate all profiles and refresh the AirDrop handoff' \
 		'  make check         Run offline generation, lint, docs, hygiene and tests' \
 		'  make hygiene       Scan tracked files for secrets, local paths and runtime state' \
@@ -20,16 +23,26 @@ help:
 		'  make validate      Run live validation for the Master profile' \
 		'  make validate-lite Run live validation for iPhone Lite' \
 		'  make validate-air  Run live validation for iPhone Air' \
-		'  make generate      Regenerate OPML and source-table artifacts only' \
+		'  make generate      Regenerate all manifest-backed generated artifacts' \
 		'  make check-frozen  Run non-mutating checks against the frozen artifacts' \
 		'  make hourly-digest Collect manifest feeds and prepare the Apple Intelligence handoff'
 
 RUNTIME_DIR ?= .runtime/hourly
 
+doctor:
+	$(PYTHON) check-environment.py --root .
+
+doctor-live:
+	$(PYTHON) check-environment.py --root . --live
+
+status:
+	$(PYTHON) project-status.py --root .
+
 generate:
 	$(PYTHON) generate-bundle.py --manifest $(MANIFEST) --all \
 		--notification-table $(NOTIFICATION_ROOT)/NetNewsWire-Notification-Profile.md \
-		--notification-json $(NOTIFICATION_ROOT)/NetNewsWire-Notification-Profile.json
+		--notification-json $(NOTIFICATION_ROOT)/NetNewsWire-Notification-Profile.json \
+		--airdrop-readme $(AIRDROP_ROOT)/README.txt
 
 package: generate
 	mkdir -p $(AIRDROP_ROOT)
@@ -52,7 +65,7 @@ compile:
 	$(PYTHON) -m compileall -q .
 
 syntax:
-	zsh -n validate-rss-bundle.sh
+	zsh -n validate-rss-bundle.sh automation/run-hourly-digest.sh automation/install-hourly-digest-launch-agent.sh
 
 lint:
 	$(PYTHON) validate-manifest.py --manifest $(MANIFEST) --root .
@@ -64,21 +77,21 @@ hygiene:
 	$(PYTHON) check-repository-hygiene.py --root .
 
 validate:
-	./validate-rss-bundle.sh
+	PYTHON_BIN="$(PYTHON)" ./validate-rss-bundle.sh
 
 validate-lite:
 	VALIDATION_PROFILE=iphone-lite \
 	SOURCE_TABLE_FILE=$(SOURCE_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
 	REPORT_MARKDOWN_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.md \
 	REPORT_JSON_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite-VALIDATION-REPORT.json \
-	./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite.opml
+	PYTHON_BIN="$(PYTHON)" ./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Lite.opml
 
 validate-air:
 	VALIDATION_PROFILE=iphone-air \
 	SOURCE_TABLE_FILE=$(SOURCE_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
 	REPORT_MARKDOWN_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.md \
 	REPORT_JSON_FILE=$(REPORT_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json \
-	./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml
+	PYTHON_BIN="$(PYTHON)" ./validate-rss-bundle.sh $(OPML_ROOT)/NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
 validate-all:
 	$(MAKE) validate

@@ -8,8 +8,8 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 
 | Profile | Recommended | Feeds | On | Optional | Optional French | Off |
 |---|---|---:|---:|---:|---:|---:|
-| Master | No | 536 | 4 | 12 | 1 | 519 |
-| iPhone Lite | No | 118 | 4 | 9 | 1 | 104 |
+| Master | No | 672 | 4 | 12 | 1 | 655 |
+| iPhone Lite | No | 120 | 4 | 9 | 1 | 106 |
 | iPhone Air | Yes | 125 | 4 | 9 | 1 | 111 |
 
 ## Policy meanings
@@ -29,8 +29,21 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 01 — Core — Market & Trading | Nasdaq Trader — Equity Trader Alerts | Yes | Yes | Yes | Off; summarize | regulatory/event |
 | Finance | 01 — Core — Market & Trading | Euronext — Market Status | Yes | Yes | Yes | Off; summarize | market-operations-alert |
 | Finance | 01 — Core — Market & Trading | Euronext Athens — Market Notices | Yes | No | No | Off; summarize | exchange-notices |
+| Finance | 01 — Core — Market & Trading | HKEX — News Releases | Yes | No | No | Off; summarize | exchange/market-development |
+| Finance | 01 — Core — Market & Trading | HKEX — Regulatory Announcements | Yes | No | No | Off; summarize | exchange-regulation/enforcement |
+| Finance | 01 — Core — Market & Trading | HKEX — Market Communications | Yes | No | No | Off; summarize | exchange/market-operations |
+| Finance | 01 — Core — Market & Trading | HKEX — SEHK Trading Rules | Yes | No | No | Off; summarize | exchange-rule-change |
+| Finance | 01 — Core — Market & Trading | JPX — Market News | Yes | No | No | Off; summarize | exchange-market-news |
+| Finance | 01 — Core — Market & Trading | JPX — News Releases | Yes | No | No | Off; summarize | exchange-news-release |
+| Finance | 01 — Core — Market & Trading | JPX — Equity Trading Halts | Yes | No | No | Off; summarize | exchange-alert |
+| Finance | 01 — Core — Market & Trading | JPX — Derivatives Trading Halts | Yes | No | No | Off; summarize | exchange-alert |
+| Finance | 01 — Core — Market & Trading | JPX — Alerts on Unclear Information | Yes | No | No | Off; summarize | exchange-market-integrity-alert |
+| Finance | 01 — Core — Market & Trading | TWSE — News (Chinese) | Yes | No | No | Off; summarize | exchange-market-news |
+| Finance | 01 — Core — Market & Trading | TWSE — Rules & Regulations News (English) | Yes | No | No | Off; summarize | exchange-rule-change |
+| Finance | 01 — Core — Market & Trading | TAIFEX — Press Releases (English) | Yes | No | No | Off; summarize | derivatives-exchange-news |
+| Finance | 01 — Core — Market & Trading | TAIFEX — Notices (English) | Yes | No | No | Off; summarize | derivatives-exchange-notice |
 | Finance | 01 — Core — Market & Trading | BBC — Business | Yes | No | No | Off; summarize | context |
-| Finance | 01 — Core — Market & Trading | Bloomberg — Markets | Yes | No | Yes | Off; summarize | market |
+| Finance | 01 — Core — Market & Trading | Bloomberg — Markets | Yes | No | No | Off; summarize | market |
 | Finance | 01 — Core — Market & Trading | Financial Times — Markets | Yes | No | No | Off; summarize | market/research |
 | Finance | 01 — Core — Market & Trading | MarketWatch — Top Stories | Yes | No | No | Off; summarize | market |
 | Finance | 01 — Core — Market & Trading | RTÉ — Business | Yes | No | No | Off; summarize | context |
@@ -86,6 +99,9 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 02 — Core — Official & Macro | Federal Reserve — Speeches | Yes | Yes | Yes | Off; summarize | policy/research |
 | Finance | 02 — Core — Official & Macro | Bank of Korea — Press Releases | Yes | No | No | Off; summarize | central-bank/policy |
 | Finance | 02 — Core — Official & Macro | Bank of Korea — Monetary Policy Decisions | Yes | No | No | Off; summarize | central-bank/monetary-policy |
+| Finance | 02 — Core — Official & Macro | Korea Financial Services Commission — Press Releases (Korean) | Yes | No | No | Off; summarize | financial-regulator/policy |
+| Finance | 02 — Core — Official & Macro | Korea Financial Services Commission — Explanations (Korean) | Yes | No | No | Off; summarize | financial-regulator/clarification |
+| Finance | 02 — Core — Official & Macro | Korea Financial Services Commission — Notices (Korean) | Yes | No | No | Off; summarize | financial-regulator/notice |
 | Finance | 02 — Core — Official & Macro | Bangko Sentral ng Pilipinas — Media Releases | Yes | No | No | Off; summarize | central-bank/press |
 | Finance | 02 — Core — Official & Macro | Bangko Sentral ng Pilipinas — Issuances | Yes | No | No | Off; summarize | central-bank/regulatory |
 | Finance | 02 — Core — Official & Macro | Bangko Sentral ng Pilipinas — Public Advisories | Yes | No | No | Off; summarize | central-bank/advisory |
@@ -110,7 +126,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 02 — Core — Official & Macro | NFA — Regulatory Actions | Yes | No | No | Off; summarize | derivatives-regulation/enforcement |
 | Finance | 02 — Core — Official & Macro | FDIC — Press Releases | Yes | No | No | Off; summarize | deposit-insurance/banking-regulation |
 | Finance | 02 — Core — Official & Macro | Bank of Canada — Press Releases | Yes | Yes | Yes | Off; summarize | central-bank/news |
-| Finance | 02 — Core — Official & Macro | OSFI — News | Yes | No | No | Off; summarize | prudential-supervision/financial-stability |
+| Finance | 02 — Core — Official & Macro | OSFI — News | Yes | Yes | Yes | Off; summarize | prudential-supervision/financial-stability |
 | Finance | 02 — Core — Official & Macro | Bank of Canada — Market Notices | Yes | Yes | Yes | Off; summarize | market-infrastructure/official-notices |
 | Finance | 02 — Core — Official & Macro | Bank of Canada — Regulatory News | Yes | No | No | Off; summarize | payments-regulation/enforcement |
 | Finance | 02 — Core — Official & Macro | FINTRAC — News | Yes | Yes | Yes | Off; summarize | financial-crime/intelligence |
@@ -184,6 +200,10 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | Asian Development Bank — News Releases | Yes | No | No | Off; summarize | development-finance/news |
 | Finance | 04 — Optional — Global Data & Research | Asian Development Bank — Publications | Yes | No | No | Off; summarize | development-finance/publication |
 | Finance | 04 — Optional — Global Data & Research | Banco de la República — News & Research (Spanish) | Yes | No | No | Off; summarize | central-bank/news-research |
+| Finance | 04 — Optional — Global Data & Research | Banco de la República — News & Research (English route) | Yes | No | No | Off; summarize | central-bank/news-research |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of Sri Lanka — Monetary Policy Review | Yes | No | No | Off; summarize | central-bank/monetary-policy |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of Sri Lanka — Weekly Economic Indicators | Yes | No | No | Off; summarize | central-bank/macro-data |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of Sri Lanka — Monthly Economic Indicators | Yes | No | No | Off; summarize | central-bank/macro-data |
 | Finance | 04 — Optional — Global Data & Research | Reserve Bank of Australia — Daily Exchange Rates | Yes | No | No | Off; summarize | central-bank/market-data |
 | Finance | 04 — Optional — Global Data & Research | Reserve Bank of Australia — Media Releases | Yes | Yes | Yes | Off; summarize | central-bank/news |
 | Finance | 04 — Optional — Global Data & Research | Reserve Bank of Australia — Speeches | Yes | Yes | Yes | Off; summarize | central-bank/speeches |
@@ -214,6 +234,9 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | European Investment Bank — News | Yes | Yes | Yes | Off; summarize | development-finance/context |
 | Finance | 04 — Optional — Global Data & Research | European Investment Bank — Publications | Yes | No | No | Off; summarize | development-finance/research |
 | Finance | 04 — Optional — Global Data & Research | European Investment Bank — Blog | Yes | No | No | Off; summarize | development-finance/analysis |
+| Finance | 04 — Optional — Global Data & Research | European Investment Bank — Projects to be Financed | Yes | No | No | Off; summarize | development-finance/project-pipeline |
+| Finance | 04 — Optional — Global Data & Research | European Investment Bank — Project Procurement | Yes | No | No | Off; summarize | development-finance/procurement |
+| Finance | 04 — Optional — Global Data & Research | European Investment Bank — Board and Institutional Events | Yes | No | No | Off; summarize | development-finance/calendar |
 | Finance | 04 — Optional — Global Data & Research | Apple — Newsroom | Yes | Yes | Yes | Off; summarize | technology/platform-policy |
 | Finance | 04 — Optional — Global Data & Research | Apple Developer — News | Yes | No | No | Off; summarize | technology/developer-platform |
 | Finance | 04 — Optional — Global Data & Research | European Commission — Harmonised Standards | Yes | No | No | Off; summarize | product-standards/regulatory-compliance |
@@ -284,6 +307,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | European Food Safety Authority — News | Yes | No | No | Off; summarize | food-safety/science |
 | Finance | 04 — Optional — Global Data & Research | European Food Safety Authority — Publications | Yes | No | No | Off; summarize | food-safety/research |
 | Finance | 04 — Optional — Global Data & Research | European Patent Office — News | Yes | No | No | Off; summarize | intellectual-property/innovation |
+| Finance | 04 — Optional — Global Data & Research | European Patent Office — Communications from the Boards of Appeal | Yes | No | No | Off; summarize | intellectual-property/patent-law |
 | Finance | 05 — Optional — UK Regulation & Warnings | Bank of England — Prudential Regulation Publications | Yes | No | No | Off; summarize | prudential-regulation |
 | Finance | 05 — Optional — UK Regulation & Warnings | FCA — News | Yes | No | No | Off; summarize | regulatory/news |
 | Finance | 05 — Optional — UK Regulation & Warnings | FCA — Scam Warnings | Yes | Yes | Yes | Off; summarize | regulatory/alert |
@@ -313,6 +337,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | CEPR — Discussion Papers | Yes | No | No | Off; summarize | independent-macro/research |
 | Finance | 04 — Optional — Global Data & Research | Tax Foundation — Research & Commentary | Yes | No | No | Off; summarize | tax-policy/research |
 | Finance | 04 — Optional — Global Data & Research | OECD Ecoscope — Economics Department Blog | Yes | No | No | Off; summarize | official-macro/research |
+| Finance | 04 — Optional — Global Data & Research | OECD.AI — AI Wonk | Yes | No | No | Off; summarize | ai-policy/security-research |
 | Finance | 04 — Optional — Global Data & Research | Deutsche Bundesbank — Discussion Papers | Yes | No | No | Off; summarize | central-bank/research |
 | Finance | 04 — Optional — Global Data & Research | Deutsche Bundesbank — Latest Announcements | Yes | No | No | Off; summarize | central-bank/market-operations |
 | Finance | 04 — Optional — Global Data & Research | Deutsche Bundesbank — Speeches, Interviews & Contributions | Yes | Yes | Yes | Off; summarize | central-bank/policy |
@@ -350,7 +375,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | CERT-FR — Security Alerts (French) | Yes | Yes | Yes | Optional on; French | alert/advisory |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | NCSC UK — News | Yes | Yes | Yes | Optional on | alert/news |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | NCSC UK — All Updates | Yes | Yes | Yes | Optional on | alert/context |
-| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | CISA — News | Yes | Yes | Yes | Off; summarize | official-cyber/news |
+| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | CISA — News | Yes | No | No | Off; summarize | official-cyber/news |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | NCSC Netherlands — Security Advisories | Yes | No | No | Off; summarize | advisory |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | NCSC Netherlands — News | Yes | No | No | Off; summarize | official-cyber/news |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | CERT Polska — Security Advisories & News (Polish) | Yes | No | No | Off; summarize | national-csirt/advisory-news |
@@ -363,7 +388,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | JVN — Vulnerability Notes | Yes | No | No | Off; summarize | vulnerability-coordination |
 | Cyber Security | 02 — Core — News & Incident Reporting | BleepingComputer | Yes | Yes | Yes | Off; summarize | news |
 | Cyber Security | 02 — Core — News & Incident Reporting | The Hacker News | Yes | No | No | Off; summarize | news/incident |
-| Cyber Security | 02 — Core — News & Incident Reporting | CyberScoop | Yes | Yes | Yes | Off; summarize | news/policy |
+| Cyber Security | 02 — Core — News & Incident Reporting | CyberScoop | Yes | No | No | Off; summarize | news/policy |
 | Cyber Security | 02 — Core — News & Incident Reporting | SecurityWeek | Yes | No | No | Off; summarize | news |
 | Cyber Security | 02 — Core — News & Incident Reporting | The Record — Cybersecurity News | Yes | Yes | Yes | Off; summarize | news |
 | Cyber Security | 02 — Core — News & Incident Reporting | The DFIR Report | Yes | No | No | Off; summarize | incident-response/research |
@@ -422,7 +447,7 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | ANSSI — Cyber Threat Overviews (English) | Yes | No | No | Off; summarize | threat-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | CSSF — Cybersecurity Publications (English) | Yes | No | No | Off; summarize | financial-cyber/regulatory-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | NCSC-FI — Vulnerabilities (Finnish) | Yes | No | No | Off; summarize | national-csirt/vulnerability |
-| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | ACN / CSIRT Italia — Security Updates (Italian) | Yes | No | Yes | Off; summarize | national-csirt/vulnerability |
+| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | ACN / CSIRT Italia — Security Updates (Italian) | Yes | No | No | Off; summarize | national-csirt/vulnerability |
 | Finance | 02 — Core — Official & Macro | Finansinspektionen — News (English) | Yes | No | No | Off; summarize | financial-regulation/news |
 | Finance | 02 — Core — Official & Macro | European Ombudsman — News & Decisions (English) | Yes | No | No | Off; summarize | institutional-accountability/governance |
 | Finance | 02 — Core — Official & Macro | EUR-Lex — Parliament & Council Legislation (English) | Yes | No | No | Off; summarize | eu-law/regulatory-policy |
@@ -512,8 +537,10 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | Eurostat — Data and Data Structure Updates | Yes | No | No | Off; summarize | statistical-data-change |
 | Finance | 04 — Optional — Global Data & Research | European Training Foundation — News | Yes | No | No | Off; summarize | skills/labour-migration/human-capital |
 | Finance | 04 — Optional — Global Data & Research | European Union Agency for Railways — News | Yes | Yes | Yes | Off; summarize | rail-safety/transport-policy |
-| Finance | 04 — Optional — Global Data & Research | Eurofound — News | Yes | Yes | Yes | Off; summarize | labour-market/social-policy |
+| Finance | 04 — Optional — Global Data & Research | Eurofound — News | Yes | No | No | Off; summarize | labour-market/social-policy |
 | Finance | 04 — Optional — Global Data & Research | United Nations Office at Geneva — Meeting Summaries | Yes | No | No | Off; summarize | multilateral-policy/human-rights |
+| Finance | 04 — Optional — Global Data & Research | United Nations Office at Geneva — Press Releases | Yes | No | No | Off; summarize | multilateral-policy/human-rights |
+| Finance | 04 — Optional — Global Data & Research | United Nations Office at Geneva — Press Conference Announcements | Yes | No | No | Off; summarize | multilateral-policy/media-calendar |
 | Finance | 04 — Optional — Global Data & Research | Caribbean Development Bank — News Releases | Yes | No | No | Off; summarize | development-finance/regional-macro |
 | Finance | 04 — Optional — Global Data & Research | Afreximbank Research — Journal of African Trade | Yes | No | No | Off; summarize | trade-policy/african-macro-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | European Cybersecurity Competence Centre and Network — News | Yes | No | No | Off; summarize | cyber-policy/resilience/funding |
@@ -523,7 +550,6 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Chatham House — Expert Comment | Yes | No | No | Off; summarize | security/geopolitical-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Chatham House — News Releases | Yes | No | No | Off; summarize | security/geopolitical-policy |
 | Finance | 04 — Optional — Global Data & Research | U.S. Courts — Judiciary News | Yes | Yes | Yes | Off; summarize | legal/financial-risk |
-| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | CIS — MS-ISAC Advisories | Yes | Yes | Yes | Off; summarize | vulnerability/advisory |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | EUISS — News & Publications | Yes | No | No | Off; summarize | security/geopolitical-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | ECFR — European Foreign & Security Policy | Yes | No | No | Off; summarize | security/geopolitical-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Bellingcat — Open-Source Investigations | Yes | No | No | Off; summarize | security/osint-research |
@@ -531,7 +557,6 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Jamestown — Eurasia & Terrorism Analysis | Yes | No | No | Off; summarize | security/geopolitical-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Atlantic Council — Global Security & Geopolitics | Yes | No | No | Off; summarize | security/geopolitical-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | FDD — National Security & Foreign Policy Analysis | Yes | No | No | Off; summarize | security/geopolitical-research |
-| Cyber Security | 04 — Optional — Specialist Alerts & Research | Lawfare — Cybersecurity & Tech | Yes | No | No | Off; summarize | security/cyber-policy-research |
 | Finance | 02 — Core — Official & Macro | National Defence — News | Yes | No | No | Off; summarize | defence/security-policy |
 | Finance | 02 — Core — Official & Macro | Global Affairs Canada — News | Yes | Yes | Yes | Off; summarize | foreign-policy/trade-security |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | Communications Security Establishment — News | Yes | Yes | Yes | Off; summarize | cyber/national-security |
@@ -542,25 +567,136 @@ OPML imports carry the feed structure but do not reliably carry NetNewsWire noti
 | Finance | 04 — Optional — Global Data & Research | European Council — Meetings | Yes | Yes | Yes | Off; summarize | eu-policy/strategic-calendar |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Council of the EU — Justice & Home Affairs Meetings | Yes | No | No | Off; summarize | eu-security/justice-calendar |
 | Finance | 04 — Optional — Global Data & Research | Council of the EU — Transport, Telecommunications & Energy Meetings | Yes | No | No | Off; summarize | eu-policy/energy-digital-calendar |
+| Finance | 04 — Optional — Global Data & Research | Council of the EU — Agriculture & Fisheries Meetings | Yes | No | No | Off; summarize | eu-policy/agri-food-calendar |
+| Finance | 04 — Optional — Global Data & Research | Council of the EU — Competitiveness Meetings | Yes | No | No | Off; summarize | eu-policy/competitiveness-calendar |
+| Finance | 04 — Optional — Global Data & Research | Council of the EU — Environment Meetings | Yes | No | No | Off; summarize | eu-policy/environment-calendar |
+| Finance | 04 — Optional — Global Data & Research | Council of the EU — Foreign Affairs Meetings | Yes | No | No | Off; summarize | eu-policy/geopolitical-calendar |
+| Finance | 04 — Optional — Global Data & Research | Council of the EU — General Affairs Meetings | Yes | No | No | Off; summarize | eu-policy/institutional-calendar |
 | Finance | 04 — Optional — Global Data & Research | UK Government — National Security News & Communications | Yes | No | No | Off; summarize | national-security/economic-security |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | UK Government — Cyber Security News & Communications | Yes | No | No | Off; summarize | cyber/policy |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | UK Government — Cyber Security Research & Statistics | Yes | No | No | Off; summarize | cyber/research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | UK Government — Cyber Security Policy Papers & Consultations | Yes | No | No | Off; summarize | cyber/regulation-policy |
 | Finance | 04 — Optional — Global Data & Research | European Commission Representation in Ireland — News | Yes | No | No | Off; summarize | eu/ireland-policy |
 | Finance | 03 — Optional — Data, Ireland, EU & UK | ComReg — News and Publications | Yes | No | No | Off; summarize | ireland/telecoms-regulation |
+| Finance | 03 — Optional — Data, Ireland, EU & UK | BEREC — Latest News, Press Releases & Publications | Yes | No | No | Off; summarize | telecoms/digital-regulation |
 | Finance | 03 — Optional — Data, Ireland, EU & UK | Houses of the Oireachtas — Press Releases | Yes | No | No | Off; summarize | ireland/parliamentary-policy |
 | Finance | 03 — Optional — Data, Ireland, EU & UK | Houses of the Oireachtas — Dáil Schedule | Yes | No | No | Off; summarize | ireland/parliamentary-calendar |
 | Finance | 03 — Optional — Data, Ireland, EU & UK | Houses of the Oireachtas — Seanad Schedule | Yes | No | No | Off; summarize | ireland/parliamentary-calendar |
 | Finance | 03 — Optional — Data, Ireland, EU & UK | Houses of the Oireachtas — Committee Schedule | Yes | No | No | Off; summarize | ireland/parliamentary-oversight-calendar |
+| Finance | 03 — Optional — Data, Ireland, EU & UK | IAASA — News | Yes | No | No | Off; summarize | irish/audit-accounting-supervision |
+| Finance | 03 — Optional — Data, Ireland, EU & UK | Pensions Authority — News | Yes | No | No | Off; summarize | irish/pensions-regulation |
 | Finance | 04 — Optional — Global Data & Research | European Union Agency for Fundamental Rights — Publications | Yes | No | No | Off; summarize | fundamental-rights/digital-governance-research |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | eu-LISA — News and Updates | Yes | No | No | Off; summarize | eu-large-scale-it-systems/cyber-resilience |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | eu-LISA — Publications | Yes | No | No | Off; summarize | eu-it-systems/digital-resilience-research |
 | Cyber Security | 01 — Core — Ireland, EU & Official Alerts | Canadian Centre for Cyber Security — Alerts & Advisories | Yes | No | No | Off; summarize | cyber/official-advisories |
 | Cyber Security | 04 — Optional — Specialist Alerts & Research | Canadian Centre for Cyber Security — Guidance, News & Events | Yes | No | No | Off; summarize | cyber/guidance-and-resilience |
 | Finance | 04 — Optional — Global Data & Research | Japan Securities and Exchange Surveillance Commission — Press Releases | Yes | No | No | Off; summarize | securities-supervision/market-conduct |
+| Finance | 04 — Optional — Global Data & Research | Japan Securities and Exchange Surveillance Commission — Press Releases (Japanese) | Yes | No | No | Off; summarize | securities-supervision/market-conduct |
+| Finance | 04 — Optional — Global Data & Research | Japan Certified Public Accountants and Auditing Oversight Board — News (Japanese) | Yes | No | No | Off; summarize | audit-oversight/financial-regulation |
 | Finance | 04 — Optional — Global Data & Research | Federal Register — OFAC Sanctions Notices | Yes | No | No | Off; summarize | sanctions/official-notice |
 | Finance | 04 — Optional — Global Data & Research | Federal Register — FinCEN AML & Financial-Crime Notices | Yes | No | No | Off; summarize | aml-financial-crime/official-notice |
 | Finance | 04 — Optional — Global Data & Research | Federal Register — OCC Banking Rules & Notices | Yes | No | No | Off; summarize | banking-regulation/official-notice |
+| Finance | 04 — Optional — Global Data & Research | Hong Kong SFC — Press Releases | Yes | No | No | Off; summarize | securities-regulation/market-conduct |
+| Finance | 04 — Optional — Global Data & Research | Hong Kong SFC — Circulars | Yes | No | No | Off; summarize | securities-regulation/supervisory-circulars |
+| Finance | 04 — Optional — Global Data & Research | Hong Kong SFC — Consultations & Conclusions | Yes | No | No | Off; summarize | securities-regulation/consultations |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Atlanta — Macroblog | Yes | No | No | Off; summarize | macro/research |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Atlanta — Working Papers | Yes | No | No | Off; summarize | central-bank-research/working-papers |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Dallas — Economic Updates | Yes | No | No | Off; summarize | regional-macro/data |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Dallas — News Releases | Yes | No | No | Off; summarize | central-bank/official-news |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Dallas — Speeches | Yes | No | No | Off; summarize | central-bank-policy/speeches |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of New York — Liberty Street Economics | Yes | No | No | Off; summarize | central-bank-research/macro |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Richmond — Press Room | Yes | No | No | Off; summarize | central-bank/official-news |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of Richmond — Research | Yes | No | No | Off; summarize | central-bank-research/regional |
+| Finance | 04 — Optional — Global Data & Research | Federal Reserve Bank of San Francisco — News & Research | Yes | No | No | Off; summarize | central-bank-research/regional |
+| Finance | 04 — Optional — Global Data & Research | Bank of Canada — Sparks at Bank Articles | Yes | No | No | Off; summarize | central-bank-research/analysis |
+| Finance | 04 — Optional — Global Data & Research | Bank of Canada — Staff Analytical Papers | Yes | No | No | Off; summarize | central-bank-research/applied-papers |
+| Finance | 04 — Optional — Global Data & Research | Bank of Canada — Staff Working Papers | Yes | No | No | Off; summarize | central-bank-research/working-papers |
+| Finance | 04 — Optional — Global Data & Research | Asian Development Bank — Blogs | Yes | No | No | Off; summarize | development-finance/analysis |
+| Finance | 04 — Optional — Global Data & Research | Asian Development Bank — Research Publications | Yes | No | No | Off; summarize | development-finance/research |
+| Finance | 04 — Optional — Global Data & Research | Asian Development Bank — Evaluation | Yes | No | No | Off; summarize | development-finance/evaluation |
+| Finance | 04 — Optional — Global Data & Research | Asian Development Bank — Features | Yes | No | No | Off; summarize | development-finance/feature-analysis |
+| Finance | 04 — Optional — Global Data & Research | CNA — Business | Yes | No | No | Off; summarize | news/business-asia |
+| Finance | 04 — Optional — Global Data & Research | CNA — Asia | Yes | No | No | Off; summarize | news/geopolitical-asia |
+| Finance | 02 — Core — Official & Macro | South African Reserve Bank — News & Publications | Yes | No | No | Off; summarize | central-bank/official-news-and-publications |
+| Finance | 02 — Core — Official & Macro | South African Revenue Service — Latest News | Yes | No | No | Off; summarize | tax-customs/official-news |
+| Finance | 04 — Optional — Global Data & Research | South African Department of Science, Technology and Innovation — News | Yes | No | No | Off; summarize | science-technology-policy/news |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of the Republic of Türkiye — Publications (English) | Yes | No | No | Off; summarize | central-bank-research/publications |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of the Republic of Türkiye — Data (English) | Yes | No | No | Off; summarize | central-bank/statistical-data |
+| Finance | 04 — Optional — Global Data & Research | Central Bank of the Republic of Türkiye — Remarks by Governor (English) | Yes | No | No | Off; summarize | central-bank-policy/speeches |
+| Finance | 02 — Core — Official & Macro | Central Bank of the Republic of Türkiye — Press Releases (English) | Yes | No | No | Off; summarize | central-bank/official-news |
+| Finance | 02 — Core — Official & Macro | Nepal Rastra Bank — Media Releases | Yes | No | No | Off; summarize | central-bank/official-news |
+| Finance | 02 — Core — Official & Macro | Nepal Rastra Bank — Circulars | Yes | No | No | Off; summarize | banking-regulation/circulars |
+| Finance | 04 — Optional — Global Data & Research | Nepal Rastra Bank — Monetary Policy | Yes | No | No | Off; summarize | central-bank/monetary-policy |
+| Finance | 02 — Core — Official & Macro | Bank of Ghana — News | Yes | No | No | Off; summarize | central-bank/official-news |
+| Finance | 02 — Core — Official & Macro | Central Bank of Kenya — News & Releases | Yes | No | No | Off; summarize | central-bank/official-news-and-surveys |
+| Finance | 02 — Core — Official & Macro | Central Bank of Eswatini — News & Releases | Yes | No | No | Off; summarize | central-bank/official-news-and-statistics |
+| Finance | 02 — Core — Official & Macro | Kenya Capital Markets Authority — News & Releases | Yes | No | No | Off; summarize | capital-markets-regulation/official-news |
+| Finance | 02 — Core — Official & Macro | Ghana Securities & Exchange Commission — Public Notices | Yes | No | No | Off; summarize | securities-regulation/investor-alert |
+| Finance | 02 — Core — Official & Macro | Central Bank of Lesotho — Monetary Policy Statements | Yes | No | No | Off; summarize | central-bank/monetary-policy |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | ThaiCERT — English News & Advisories | Yes | No | No | Off; summarize | national-csirt/threat-news |
+| Cyber Security | 01 — Core — Ireland, EU & Official Alerts | Lithuania NKSC — News (Lithuanian) | Yes | No | No | Off; summarize | national-csirt/news |
+| Finance | 02 — Core — Official & Macro | Bank of Russia — English What’s New | Yes | No | No | Off; summarize | central-bank/macro-statistics-and-analysis |
+| Finance | 02 — Core — Official & Macro | Bank of Russia — English News and Comments | Yes | No | No | Off; summarize | central-bank/policy-commentary |
+| Finance | 02 — Core — Official & Macro | Bank of Russia — English Press Releases | Yes | Yes | Yes | Off; summarize | central-bank/press-release |
+| Finance | 04 — Optional — Global Data & Research | CVM — Board Decisions | Yes | No | No | Off; summarize | securities-regulation/board-decisions |
+| Finance | 04 — Optional — Global Data & Research | CVM — Legislation | Yes | Yes | Yes | Off; summarize | securities-regulation/legislation |
+| Finance | 04 — Optional — Global Data & Research | CVM — Public Consultations | Yes | No | No | Off; summarize | securities-regulation/consultations |
+| Finance | 04 — Optional — Global Data & Research | CVM — Collegiate Bulletins | Yes | Yes | Yes | Off; summarize | securities-regulation/board-bulletins |
+| Finance | 04 — Optional — Global Data & Research | Singapore Food Agency — Food Alerts & Recalls | Yes | Yes | Yes | Off; summarize | food-safety/recall-alert |
+| Finance | 04 — Optional — Global Data & Research | Singapore Food Agency — Newsroom | Yes | No | No | Off; summarize | food-security/food-safety/news |
+| Finance | 04 — Optional — Global Data & Research | Singapore Food Agency — Trade Circulars | Yes | No | No | Off; summarize | food-supply/trade-regulation |
+| Finance | 04 — Optional — Global Data & Research | New Zealand Treasury — Publications | Yes | No | No | Off; summarize | new-zealand/fiscal-policy |
+| Finance | 04 — Optional — Global Data & Research | New Zealand Treasury — Regulatory Impact Statements | Yes | No | No | Off; summarize | new-zealand/regulatory-policy |
+| Finance | 04 — Optional — Global Data & Research | New Zealand Treasury — Data and Charts | Yes | No | No | Off; summarize | new-zealand/economic-data |
+| Finance | 04 — Optional — Global Data & Research | Reserve Bank of New Zealand — News Releases | Yes | No | No | Off; summarize | new-zealand/central-bank-prudential-policy |
+| Finance | 04 — Optional — Global Data & Research | Peterson Institute for International Economics — Updates | Yes | No | No | Off; summarize | global-economic-policy/research |
+| Finance | 04 — Optional — Global Data & Research | European Commission Joint Research Centre — News & Updates | Yes | No | No | Off; summarize | european-policy/research |
+| Finance | 04 — Optional — Global Data & Research | European Commission — International Partnerships News | Yes | No | No | Off; summarize | global-gateway/investment-policy |
+| Finance | 04 — Optional — Global Data & Research | UK ONS — National Statistical Blog | Yes | No | No | Off; summarize | uk-statistics/methodology |
+| Finance | 01 — Core — Market & Trading | CME Globex — Electronic Trading Notices | Yes | No | No | Off; summarize | derivatives/market-operations |
+| Finance | 04 — Optional — Global Data & Research | Taiwan National Treasury Administration — Latest News | Yes | No | No | Off; summarize | sovereign-finance/public-debt |
+| Finance | 04 — Optional — Global Data & Research | Taiwan National Treasury Administration — Important Measures | Yes | No | No | Off; summarize | sovereign-finance/fiscal-policy |
+| Finance | 02 — Core — Official & Macro | Canadian Investment Regulatory Organization — News & Enforcement | Yes | No | No | Off; summarize | canadian-securities/investor-protection |
+| Finance | 04 — Optional — Global Data & Research | ITU — Global Digital and Telecoms News | Yes | No | No | Off; summarize | global-telecoms/digital-policy |
+| Finance | 04 — Optional — Global Data & Research | WIPO — Press Releases | Yes | No | No | Off; summarize | intellectual-property/innovation-policy |
+| Finance | 04 — Optional — Global Data & Research | WIPO — Economics and Innovation Policy News | Yes | No | No | Off; summarize | innovation-economics/intangible-investment |
+| Finance | 02 — Core — Official & Macro | ACER — Energy Market and REMIT News | Yes | No | No | Off; summarize | energy-market-regulation/electricity-security |
+| Finance | 02 — Core — Official & Macro | European Commission — Single Market, Industry & SMEs News | Yes | No | No | Off; summarize | single-market/industrial-policy |
+| Finance | 04 — Optional — Global Data & Research | European Commission — Defence Industry & Space Latest News | Yes | No | No | Off; summarize | eu-defence-industry/space-security |
+| Finance | 04 — Optional — Global Data & Research | European Commission — Civil Protection & Humanitarian Aid News | Yes | No | No | Off; summarize | eu-crisis-response/humanitarian-policy |
+| Finance | 04 — Optional — Global Data & Research | UK Office for Budget Responsibility — Research & Statistics | Yes | No | No | Off; summarize | uk-fiscal-watchdog/research |
+| Finance | 04 — Optional — Global Data & Research | Irish Fiscal Advisory Council — Beyond the Budget | Yes | No | No | Off; summarize | irish-fiscal-watchdog/research |
+| Finance | 04 — Optional — Global Data & Research | European Commission — EU Finance Podcast: The Future of Finance | Yes | No | No | Off; summarize | eu-finance/podcast-analysis |
+| Finance | 02 — Core — Official & Macro | Chile Servicio de Impuestos Internos — News | Yes | No | No | Off; summarize | tax-authority/news |
+| Finance | 02 — Core — Official & Macro | Qatar News Agency — Economy Local | Yes | No | No | Off; summarize | sovereign-news/economy-and-markets |
+| Finance | 01 — Core — Market & Trading | Boursa Kuwait — Market Message | Yes | No | No | Off; summarize | exchange/issuer-disclosure |
+| Finance | 02 — Core — Official & Macro | Vietnam Official Gazette — New Issues | Yes | No | No | Off; summarize | sovereign-news/legal-regulatory |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | International Crisis Group — Horn of Africa | Yes | No | No | Off; summarize | security/geopolitical-risk-analysis |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | Council on Foreign Relations — Analysis & Podcasts | Yes | No | No | Off; summarize | security/geopolitical-risk-analysis |
+| Finance | 04 — Optional — Global Data & Research | European Parliament Research Service — Think Tank | Yes | No | No | Off; summarize | official-eu-policy-research |
+| Finance | 04 — Optional — Global Data & Research | United Nations Development Programme — Asia-Pacific News Centre | Yes | No | No | Off; summarize | development-policy/climate-finance-ai-governance |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | Lowy Institute — The Interpreter | Yes | No | No | Off; summarize | security/geopolitical-risk-analysis |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | International Criminal Court — News | Yes | No | No | Off; summarize | security/international-justice |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | UN OCHA — Humanitarian Affairs News | Yes | No | No | Off; summarize | security/humanitarian-early-warning |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | ReliefWeb — Humanitarian Updates | Yes | No | No | Off; summarize | security/humanitarian-early-warning |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | OPCW — Chemical Security & Disarmament News | Yes | No | No | Off; summarize | security/chemical-security-nonproliferation |
+| Finance | 04 — Optional — Global Data & Research | United Nations Economic Commission for Africa — News | Yes | No | No | Off; summarize | development-finance/african-macro |
+| Finance | 04 — Optional — Global Data & Research | African Union — News & Events | Yes | No | No | Off; summarize | african-policy/trade-security |
+| Finance | 04 — Optional — Global Data & Research | IPCC — News | Yes | No | No | Off; summarize | climate-assessment/science-policy |
+| Finance | 04 — Optional — Global Data & Research | UN-Water — News | Yes | No | No | Off; summarize | water-security/climate-policy |
+| Finance | 04 — Optional — Global Data & Research | UN-Habitat — News | Yes | No | No | Off; summarize | urban-development/climate-policy |
+| Finance | 04 — Optional — Global Data & Research | East African Community — Press Releases | Yes | No | No | Off; summarize | east-african-integration/trade-monetary-policy |
+| Finance | 04 — Optional — Global Data & Research | COMESA — News | Yes | No | No | Off; summarize | african-integration/trade-digital-policy |
+| Finance | 04 — Optional — Global Data & Research | Pacific Islands Forum — Media Releases and News | Yes | No | No | Off; summarize | pacific-regionalism/climate-trade-security |
+| Finance | 04 — Optional — Global Data & Research | ECOWAS — News | Yes | No | No | Off; summarize | west-african-integration/trade-energy-security |
+| Finance | 04 — Optional — Global Data & Research | MERCOSUR — News | Yes | No | No | Off; summarize | south-american-integration/trade-policy |
+| Finance | 04 — Optional — Global Data & Research | IGAD — News | Yes | No | No | Off; summarize | horn-of-africa/peace-trade-health-security |
+| Finance | 04 — Optional — Global Data & Research | COMCEC — News | Yes | No | No | Off; summarize | oic-economic-cooperation/trade-finance-development |
+| Finance | 04 — Optional — Global Data & Research | APEC — Press | Yes | No | No | Off; summarize | apec-economic-cooperation/trade-development |
+| Finance | 04 — Optional — Global Data & Research | Statistical Office of the Republic of Slovenia — Releases | Yes | No | No | Off; summarize | official-statistics/slovenian-macro |
+| Finance | 04 — Optional — Global Data & Research | Statistics Norway — Upcoming Statistical Releases | Yes | No | No | Off; summarize | official-statistics/release-calendar |
+| Finance | 04 — Optional — Global Data & Research | Statistics Norway — StatBank Table Updates | Yes | No | No | Off; summarize | official-statistics/data-updates |
+| Cyber Security | 04 — Optional — Specialist Alerts & Research | European Data Protection Board — Publications | Yes | Yes | Yes | Off; summarize | privacy/regulatory-research |
 
 ## Import checklist
 

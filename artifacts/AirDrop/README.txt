@@ -12,17 +12,23 @@ File to open:
   NetNewsWire-Finance-Cyber-iPhone-Air.opml
 
 Profile:
-  - 50 feeds: Finance and Cyber Security folders
+  - 125 feeds: Finance and Cyber Security folders
   - 4 official alert notifications recommended
-  - 4 MB total and 600 KB per-feed mobile refresh limits
-  - validated successfully on 16 August 2026
+  - 4 MiB total and 600 KiB per-feed mobile refresh limits
+  - Generated from feed-manifest.json; run make validate-air for current endpoint health
+
+Recommended notification feeds:
+  - Nasdaq Trader — Trade Halts
+  - Ireland NCSC — Alerts & Advisories
+  - CISA — All Advisories
+  - CERT-EU — Security Advisories
 
 On iPhone:
   1. Open the .opml file in Files.
   2. Use Share and choose NetNewsWire, or choose Open in NetNewsWire.
   3. Import it once into the intended NetNewsWire account.
   4. Refresh and confirm the Finance and Cyber Security folders.
-  5. Enable notifications manually for the four official alert feeds only.
+  5. Enable notifications manually for the 4 feeds listed above only.
 
 Important:
   OPML import is additive. If an older copy is already in NetNewsWire,

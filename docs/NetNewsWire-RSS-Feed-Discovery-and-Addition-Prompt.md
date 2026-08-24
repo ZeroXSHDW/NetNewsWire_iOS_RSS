@@ -109,7 +109,7 @@ Reject a candidate immediately if any hard gate fails:
 - Recent useful content within the configured freshness window, normally 180 days.
 - No malformed XML, authentication wall, dead endpoint, blocked response, duplicate URL or unexplained redirect.
 
-An official event-driven feed may be quiet between announcements, but it must still be structurally healthy, dated and explicitly marked `eventDriven="true"`. A feed with missing item dates is not rescued by being official. A feed that is valid but stale, archived or historical is rejected or kept only as a web reference.
+An official event-driven feed may be quiet between announcements, but it must still be structurally healthy, dated and explicitly marked `eventDriven="true"`. The only exception is a documented, host-scoped parser rule for a feed that omits item date tags but encodes an unambiguous report date in its title or link; that rule must be tested and must feed both validation and the Apple Intelligence digest preparer. A feed with otherwise missing item dates is not rescued by being official. A feed that is valid but stale, archived or historical is rejected or kept only as a web reference.
 
 Legacy HTTP article links inside a verified HTTPS feed are warnings, not automatic failures, if the links are valid and the reason is recorded. The feed endpoint itself must remain HTTPS.
 

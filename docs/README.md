@@ -9,6 +9,7 @@ The project is split into a small set of maintainer files at the repository root
 - [Hourly Apple Intelligence workflow](NetNewsWire-Hourly-Apple-Intelligence-Workflow.md) — mirror the manifest on macOS and run a bounded Shortcut batch every 30 minutes or hourly.
 - [Apple Intelligence summary prompt](Apple-Intelligence-RSS-Summary-Prompt.md) — fixed guardrails for evidence-based summaries.
 - [Feature and automation matrix](NetNewsWire-Feature-and-Automation-Matrix.md) — iPhone, Shortcuts and Apple workflow capabilities.
+- [Troubleshooting](Troubleshooting.md) — fixes for OPML imports, notifications, validation and digest handoffs.
 
 ## Maintain the source list
 

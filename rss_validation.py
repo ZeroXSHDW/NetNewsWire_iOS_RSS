@@ -82,6 +82,27 @@ def child_text(element: ET.Element, names: set[str]) -> str:
 def child_link(element: ET.Element) -> str:
     """Return the preferred article link from an RSS item or Atom entry."""
 
+    # A few official feeds put the article permalink in an anchor nested inside
+    # the item title while emitting a malformed, HTML-escaped value in the
+    # sibling ``link`` element.  Prefer an explicit title anchor when it is a
+    # usable absolute or relative web path; ``extract_feed`` resolves relative
+    # paths against the verified feed URL afterward.
+    title_anchor_candidates: list[tuple[int, str]] = []
+    for child in list(element):
+        if local_name(child.tag) != "title":
+            continue
+        for descendant in child.iter():
+            href = (descendant.attrib.get("href") or "").strip()
+            if not href:
+                continue
+            if url_is_web(href):
+                priority = 0 if href.startswith("https://") else 1
+                title_anchor_candidates.append((priority, href))
+            elif href.startswith(("/", "./", "../")):
+                title_anchor_candidates.append((2, href))
+    if title_anchor_candidates:
+        return min(title_anchor_candidates, key=lambda item: item[0])[1]
+
     candidates: list[tuple[int, str]] = []
     for child in list(element):
         if local_name(child.tag) != "link":
@@ -113,8 +134,90 @@ def child_link(element: ET.Element) -> str:
     return ""
 
 
-def item_date_raw(element: ET.Element) -> str:
-    """Prefer feed date fields, then an explicit HTML ``time`` fallback.
+_CBSL_HOSTS = {"cbsl.gov.lk", "www.cbsl.gov.lk"}
+_MONTH_NUMBERS = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
+
+
+def _cbsl_embedded_date(element: ET.Element, base_url: str) -> str:
+    """Extract an unambiguous CBSL report date when item date tags are absent.
+
+    CBSL's official RSS endpoints publish a current channel timestamp but omit
+    per-item ``pubDate``/``dc:date`` fields. Their report titles and PDF links
+    carry explicit publication/reporting dates, so accept only those strongly
+    typed patterns and only for the CBSL host. This keeps the general parser's
+    item-date requirement strict for every other publisher.
+    """
+
+    host = urlsplit((base_url or "").strip()).hostname
+    if (host or "").lower() not in _CBSL_HOSTS:
+        return ""
+
+    title = child_text(element, {"title"})
+    link = child_link(element)
+
+    def iso_date(year: str, month: str, day: str) -> str:
+        try:
+            parsed = datetime(int(year), int(month), int(day), tzinfo=timezone.utc)
+        except (TypeError, ValueError):
+            return ""
+        return parsed.isoformat()
+
+    # CBSL PDF routes use compact YYYYMMDD filenames, for example
+    # ``press_20260722_Monetary_Policy_Review...pdf``.
+    for raw in (link, title):
+        match = re.search(r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)", raw or "")
+        if match:
+            value = iso_date(match.group(1), match.group(2), match.group(3))
+            if value:
+                return value
+
+    month_pattern = "|".join(_MONTH_NUMBERS)
+    match = re.search(
+        rf"\b(\d{{1,2}})\s+({month_pattern})\s+(20\d{{2}})\b",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        value = iso_date(match.group(3), str(_MONTH_NUMBERS[match.group(2).lower()]), match.group(1))
+        if value:
+            return value
+
+    match = re.search(
+        rf"\b({month_pattern})\s+(\d{{1,2}}),?\s+(20\d{{2}})\b",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        value = iso_date(match.group(3), str(_MONTH_NUMBERS[match.group(1).lower()]), match.group(2))
+        if value:
+            return value
+
+    # Monthly indicator titles identify the reporting month rather than a day.
+    # Use the first day of that explicit period as a deterministic, conservative
+    # date; the channel publication timestamp remains available in the raw RSS.
+    match = re.search(rf"\b({month_pattern})\s+(20\d{{2}})\b", title, flags=re.IGNORECASE)
+    if match:
+        value = iso_date(match.group(2), str(_MONTH_NUMBERS[match.group(1).lower()]), "1")
+        if value:
+            return value
+    return ""
+
+
+def item_date_raw(element: ET.Element, base_url: str = "") -> str:
+    """Prefer feed date fields, then explicit HTML or scoped source fallbacks.
 
     A small number of official RSS feeds expose a standards-compliant item
     description but place the publisher's creation timestamp inside escaped
@@ -153,6 +256,10 @@ def item_date_raw(element: ET.Element) -> str:
         explicit_datetime = explicit_time_datetime("".join(child.itertext()))
         if explicit_datetime:
             return explicit_datetime
+
+    embedded_date = _cbsl_embedded_date(element, base_url)
+    if embedded_date:
+        return embedded_date
     return ""
 
 
@@ -185,6 +292,7 @@ def parse_date(raw: str, naive_timezone: timezone | ZoneInfo = timezone.utc) -> 
             "%Y-%m-%d %H:%M:%S.%f",
             "%Y-%m-%d %H:%M:%S",
             "%A, %B %d, %Y - %H:%M",
+            "%a, %m/%d/%Y - %H:%M",
         ):
             try:
                 parsed = datetime.strptime(raw, fmt)
@@ -312,7 +420,7 @@ def extract_feed(
             resolved_link = urljoin(base_url, link)
             if url_is_web(resolved_link):
                 link = resolved_link
-        date = parse_date(item_date_raw(element), naive_timezone=naive_timezone)
+        date = parse_date(item_date_raw(element, base_url=base_url), naive_timezone=naive_timezone)
         items.append({"title": title, "link": link, "date": date})
     return feed_title, items
 
@@ -582,17 +690,15 @@ def counter_rates(values: list[str]) -> tuple[int, int, float]:
 
 def _cli() -> int:
     if len(sys.argv) < 3:
-        print("usage: rss_validation.py latest-date FEED_XML | inspect FEED_XML | age-days ISO_DATE | cache-key URL", file=sys.stderr)
+        print("usage: rss_validation.py latest-date FEED_XML [FEED_URL] | inspect FEED_XML [FEED_URL] | age-days ISO_DATE | cache-key URL", file=sys.stderr)
         return 2
     operation, value = sys.argv[1:3]
+    source_url = sys.argv[3] if len(sys.argv) > 3 else ""
     if operation == "latest-date":
         root = safe_xml_root(value)
+        _, extracted_items = extract_feed(root, base_url=source_url)
         dates = [
-            item["date"]
-            for element in root.iter()
-            if local_name(element.tag) in {"item", "entry"}
-            for item in [{"date": parse_date(item_date_raw(element))}]
-            if item["date"] is not None
+            item["date"] for item in extracted_items if item["date"] is not None
         ]
         if dates:
             print(max(dates).isoformat())
@@ -601,7 +707,7 @@ def _cli() -> int:
     if operation == "inspect":
         started = time.perf_counter()
         root = safe_xml_root(value)
-        _, items = extract_feed(root)
+        _, items = extract_feed(root, base_url=source_url)
         dates = [item["date"] for item in items if item["date"] is not None]
         latest = max(dates).isoformat() if dates else ""
         print(f"{latest}\t{time.perf_counter() - started:.6f}\t{len(items)}")

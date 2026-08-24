@@ -2,21 +2,36 @@
 
 [![Validate RSS bundles](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/actions/workflows/rss-validation.yml/badge.svg)](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/actions/workflows/rss-validation.yml)
 
-A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone**. It combines Ireland, EU, UK and US finance sources with official cybersecurity alerts, incident reporting and technical research—and adds a local-first Apple Intelligence digest layer for articles you deliberately provide.
+A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone, iPad and Mac**. It combines Ireland, EU, UK and US finance sources with official cybersecurity alerts, incident reporting and technical research—and adds a local-first Apple Intelligence digest layer for articles you deliberately provide.
 
 > **The short version:** NetNewsWire collects and organizes the feeds. The manifest defines what belongs in each profile. Apple Intelligence summarizes only the selected, prepared article text; it does not fetch news, trade, or make decisions for you.
 >
 > This repository is **not a standalone iOS app**. It is a ready-to-import OPML/feed bundle plus optional Shortcuts and Apple Intelligence instructions.
+
+This is **free software under the MIT License**. The code, configuration, documentation and generated bundle tooling are free to use, modify and redistribute; RSS publishers retain their own content, trademarks and feed terms. See [`LICENSE`](LICENSE).
+
+## Live README, monitor and marketplace
+
+The live public surfaces are linked so the listing can be checked without cloning the repository:
+
+| Surface | Link | Purpose |
+| --- | --- | --- |
+| Live README and source | [GitHub README](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS#readme) | Current setup, validation and OPML downloads |
+| Cloudflare live monitor | [zerodevllc.eu/rss](https://zerodevllc.eu/rss) | Read-only representative RSS events and feed health |
+| Marketplace listing | [ZERODEVLLC.EU build map](https://zerodevllc.eu/#work) | Free-software listing with live actions |
+| Machine-readable listing | [`marketplace/netnewswire-finance-cyber-rss.json`](marketplace/netnewswire-finance-cyber-rss.json) | License, price, links and platform metadata |
+
+The monitor shows `LIVE` only after the Cloudflare-hosted server successfully fetches and parses a publisher feed. It marks failed sources `OFFLINE` and preserves a clearly labelled demo/fallback state; it never presents synthetic events as live publisher data.
 
 ## At a glance
 
 | Profile | Feeds | Best for | Download |
 | --- | ---: | --- | --- |
 | **iPhone Air** | 125 | Recommended daily profile with broad coverage and a 4 MB full-body budget | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Air.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md) |
-| **iPhone Lite** | 118 | Lower-noise mobile reading and smaller refreshes | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
-| **Master** | 536 | Full research coverage and rebuilding the other profiles | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md) |
+| **iPhone Lite** | 120 | Lower-noise mobile reading and smaller refreshes | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber-iPhone-Lite.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md) |
+| **Master** | 672 | Full research coverage and rebuilding the other profiles | [Download for iPhone](artifacts/opml/NetNewsWire-Finance-Cyber.opml?raw=1) · [inspect OPML](artifacts/opml/NetNewsWire-Finance-Cyber.opml) · [source table](artifacts/sources/NetNewsWire-Finance-Cyber-Source-Table.md) |
 
-The repository contains **428 finance feeds** and **108 cybersecurity feeds**. Four official alert feeds are configured for interrupting notifications; the remaining sources are intended for normal reading, optional notifications or digest review.
+The repository contains **556 finance feeds** and **116 cybersecurity feeds**. Four official alert feeds are configured for interrupting notifications; the remaining sources are intended for normal reading, optional notifications or digest review.
 
 ## What you need
 
@@ -30,6 +45,18 @@ The repository contains **428 finance feeds** and **108 cybersecurity feeds**. F
 | **`curl` + `xmllint` (libxml2)** | Live validation only | Fetches direct feed endpoints and verifies their XML. |
 
 You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
+
+## How it operates across platforms
+
+The same manifest remains the source of truth while each surface has a separate job:
+
+| Platform | Role |
+| --- | --- |
+| iPhone and iPad | Import one OPML profile into NetNewsWire, refresh feeds and read the Finance/Cyber Security folders. |
+| Mac | Use the same OPML profiles for larger-screen research and maintenance checks. |
+| Shortcuts + Apple Intelligence | Optionally pass selected article text into a local-first, bounded digest workflow. |
+| Cloudflare / ZERODEVLLC.EU | Show read-only live health and representative RSS items from a small public sample; this is a display layer, not a second feed reader. |
+| GitHub | Keep the README, manifest, validation reports and OPML artifacts auditable and downloadable. |
 
 ## Install directly from this GitHub page
 
@@ -94,24 +121,28 @@ These repository-authored previews make the deliverable visible before you impor
 
 ## Feed coverage
 
-### Finance — 428 feeds
+### Finance — 556 feeds
 
 | Group | Count | Coverage |
 | --- | ---: | --- |
-| Market & Trading | 10 | Euronext market-status and Athens market-notice alerts, Nasdaq trade halts and trader alerts, business headlines and market reporting |
-| Official & Macro | 133 | Central banks, regulators, financial-intelligence, monetary policy, banking supervision, enforcement and market operations, including Banco Central do Brasil news on Pix, payments, virtual-asset regulation, foreign exchange, Open Finance and financial-system supervision, Banca d’Italia English central-bank news, Norges Bank press releases, European Investment Fund SME and development-finance activity, ESRB Press, Publications & Research, Policy Warnings & Advice and National Macroprudential Notifications, AFM Dutch conduct supervision, EIOPA insurance and occupational-pensions supervision, UK Ofgem and Ofcom energy/communications regulation, UK Export Finance trade-credit activity and UK DWP pensions, labour and benefits activity, U.S. Treasury press releases and SEC speeches/statements and testimony, CFTC press, enforcement and speeches/testimony, OCC news releases, bulletins, speeches, congressional testimony and publications, National Futures Association rulebook, notices, board, consultation, CFTC rule-submission, news-release and regulatory-action streams, BaFin’s German supervisory-measures and circular streams, Swedish Finansinspektionen, the European Ombudsman’s institutional-accountability and transparency decisions, EUR-Lex adopted legislation and Official Journal notices, CFPB and FTC consumer-protection, DNB’s general and supervision news, OSFI’s Canadian prudential-supervision stream, the independent UK Office for Budget Responsibility, Japan, Switzerland, Norway, Spain, Sweden, Czechia, Denmark, Korea and the Philippines, alongside EPPO, FINTRAC, OLAF, Eurojust, Frontex border and organised-crime operations, the European Commission’s competition, energy, transport, tax/customs, trade and economic-security, financial-services, and Migration & Home Affairs news, official UK Home Office, Ministry of Defence and Department for Transport activity, U.S. Department of Defense newsroom and releases, U.S. Department of Energy energy-security, critical-minerals, grid and nuclear news, U.S. Nuclear Regulatory Commission news releases, FEMA emergency-response news, U.S. Energy Information Administration energy-market analysis and forecast releases, Australia’s Treasury and APRA, HMRC, SFO, the Insolvency Service, UK CMA, DOJ Antitrust and National Security Division, Federal Reserve other announcements, France’s AMF, OCC, FDIC, Bank of Canada, HKMA consultations, supervisory-policy updates and circulars, RBI, SEBI, Japan FSA, Swiss National Bank monetary-policy decisions, Finanstilsynet, CSSF, Austria’s FMA and Belgium’s FSMA, plus Canadian National Defence, Global Affairs Canada, Defence Investment Agency and Canadian Security Intelligence Service news |
-| Data, Ireland, EU & UK | 46 | Reference rates, central-bank and national statistical releases, Eurostat industry/trade/services releases, sanctions guidance, release calendars, ComReg communications regulation, Houses of the Oireachtas press releases and sitting/committee schedules, Banco Central do Brasil market-data/statistical feeds, plus Bank of Korea, National Bank of Poland, Statistics Canada, US Census and BEA statistics coverage |
-| Global Data & Research | 218 | Central-bank speeches, minutes, reports, working papers, statistics and analysis from Switzerland, Norway, Spain, Sweden, Czechia, Denmark, Korea, Germany and Australia, plus ASEAN diplomatic and regional-policy news, ASEAN+3 macroeconomic surveillance and AMRO research/press releases, European Commission agriculture and rural-development, enlargement/Eastern Neighbourhood and Oceans & Fisheries news, European Maritime Safety Agency maritime-resilience updates, European Union Agency for Railways rail-safety, interoperability, resilience and transport-policy news, Eurostat catalogue data-structure updates, European Training Foundation labour-migration, skills, employability and human-capital reform news, European Commission harmonised-standards notices, Apple Newsroom company, Apple Intelligence, iOS, privacy, EU platform-policy and ecosystem news, Asian and African development-bank news/releases, UK and EU institutional activity, public-health and climate coverage, ECHR and UN case-law/meeting streams, central-bank research, statistics and publications, space and aviation safety, EU Agency for the Space Programme news and press releases, official Council of the EU meeting calendars, UK Parliament public and private bill activity, UK Parliament POST science-policy research, UK national-security and economic-security activity, European Commission Representation in Ireland news, European Union Agency for Fundamental Rights publications, Japanese securities-surveillance and market-conduct releases, and the new Federal Register OFAC sanctions, FinCEN financial-crime and OCC banking-rule notices alongside the retained development, economic, legal, health, science and research sources |
+| Market & Trading | 25 | Nasdaq trade halts and trader alerts, Euronext market-status and Athens market-notice alerts, HKEX exchange news, regulatory announcements, market communications and SEHK trading-rule updates, JPX market news, exchange releases, equity and derivatives halts and market-integrity alerts, Taiwan Stock Exchange news and rules, Taiwan Futures Exchange press releases and notices, CME Globex electronic-trading notices, Boursa Kuwait market messages and issuer disclosures, business headlines and market reporting |
+| Official & Macro | 156 | Central banks, regulators, financial-intelligence, monetary policy, banking supervision, enforcement and market operations, including Vietnam Official Gazette issue notices, Qatar News Agency local-economy reporting, ACER energy-market, REMIT, cross-border-capacity and security-of-supply news, European Commission Single Market, Industry and SMEs policy news, the new Bank of Russia English What’s New, News and Comments, and Press Releases streams, Bank of Ghana News, Central Bank of Kenya News & Releases, Central Bank of Eswatini News & Releases, Kenya Capital Markets Authority News & Releases, Ghana Securities & Exchange Commission Public Notices, Central Bank of Lesotho Monetary Policy Statements, South African Reserve Bank News & Publications, South African Revenue Service Latest News, Chile Servicio de Impuestos Internos tax-authority news, Nepal Rastra Bank Media Releases and Circulars, and Central Bank of the Republic of Türkiye Press Releases, alongside Banco Central do Brasil news on Pix, payments, virtual-asset regulation, foreign exchange, Open Finance and financial-system supervision, Banca d’Italia English central-bank news, Norges Bank press releases, European Investment Fund SME and development-finance activity, ESRB Press, Publications & Research, Policy Warnings & Advice and National Macroprudential Notifications, AFM Dutch conduct supervision, EIOPA insurance and occupational-pensions regulation, UK Ofgem and Ofcom energy/communications regulation, UK Export Finance trade-credit activity and UK DWP pensions, labour and benefits activity, U.S. Treasury press releases and SEC speeches/statements and testimony, CFTC press, enforcement and speeches/testimony, OCC news releases, bulletins, speeches, congressional testimony and publications, National Futures Association rulebook, notices, board, consultation, CFTC rule-submission, news-release and regulatory-action streams, BaFin’s German supervisory-measures and circular streams, Swedish Finansinspektionen, the European Ombudsman’s institutional-accountability and transparency decisions, CFPB and FTC consumer-protection, DNB’s general and supervision news, OSFI’s Canadian prudential-supervision stream, CIRO’s Canadian dealer, marketplace, sanctions, hearing and investor-protection updates, the independent UK Office for Budget Responsibility, Japan, Switzerland, Norway, Spain, Sweden, Czechia, Denmark, Korea and the Philippines, alongside EPPO, FINTRAC, OLAF, Eurojust, Frontex border and organised-crime operations, the European Commission’s competition, energy, transport, tax/customs, trade and economic-security, financial-services, and Migration & Home Affairs news, official UK Home Office, Ministry of Defence and Department for Transport activity, U.S. Department of Defense newsroom and releases, U.S. Department of Energy energy-security, critical-minerals, grid and nuclear news, U.S. Nuclear Regulatory Commission news releases, FEMA emergency-response news, U.S. Energy Information Administration energy-market analysis and forecast releases, Australia’s Treasury and APRA, HMRC, SFO, the Insolvency Service, UK CMA, DOJ Antitrust and National Security Division, Federal Reserve other announcements, France’s AMF, OCC, FDIC, Bank of Canada, HKMA consultations, supervisory-policy updates and circulars, RBI, SEBI, Japan FSA, Swiss National Bank monetary-policy decisions, Finanstilsynet, CSSF, Austria’s FMA and Belgium’s FSMA, plus Canadian National Defence, Global Affairs Canada, Defence Investment Agency and Canadian Security Intelligence Service news |
+| Data, Ireland, EU & UK | 49 | Reference rates, central-bank and national statistical releases, Eurostat industry/trade/services releases, sanctions guidance, release calendars, ComReg communications regulation, BEREC telecoms and digital-regulation news, press releases, publications and consultations, Houses of the Oireachtas press releases and sitting/committee schedules, IAASA audit/accounting supervision, Pensions Authority IORP/DORA and pension-reporting regulation, Banco Central do Brasil market-data/statistical feeds, plus Bank of Korea, National Bank of Poland, Statistics Canada, US Census and BEA statistics coverage |
+| Global Data & Research | 305 | Central-bank speeches, minutes, reports, working papers, statistics and analysis from South Africa, Türkiye, Switzerland, Norway, Spain, Sweden, Czechia, Denmark, Korea, Germany, Australia, Colombia, Nepal and Sri Lanka, including the four new official Brazilian CVM streams—Board Decisions, Legislation, Public Consultations and Collegiate Bulletins—with compact Legislation and Collegiate Bulletins carried into both phone profiles, the three Singapore Food Agency streams—Food Alerts & Recalls, Newsroom and Trade Circulars—with the compact Food Alerts & Recalls carried into both phone profiles, the new New Zealand Treasury Publications, Regulatory Impact Statements and Data and Charts streams, SURS statistical releases, and Statistics Norway’s upcoming-release and StatBank update streams, Peterson Institute international economic-policy updates covering trade, tariffs, sanctions and economic security, European Commission Joint Research Centre news and policy-research updates covering economic resilience, AI, climate risk, critical materials and science-for-policy evidence, European Commission International Partnerships and Global Gateway investment updates covering digital infrastructure, energy, transport, critical raw materials and resilient supply chains, UK ONS statistical-analysis and methodology updates covering GDP, labour-force measurement, productivity, population, household wealth and data quality, Taiwan National Treasury Administration sovereign-finance, government-bond, fiscal-measure and debt-management streams, ITU global digital-policy, AI-governance, satellite, radio-spectrum, connectivity and telecom-resilience news, WIPO intellectual-property, AI-innovation, intangible-investment and innovation-economics updates, European Commission Defence Industry & Space defence-industrial, SAFE, space-security, procurement and strategic-autonomy news, European Commission Civil Protection & Humanitarian Aid emergency-response, disaster, humanitarian-finance and resilience news, UK Office for Budget Responsibility research, fiscal-risk, forecast and welfare-trends releases, Irish Fiscal Advisory Council Beyond the Budget research on Ireland’s tax base, spending overruns, infrastructure and household spending, and the European Commission EU Finance podcast on sanctions, anti-money-laundering, digital finance, capital markets, the EIB and the savings-and-investments union, alongside Central Bank of the Republic of Türkiye Publications, Nepal Rastra Bank Monetary Policy, both Banco de la República Spanish and English-portal research/news routes plus CBSL monetary-policy reviews and weekly/monthly economic indicators, new Federal Reserve Bank of Atlanta Macroblog and Working Papers, Federal Reserve Bank of Dallas economic updates, news releases and speeches, Federal Reserve Bank of New York Liberty Street Economics, Federal Reserve Bank of Richmond Press Room and Research, Federal Reserve Bank of San Francisco News & Research, and the new Bank of Canada Sparks at Bank Articles, Staff Analytical Papers and Staff Working Papers, alongside the new Asian Development Bank Blogs, Research Publications, Evaluation and Features streams, CNA Business and Asia reporting, South African Department of Science, Technology and Innovation News, and OECD.AI AI Wonk research on AI governance, evaluation, security and data policy, ASEAN diplomatic and regional-policy news, ASEAN+3 macroeconomic surveillance and AMRO research/press releases, European Commission agriculture and rural-development, enlargement/Eastern Neighbourhood and Oceans & Fisheries news, European Maritime Safety Agency maritime-resilience updates, European Union Agency for Railways rail-safety, interoperability, resilience and transport-policy news, Eurostat catalogue data-structure updates, European Training Foundation labour-migration, skills, employability and human-capital reform news, European Commission harmonised-standards notices, Apple Newsroom company, Apple Intelligence, iOS, privacy, EU platform-policy and ecosystem news, Asian and African development-bank news/releases, UK and EU institutional activity, public-health and climate coverage, ECHR and UN case-law/meeting streams, central-bank research, statistics and publications, space and aviation safety, EU Agency for the Space Programme news and press releases, official Council of the EU meeting calendars for economic and financial affairs, Eurogroup, European Council, justice and home affairs, transport, telecommunications and energy, agriculture and fisheries, competitiveness, environment, foreign affairs and general affairs, UK Parliament public and private bill activity, UK Parliament POST science-policy research, UK national-security and economic-security activity, European Commission Representation in Ireland news, European Union Agency for Fundamental Rights publications, European Patent Office Boards of Appeal communications on patent-law case developments and procedural guidance, Japanese securities-surveillance and market-conduct releases including the Japanese SESC press-release and CPAAOB news streams, Hong Kong SFC securities-regulation, enforcement, circular and consultation streams, and the new Federal Register OFAC sanctions, FinCEN financial-crime and OCC banking-rule notices alongside the retained development, economic, health, legal and research sources; the EIB project-pipeline, project-procurement and Board/institutional-event streams add first-party prospective investment, tender and governance timing; African Union News & Events and United Nations Economic Commission for Africa add first-party continental policy, integration, trade, development and structural-transformation context; East African Community Press Releases adds regional trade, customs, payments, monetary-union, digital-economy and border-security updates; COMESA News adds regional integration, AI, digital-inclusion, election-observation and development updates; IPCC News, UN-Water News and UN-Habitat News add climate-assessment, water-security, sanitation, urban-development and sustainable-cities context; Pacific Islands Forum adds Pacific regionalism, climate, disaster-resilience, trade, finance, ocean and security context; ECOWAS adds West African integration, diplomacy, trade, energy-transition, development and peace-and-security context; MERCOSUR adds South American integration, customs, trade, human-rights, science and innovation context; IGAD adds Horn of Africa peacebuilding, cross-border trade, food and health security, climate resilience and development context; COMCEC adds OIC economic and commercial cooperation, trade, finance, agriculture, tourism, transport and development context; APEC adds Asia-Pacific regional trade, investment, digital-economy, food-security, supply-chain, disaster-resilience and development-policy context; and UNDP Asia-Pacific adds inclusive-development, blended-finance, carbon-market, climate-resilience, AI-policy, governance and regional-recovery context |
 | UK Regulation & Warnings | 21 | Bank of England prudential publications, FCA news, scam warnings, OFSI financial sanctions and direct GOV.UK activity, Ofgem energy-market regulation, Ofcom communications and online-safety regulation, Guernsey financial-crime and sanctions notices, National Crime Agency GOV.UK and direct operational economic-crime and cyber-enforcement news, Public Sector Fraud Authority fraud-prevention policy, Ministry of Justice justice-policy activity, Attorney General's Office, Crown Prosecution Service, HM Courts & Tribunals Service and Courts and Tribunals Judiciary legal activity, Financial Reporting Council audit and corporate-governance regulation, The Pensions Regulator workplace-pensions supervision, Payment Systems Regulator payments oversight, Pension Protection Fund compensation and resilience activity, OTSI trade sanctions and ECJU export-control updates |
 
-### Cyber Security — 108 feeds
+The latest Master-only additions to **Global Data & Research** are **Statistical Office of the Republic of Slovenia — Releases**, **Statistics Norway — Upcoming Statistical Releases**, **Statistics Norway — StatBank Table Updates**, **Reserve Bank of New Zealand — News Releases**, **European Investment Bank — Projects to be Financed**, **European Investment Bank — Project Procurement** and **European Investment Bank — Board and Institutional Events**. The SURS and Statistics Norway streams add first-party European statistical release, release-calendar and data-change signal; RBNZ adds New Zealand monetary-policy, financial-stability, prudential-regulation, payments, cash, banking and macroeconomic signal; the EIB streams add prospective project-finance, tender and governance-calendar signal. All remain notification-off and outside the capped phone profiles. **IAASA — News** and **Pensions Authority — News** remain the latest additions to **Data, Ireland, EU & UK**, adding first-party Irish audit/accounting-supervision, financial-reporting, IORP, DORA, pension-data and governance signal. They join **United Nations Development Programme — Asia-Pacific News Centre**, **APEC — Press**, **COMCEC — News**, **Pacific Islands Forum — Media Releases and News**, **ECOWAS — News**, **MERCOSUR — News** and **IGAD — News**, adding first-party Asia-Pacific development finance, climate-resilience, carbon-market, AI-policy, regional-policy, trade, investment, integration, security, health and development signal. **European Data Protection Board — Publications** is included in both phone profiles; the current phone imports remain 125 Air and 120 Lite. The current Air budget rebalance keeps **Bloomberg — Markets** and **ACN / CSIRT Italia — Security Updates (Italian)** in Master for the local Apple Intelligence collector while leaving them out of the capped Air import.
+
+### Cyber Security — 116 feeds
 
 | Group | Count | Coverage |
 | --- | ---: | --- |
-| Ireland, EU & official alerts | 33 | Ireland NCSC alerts and guidance, CISA, CERT-EU, CERT-FR, NCSC UK, CISA News, CIS MS-ISAC vulnerability advisories, Swiss NCSC/BACS, ACN / CSIRT Italia, EDPB, New Zealand and other national cyber authorities, plus Belgian CCB, Romanian DNSC, CERT.LV, SI-CERT, Norway NCSC, INCIBE, Czech NÚKIB, Croatian CERT.hr, Estonian RIA, JPCERT/CC, JVN, Communications Security Establishment national-cyber and signals-intelligence news, and the Canadian Centre for Cyber Security alerts and advisories stream |
-| News & incident reporting | 7 | BleepingComputer, The Hacker News, CyberScoop, SecurityWeek, The Record, The DFIR Report and Krebs on Security; The Hacker News is Master-only after the latest phone rebalance |
+| Ireland, EU & official alerts | 33 | Ireland NCSC alerts and guidance, CISA, CERT-EU, CERT-FR, NCSC UK, CISA News, Swiss NCSC/BACS, ACN / CSIRT Italia, EDPB, New Zealand and other national cyber authorities, plus Belgian CCB, Romanian DNSC, CERT.LV, SI-CERT, Norway NCSC, INCIBE, Czech NÚKIB, Croatian CERT.hr, Estonian RIA, Lithuania NKSC, JPCERT/CC, JVN, Communications Security Establishment national-cyber and signals-intelligence news, and the Canadian Centre for Cyber Security alerts and advisories stream |
+| News & incident reporting | 7 | BleepingComputer, The Hacker News, CyberScoop, SecurityWeek, The Record, The DFIR Report and Krebs on Security; The Hacker News and CyberScoop are Master-only after the latest phone rebalance |
 | Technical research | 14 | CERT/CC, NIST, Google Security Blog, Rapid7 Research, Elastic Security Labs, FBI Cyber Division, Mandiant, Project Zero, Microsoft, Unit 42, GitHub Security, OWASP, ZDI and Trail of Bits |
-| Specialist alerts & research | 54 | Council of the EU Justice & Home Affairs meeting calendar, Atlantic Council, FDD, Lawfare Cybersecurity & Tech, NIST general news and critical-technology research, ECFR, Bellingcat, Global Initiative, Jamestown, RUSI, SIPRI, Chatham House and EUISS strategic-security, OSINT, organized-crime and geopolitical research, official European Commission digital-strategy news, European Cybersecurity Competence Centre and Network EU cyber-resilience and funding news, eu-LISA updates and publications on EU large-scale IT systems and digital resilience, UK DSIT digital/AI/telecoms-security and cyber-resilience activity, UK Government cyber-security news, research/statistics and policy-paper streams, KISA, KrCERT/CC, ICS, HKCERT, Belgian CCB news, INCIBE consumer warnings, EASA aviation-cybersecurity and GNSS-resilience news, German BSI/CERT-Bund advisories, ANSSI threat overviews, CSSF financial-cybersecurity publications, NCSC-FI vulnerability notices, vendor advisories, cloud/container security, supply-chain, threat-intelligence and research, plus the Canadian Centre for Cyber Security guidance, news and events stream |
+| Specialist alerts & research | 62 | Council of the EU Justice & Home Affairs meeting calendar, Atlantic Council, FDD, International Crisis Group Horn of Africa conflict analysis, Council on Foreign Relations foreign-policy and geopolitical analysis, Lowy Institute Asia-Pacific geopolitical, defence, economic-security, technology and AI analysis, International Criminal Court news on cases, proceedings, sanctions and accountability, OPCW chemical-weapons non-proliferation and chemical-security news, UN OCHA humanitarian coordination and crisis-response news, OCHA-curated ReliefWeb humanitarian reports and situation updates, NIST general news and critical-technology research, ECFR, Bellingcat, Global Initiative, Jamestown, RUSI, SIPRI, Chatham House and EUISS strategic-security, OSINT, organized-crime and geopolitical research, official European Commission digital-strategy news, European Cybersecurity Competence Centre and Network EU cyber-resilience and funding news, eu-LISA updates and publications on EU large-scale IT systems and digital resilience, UK DSIT digital/AI/telecoms-security and cyber-resilience activity, UK Government cyber-security news, research/statistics and policy-paper streams, KISA, KrCERT/CC, ICS, HKCERT, ThaiCERT English news and advisories, Belgian CCB news, INCIBE consumer warnings, EASA aviation-cybersecurity and GNSS-resilience news, German BSI/CERT-Bund advisories, ANSSI threat overviews, CSSF financial-cybersecurity publications, NCSC-FI vulnerability notices, vendor advisories, cloud/container security, supply-chain, threat-intelligence and research, plus the Canadian Centre for Cyber Security guidance, news and events stream; EDPB Publications adds compact GDPR opinions, binding decisions, guidelines, studies and cross-regulatory privacy-policy signal to both phone profiles |
+
+The latest additions to **Specialist alerts & research** are **European Data Protection Board — Publications**, **OPCW — Chemical Security & Disarmament News**, **UN OCHA — Humanitarian Affairs News** and **ReliefWeb — Humanitarian Updates**, following the **Lowy Institute — The Interpreter** and **International Criminal Court — News** streams. EDPB Publications is compact and included in both phone profiles; the other recent streams remain Master-only. Together they add GDPR opinions and decisions, chemical-weapons non-proliferation, humanitarian coordination, conflict-accountability, sanctions, emergency-response and operational situation-report signal alongside Asia-Pacific geopolitical, defence, economic-security, technology and AI analysis.
 
 ### Profile coverage matrix
 
@@ -119,19 +150,19 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 
 | Feed group | Master | iPhone Air | iPhone Lite |
 | --- | ---: | ---: | ---: |
-| Finance — Market & Trading | 10 | 4 | 3 |
-| Finance — Official & Macro | 133 | 57 | 56 |
-| Finance — Data, Ireland, EU & UK | 46 | 8 | 6 |
-| Finance — Global Data & Research | 218 | 30 | 29 |
+| Finance — Market & Trading | 25 | 3 | 3 |
+| Finance — Official & Macro | 156 | 59 | 58 |
+| Finance — Data, Ireland, EU & UK | 49 | 8 | 6 |
+| Finance — Global Data & Research | 305 | 32 | 31 |
 | Finance — UK Regulation & Warnings | 21 | 2 | 2 |
-| Cyber — Ireland, EU & Official Alerts | 33 | 13 | 12 |
-| Cyber — News & Incident Reporting | 7 | 3 | 3 |
+| Cyber — Ireland, EU & Official Alerts | 33 | 10 | 10 |
+| Cyber — News & Incident Reporting | 7 | 2 | 2 |
 | Cyber — Technical Research | 14 | 4 | 4 |
-| Cyber — Specialist Alerts & Research | 54 | 4 | 3 |
-| **Total** | **536** | **125** | **118** |
+| Cyber — Specialist Alerts & Research | 62 | 5 | 4 |
+| **Total** | **672** | **125** | **120** |
 
 <details>
-<summary>Show all 536 feed names</summary>
+<summary>Show all 672 feed names</summary>
 
 #### Finance
 
@@ -141,6 +172,21 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Nasdaq Trader — Equity Trader Alerts
 - Euronext — Market Status
 - Euronext Athens — Market Notices
+- HKEX — News Releases
+- HKEX — Regulatory Announcements
+- HKEX — Market Communications
+- HKEX — SEHK Trading Rules
+- JPX — Market News
+- JPX — News Releases
+- JPX — Equity Trading Halts
+- JPX — Derivatives Trading Halts
+- JPX — Alerts on Unclear Information
+- TWSE — News (Chinese)
+- TWSE — Rules & Regulations News (English)
+- TAIFEX — Press Releases (English)
+- TAIFEX — Notices (English)
+- CME Globex — Electronic Trading Notices
+- Boursa Kuwait — Market Message
 - BBC — Business
 - Bloomberg — Markets
 - Financial Times — Markets
@@ -178,6 +224,8 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - European Commission — Financial Services News (FISMA)
 - Banca d’Italia — News (English)
 - European Commission — Energy News
+- ACER — Energy Market and REMIT News
+- European Commission — Single Market, Industry & SMEs News
 - European Commission — Trade & Economic Security News
 - European Commission — Mobility & Transport News
 - European Commission — Migration & Home Affairs News
@@ -211,6 +259,9 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Federal Reserve — Enforcement Actions
 - Federal Reserve — Banking Applications
 - Banco Central do Brasil — News (Portuguese)
+- Qatar News Agency — Economy Local
+- Chile Servicio de Impuestos Internos — News
+- Vietnam Official Gazette — New Issues
 - OCC — Bulletins
 - OCC — News Releases
 - OCC — Speeches
@@ -226,10 +277,25 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - FDIC — Press Releases
 - Bank of Canada — Press Releases
 - OSFI — News
+- Canadian Investment Regulatory Organization — News & Enforcement
 - DNB — General News
 - DNB — Supervision News
 - Bank of Canada — Market Notices
 - Bank of Canada — Regulatory News
+- South African Reserve Bank — News & Publications
+- South African Revenue Service — Latest News
+- Nepal Rastra Bank — Media Releases
+- Nepal Rastra Bank — Circulars
+- Bank of Ghana — News
+- Central Bank of Kenya — News & Releases
+- Central Bank of Eswatini — News & Releases
+- Kenya Capital Markets Authority — News & Releases
+- Ghana Securities & Exchange Commission — Public Notices
+- Central Bank of Lesotho — Monetary Policy Statements
+- Bank of Russia — English What’s New
+- Bank of Russia — English News and Comments
+- Bank of Russia — English Press Releases
+- Central Bank of the Republic of Türkiye — Press Releases (English)
 - FINTRAC — News
 - HKMA — Circulars
 - HKMA — Consultations
@@ -255,6 +321,9 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Danmarks Nationalbank — Market Announcements
 - Bank of Korea — Press Releases
 - Bank of Korea — Monetary Policy Decisions
+- Korea Financial Services Commission — Press Releases (Korean)
+- Korea Financial Services Commission — Explanations (Korean)
+- Korea Financial Services Commission — Notices (Korean)
 - Bangko Sentral ng Pilipinas — Media Releases
 - Bangko Sentral ng Pilipinas — Issuances
 - Bangko Sentral ng Pilipinas — Public Advisories
@@ -281,6 +350,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - ECB — Statistical Releases
 - Central Bank of Ireland — Markets Update
 - ComReg — News and Publications
+- BEREC — Latest News, Press Releases & Publications
 - Houses of the Oireachtas — Press Releases
 - Houses of the Oireachtas — Dáil Schedule
 - Houses of the Oireachtas — Seanad Schedule
@@ -326,13 +396,43 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 
 **Global Data & Research**
 
+- CVM — Board Decisions
+- CVM — Legislation
+- CVM — Public Consultations
+- CVM — Collegiate Bulletins
+- Singapore Food Agency — Food Alerts & Recalls
+- Singapore Food Agency — Newsroom
+- Singapore Food Agency — Trade Circulars
+- New Zealand Treasury — Publications
+- New Zealand Treasury — Regulatory Impact Statements
+- New Zealand Treasury — Data and Charts
+- Reserve Bank of New Zealand — News Releases
+- Statistical Office of the Republic of Slovenia — Releases
+- Statistics Norway — Upcoming Statistical Releases
+- Statistics Norway — StatBank Table Updates
+- Peterson Institute for International Economics — Updates
+- European Commission Joint Research Centre — News & Updates
+- European Commission — International Partnerships News
+- UK ONS — National Statistical Blog
+- Taiwan National Treasury Administration — Latest News
+- Taiwan National Treasury Administration — Important Measures
+- ITU — Global Digital and Telecoms News
+- WIPO — Press Releases
+- WIPO — Economics and Innovation Policy News
 - African Development Bank — News & Events
+- African Union — News & Events
+- United Nations Economic Commission for Africa — News
+- IPCC — News
+- UN-Water — News
+- UN-Habitat — News
 - WHO Africa — Featured News
 - UK Foreign, Commonwealth & Development Office — Activity on GOV.UK
 - UK Cabinet Office — Activity on GOV.UK
 - UK Department of Health and Social Care — Activity on GOV.UK
 - United Nations — Meetings Coverage and Press Releases
 - United Nations Office at Geneva — Meeting Summaries
+- United Nations Office at Geneva — Press Releases
+- United Nations Office at Geneva — Press Conference Announcements
 - U.S. Courts — Judiciary News
 - Caribbean Development Bank — News Releases
 - Afreximbank Research — Journal of African Trade
@@ -353,6 +453,10 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - European Commission — Public Health News
 - European Commission — Climate Action News
 - Banco de la República — News & Research (Spanish)
+- Banco de la República — News & Research (English route)
+- Central Bank of Sri Lanka — Monetary Policy Review
+- Central Bank of Sri Lanka — Weekly Economic Indicators
+- Central Bank of Sri Lanka — Monthly Economic Indicators
 - Reserve Bank of Australia — Daily Exchange Rates
 - Reserve Bank of Australia — Media Releases
 - Reserve Bank of Australia — Speeches
@@ -392,6 +496,9 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - European Investment Bank — News
 - European Investment Bank — Publications
 - European Investment Bank — Blog
+- European Investment Bank — Projects to be Financed
+- European Investment Bank — Project Procurement
+- European Investment Bank — Board and Institutional Events
 - Apple — Newsroom
 - Apple Developer — News
 - European Commission — Harmonised Standards
@@ -399,6 +506,14 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Asian Infrastructure Investment Bank — Blogs
 - Asian Development Bank — News Releases
 - Asian Development Bank — Publications
+- Asian Development Bank — Blogs
+- Asian Development Bank — Research Publications
+- Asian Development Bank — Evaluation
+- Asian Development Bank — Features
+- CNA — Business
+- CNA — Asia
+- South African Department of Science, Technology and Innovation — News
+- Nepal Rastra Bank — Monetary Policy
 - ASEAN — News
 - ASEAN+3 Macroeconomic Research Office — News & Research
 - ASEAN+3 Macroeconomic Research Office — Press Releases
@@ -414,6 +529,15 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Federal Reserve Bank of St. Louis — FRED Blog
 - Federal Reserve Bank of St. Louis — On the Economy
 - Federal Reserve Bank of St. Louis — Review
+- Federal Reserve Bank of Atlanta — Macroblog
+- Federal Reserve Bank of Atlanta — Working Papers
+- Federal Reserve Bank of Dallas — Economic Updates
+- Federal Reserve Bank of Dallas — News Releases
+- Federal Reserve Bank of Dallas — Speeches
+- Federal Reserve Bank of New York — Liberty Street Economics
+- Federal Reserve Bank of Richmond — Press Room
+- Federal Reserve Bank of Richmond — Research
+- Federal Reserve Bank of San Francisco — News & Research
 - Bank of Finland Bulletin — Articles
 - UK Department for Energy Security and Net Zero — Activity on GOV.UK
 - EIOPA — Risk-Free Rate Term Structures
@@ -428,15 +552,26 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Finanstilsynet — Circulars (Norwegian)
 - Japan Financial Services Agency — All News (Japanese)
 - Japan Securities and Exchange Surveillance Commission — Press Releases
+- Japan Securities and Exchange Surveillance Commission — Press Releases (Japanese)
+- Japan Certified Public Accountants and Auditing Oversight Board — News (Japanese)
 - Federal Register — OFAC Sanctions Notices
 - Federal Register — FinCEN AML & Financial-Crime Notices
 - Federal Register — OCC Banking Rules & Notices
+- Hong Kong SFC — Press Releases
+- Hong Kong SFC — Circulars
+- Hong Kong SFC — Consultations & Conclusions
 - CSSF — All Publications (English)
 - FMA Austria — All News (English)
 - FSMA Belgium — News & Warnings (English)
 - BaFin — Supervisory Measures (German)
 - BaFin — Circulars (German)
 - Bank of Canada — Financial Stability Report
+- Bank of Canada — Sparks at Bank Articles
+- Bank of Canada — Staff Analytical Papers
+- Bank of Canada — Staff Working Papers
+- Central Bank of the Republic of Türkiye — Publications (English)
+- Central Bank of the Republic of Türkiye — Data (English)
+- Central Bank of the Republic of Türkiye — Remarks by Governor (English)
 - HKMA — Daily Monetary Statistics
 - HKMA — Speeches
 - HKMA — Publications
@@ -459,6 +594,17 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Eurogroup — Meetings
 - European Council — Meetings
 - Council of the EU — Transport, Telecommunications & Energy Meetings
+- Council of the EU — Agriculture & Fisheries Meetings
+- Council of the EU — Competitiveness Meetings
+- Council of the EU — Environment Meetings
+- Council of the EU — Foreign Affairs Meetings
+- Council of the EU — General Affairs Meetings
+- European Commission — Defence Industry & Space Latest News
+- European Commission — Civil Protection & Humanitarian Aid News
+- UK Office for Budget Responsibility — Research & Statistics
+- Irish Fiscal Advisory Council — Beyond the Budget
+- European Commission — EU Finance Podcast: The Future of Finance
+- European Parliament Research Service — Think Tank
 - European Parliament — Committee Press Releases
 - UK Parliament — Public Bills
 - UK Parliament — Private Bills
@@ -476,6 +622,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - European Food Safety Authority — News
 - European Food Safety Authority — Publications
 - European Patent Office — News
+- European Patent Office — Communications from the Boards of Appeal
 - EU Agency for the Space Programme — News
 - EU Agency for the Space Programme — Press Releases
 - ECDC — News
@@ -541,6 +688,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - CEPR — Discussion Papers
 - Tax Foundation — Research & Commentary
 - OECD Ecoscope — Economics Department Blog
+- OECD.AI — AI Wonk
 - Deutsche Bundesbank — Discussion Papers
 - Deutsche Bundesbank — Latest Announcements
 - Deutsche Bundesbank — Speeches, Interviews & Contributions
@@ -553,6 +701,8 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - BMUKN — All News
 - European Commission Representation in Ireland — News
 - UK Government — National Security News & Communications
+- APEC — Press
+- United Nations Development Programme — Asia-Pacific News Centre
 
 **UK Regulation & Warnings**
 
@@ -585,7 +735,6 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Ireland NCSC — Alerts & Advisories
 - Ireland NCSC — Guidance Documents
 - CISA — All Advisories
-- CIS — MS-ISAC Advisories
 - CERT-EU — Security Advisories
 - CERT-FR — Security Alerts (French)
 - NCSC UK — News
@@ -600,6 +749,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - New Zealand NCSC — News
 - Communications Security Establishment — News
 - European Data Protection Board — News
+- European Data Protection Board — Publications
 - Swiss NCSC — Press Releases (German)
 - ACN / CSIRT Italia — Security Updates (Italian)
 - Centre for Cybersecurity Belgium — Advisories
@@ -612,6 +762,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - NÚKIB — News (Czech)
 - CERT.hr — News (Croatian)
 - Estonian RIA — Cybersecurity News (Estonian)
+- Lithuania NKSC — News (Lithuanian)
 - JPCERT/CC — All Updates
 - JVN — Vulnerability Notes
 - Canadian Centre for Cyber Security — Alerts & Advisories
@@ -687,7 +838,13 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - Jamestown — Eurasia & Terrorism Analysis
 - Atlantic Council — Global Security & Geopolitics
 - FDD — National Security & Foreign Policy Analysis
-- Lawfare — Cybersecurity & Tech
+- International Crisis Group — Horn of Africa
+- Council on Foreign Relations — Analysis & Podcasts
+- Lowy Institute — The Interpreter
+- International Criminal Court — News
+- UN OCHA — Humanitarian Affairs News
+- ReliefWeb — Humanitarian Updates
+- OPCW — Chemical Security & Disarmament News
 - NIST — General News & Critical Technology
 - Council of the EU — Justice & Home Affairs Meetings
 - RUSI — Latest Commentary
@@ -698,6 +855,7 @@ Master includes every feed. Air and Lite are curated subsets of the same manifes
 - UK Government — Cyber Security Research & Statistics
 - UK Government — Cyber Security Policy Papers & Consultations
 - Canadian Centre for Cyber Security — Guidance, News & Events
+- ThaiCERT — English News & Advisories
 
 </details>
 
@@ -716,8 +874,23 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Nasdaq Trader — Equity Trader Alerts | Yes | Yes | Off · digest |
 | Euronext — Market Status | Yes | Yes | Off · digest |
 | Euronext Athens — Market Notices | — | — | Off · digest |
+| HKEX — News Releases | — | — | Off · digest |
+| HKEX — Regulatory Announcements | — | — | Off · digest |
+| HKEX — Market Communications | — | — | Off · digest |
+| HKEX — SEHK Trading Rules | — | — | Off · digest |
+| JPX — Market News | — | — | Off · digest |
+| JPX — News Releases | — | — | Off · digest |
+| JPX — Equity Trading Halts | — | — | Off · digest |
+| JPX — Derivatives Trading Halts | — | — | Off · digest |
+| JPX — Alerts on Unclear Information | — | — | Off · digest |
+| TWSE — News (Chinese) | — | — | Off · digest |
+| TWSE — Rules & Regulations News (English) | — | — | Off · digest |
+| TAIFEX — Press Releases (English) | — | — | Off · digest |
+| TAIFEX — Notices (English) | — | — | Off · digest |
+| CME Globex — Electronic Trading Notices | — | — | Off · digest |
+| Boursa Kuwait — Market Message | — | — | Off · digest |
 | BBC — Business | — | — | Off · digest |
-| Bloomberg — Markets | Yes | — | Off · digest |
+| Bloomberg — Markets | — | — | Off · digest |
 | Financial Times — Markets | — | — | Off · digest |
 | MarketWatch — Top Stories | — | — | Off · digest |
 | RTÉ — Business | — | — | Off · digest |
@@ -731,6 +904,9 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | European Central Bank — Press | Yes | Yes | Optional |
 | European Banking Authority — News | Yes | Yes | Off · digest |
 | Banco Central do Brasil — News (Portuguese) | — | — | Off · digest |
+| Qatar News Agency — Economy Local | — | — | Off · digest |
+| Chile Servicio de Impuestos Internos — News | — | — | Off · digest |
+| Vietnam Official Gazette — New Issues | — | — | Off · digest |
 | European Systemic Risk Board — Press | Yes | Yes | Off · digest |
 | European Systemic Risk Board — Publications & Research | Yes | Yes | Off · digest |
 | European Systemic Risk Board — Policy Warnings & Advice | Yes | Yes | Off · digest |
@@ -756,6 +932,8 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | European Commission — Financial Services News (FISMA) | Yes | Yes | Off · digest |
 | Banca d’Italia — News (English) | Yes | Yes | Off · digest |
 | European Commission — Energy News | — | — | Off · digest |
+| ACER — Energy Market and REMIT News | — | — | Off · digest |
+| European Commission — Single Market, Industry & SMEs News | — | — | Off · digest |
 | European Commission — Trade & Economic Security News | — | — | Off · digest |
 | European Commission — Mobility & Transport News | — | — | Off · digest |
 | European Commission — Migration & Home Affairs News | — | — | Off · digest |
@@ -802,7 +980,8 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | NFA — Regulatory Actions | — | — | Off · digest |
 | FDIC — Press Releases | — | — | Off · digest |
 | Bank of Canada — Press Releases | Yes | Yes | Off · digest |
-| OSFI — News | — | — | Off · digest |
+| OSFI — News | Yes | Yes | Off · digest |
+| Canadian Investment Regulatory Organization — News & Enforcement | — | — | Off · digest |
 | DNB — General News | — | — | Off · digest |
 | DNB — Supervision News | Yes | Yes | Off · digest |
 | Bank of Canada — Market Notices | Yes | Yes | Off · digest |
@@ -832,6 +1011,9 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Danmarks Nationalbank — Market Announcements | Yes | Yes | Off · digest |
 | Bank of Korea — Press Releases | — | — | Off · digest |
 | Bank of Korea — Monetary Policy Decisions | — | — | Off · digest |
+| Korea Financial Services Commission — Press Releases (Korean) | — | — | Off · digest |
+| Korea Financial Services Commission — Explanations (Korean) | — | — | Off · digest |
+| Korea Financial Services Commission — Notices (Korean) | — | — | Off · digest |
 | Bangko Sentral ng Pilipinas — Media Releases | — | — | Off · digest |
 | Bangko Sentral ng Pilipinas — Issuances | — | — | Off · digest |
 | Bangko Sentral ng Pilipinas — Public Advisories | — | — | Off · digest |
@@ -898,22 +1080,78 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | US Bureau of Economic Analysis — News Releases | — | — | Off · digest |
 | US Census Bureau — Economic Indicators | — | — | Off · digest |
 | ComReg — News and Publications | — | — | Off · digest |
+| BEREC — Latest News, Press Releases & Publications | — | — | Off · digest |
 | Houses of the Oireachtas — Press Releases | — | — | Off · digest |
 | Houses of the Oireachtas — Dáil Schedule | — | — | Off · digest |
 | Houses of the Oireachtas — Seanad Schedule | — | — | Off · digest |
 | Houses of the Oireachtas — Committee Schedule | — | — | Off · digest |
+| IAASA — News | — | — | Off · digest |
+| Pensions Authority — News | — | — | Off · digest |
+| South African Reserve Bank — News & Publications | — | — | Off · digest |
+| South African Revenue Service — Latest News | — | — | Off · digest |
+| Nepal Rastra Bank — Media Releases | — | — | Off · digest |
+| Nepal Rastra Bank — Circulars | — | — | Off · digest |
+| Bank of Ghana — News | — | — | Off · digest |
+| Central Bank of Kenya — News & Releases | — | — | Off · digest |
+| Central Bank of Eswatini — News & Releases | — | — | Off · digest |
+| Kenya Capital Markets Authority — News & Releases | — | — | Off · digest |
+| Ghana Securities & Exchange Commission — Public Notices | — | — | Off · digest |
+| Central Bank of Lesotho — Monetary Policy Statements | — | — | Off · digest |
+| Bank of Russia — English What’s New | — | — | Off · digest |
+| Bank of Russia — English News and Comments | — | — | Off · digest |
+| Bank of Russia — English Press Releases | Yes | Yes | Off · digest |
+| Central Bank of the Republic of Türkiye — Press Releases (English) | — | — | Off · digest |
 
 ##### 04 — Optional — Global Data & Research
 
 | Feed | Air | Lite | Notifications |
 | --- | :---: | :---: | --- |
+| CVM — Board Decisions | — | — | Off · digest |
+| CVM — Legislation | Yes | Yes | Off · digest |
+| CVM — Public Consultations | — | — | Off · digest |
+| CVM — Collegiate Bulletins | Yes | Yes | Off · digest |
+| Singapore Food Agency — Food Alerts & Recalls | Yes | Yes | Off · digest |
+| Singapore Food Agency — Newsroom | — | — | Off · digest |
+| Singapore Food Agency — Trade Circulars | — | — | Off · digest |
+| New Zealand Treasury — Publications | — | — | Off · digest |
+| New Zealand Treasury — Regulatory Impact Statements | — | — | Off · digest |
+| New Zealand Treasury — Data and Charts | — | — | Off · digest |
+| Reserve Bank of New Zealand — News Releases | — | — | Off · digest |
+| Statistical Office of the Republic of Slovenia — Releases | — | — | Off · digest |
+| Statistics Norway — Upcoming Statistical Releases | — | — | Off · digest |
+| Statistics Norway — StatBank Table Updates | — | — | Off · digest |
+| Peterson Institute for International Economics — Updates | — | — | Off · digest |
+| European Commission Joint Research Centre — News & Updates | — | — | Off · digest |
+| European Commission — International Partnerships News | — | — | Off · digest |
+| UK ONS — National Statistical Blog | — | — | Off · digest |
+| Taiwan National Treasury Administration — Latest News | — | — | Off · digest |
+| Taiwan National Treasury Administration — Important Measures | — | — | Off · digest |
+| ITU — Global Digital and Telecoms News | — | — | Off · digest |
+| WIPO — Press Releases | — | — | Off · digest |
+| WIPO — Economics and Innovation Policy News | — | — | Off · digest |
 | African Development Bank — News & Events | — | — | Off · digest |
+| African Union — News & Events | — | — | Off · digest |
+| United Nations Economic Commission for Africa — News | — | — | Off · digest |
+| IPCC — News | — | — | Off · digest |
+| UN-Water — News | — | — | Off · digest |
+| UN-Habitat — News | — | — | Off · digest |
+| East African Community — Press Releases | — | — | Off · digest |
+| COMESA — News | — | — | Off · digest |
+| Pacific Islands Forum — Media Releases and News | — | — | Off · digest |
+| ECOWAS — News | — | — | Off · digest |
+| MERCOSUR — News | — | — | Off · digest |
+| IGAD — News | — | — | Off · digest |
+| COMCEC — News | — | — | Off · digest |
+| APEC — Press | — | — | Off · digest |
+| United Nations Development Programme — Asia-Pacific News Centre | — | — | Off · digest |
 | WHO Africa — Featured News | — | — | Off · digest |
 | UK Foreign, Commonwealth & Development Office — Activity on GOV.UK | — | — | Off · digest |
 | UK Cabinet Office — Activity on GOV.UK | — | — | Off · digest |
 | UK Department of Health and Social Care — Activity on GOV.UK | — | — | Off · digest |
 | United Nations — Meetings Coverage and Press Releases | — | — | Off · digest |
 | United Nations Office at Geneva — Meeting Summaries | — | — | Off · digest |
+| United Nations Office at Geneva — Press Releases | — | — | Off · digest |
+| United Nations Office at Geneva — Press Conference Announcements | — | — | Off · digest |
 | U.S. Courts — Judiciary News | Yes | Yes | Off · digest |
 | Caribbean Development Bank — News Releases | — | — | Off · digest |
 | Afreximbank Research — Journal of African Trade | — | — | Off · digest |
@@ -934,6 +1172,10 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | European Commission — Public Health News | — | — | Off · digest |
 | European Commission — Climate Action News | — | — | Off · digest |
 | Banco de la República — News & Research (Spanish) | — | — | Off · digest |
+| Banco de la República — News & Research (English route) | — | — | Off · digest |
+| Central Bank of Sri Lanka — Monetary Policy Review | — | — | Off · digest |
+| Central Bank of Sri Lanka — Weekly Economic Indicators | — | — | Off · digest |
+| Central Bank of Sri Lanka — Monthly Economic Indicators | — | — | Off · digest |
 | Reserve Bank of Australia — Daily Exchange Rates | — | — | Off · digest |
 | Reserve Bank of Australia — Media Releases | Yes | Yes | Off · digest |
 | Reserve Bank of Australia — Speeches | Yes | Yes | Off · digest |
@@ -973,6 +1215,9 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | European Investment Bank — News | Yes | Yes | Off · digest |
 | European Investment Bank — Publications | — | — | Off · digest |
 | European Investment Bank — Blog | — | — | Off · digest |
+| European Investment Bank — Projects to be Financed | — | — | Off · digest |
+| European Investment Bank — Project Procurement | — | — | Off · digest |
+| European Investment Bank — Board and Institutional Events | — | — | Off · digest |
 | Apple — Newsroom | Yes | Yes | Off · digest |
 | Apple Developer — News | — | — | Off · digest |
 | European Commission — Harmonised Standards | — | — | Off · digest |
@@ -980,6 +1225,14 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Asian Infrastructure Investment Bank — Blogs | — | — | Off · digest |
 | Asian Development Bank — News Releases | — | — | Off · digest |
 | Asian Development Bank — Publications | — | — | Off · digest |
+| Asian Development Bank — Blogs | — | — | Off · digest |
+| Asian Development Bank — Research Publications | — | — | Off · digest |
+| Asian Development Bank — Evaluation | — | — | Off · digest |
+| Asian Development Bank — Features | — | — | Off · digest |
+| CNA — Business | — | — | Off · digest |
+| CNA — Asia | — | — | Off · digest |
+| South African Department of Science, Technology and Innovation — News | — | — | Off · digest |
+| Nepal Rastra Bank — Monetary Policy | — | — | Off · digest |
 | ASEAN — News | — | — | Off · digest |
 | ASEAN+3 Macroeconomic Research Office — News & Research | — | — | Off · digest |
 | ASEAN+3 Macroeconomic Research Office — Press Releases | — | — | Off · digest |
@@ -989,12 +1242,21 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Eurostat — Data and Data Structure Updates | — | — | Off · digest |
 | European Training Foundation — News | — | — | Off · digest |
 | European Union Agency for Railways — News | Yes | Yes | Off · digest |
-| Eurofound — News | Yes | Yes | Off · digest |
+| Eurofound — News | — | — | Off · digest |
 | European Economic and Social Committee — News | — | — | Off · digest |
 | European Maritime Safety Agency — Latest News | Yes | Yes | Off · digest |
 | Federal Reserve Bank of St. Louis — FRED Blog | — | — | Off · digest |
 | Federal Reserve Bank of St. Louis — On the Economy | — | — | Off · digest |
 | Federal Reserve Bank of St. Louis — Review | — | — | Off · digest |
+| Federal Reserve Bank of Atlanta — Macroblog | — | — | Off · digest |
+| Federal Reserve Bank of Atlanta — Working Papers | — | — | Off · digest |
+| Federal Reserve Bank of Dallas — Economic Updates | — | — | Off · digest |
+| Federal Reserve Bank of Dallas — News Releases | — | — | Off · digest |
+| Federal Reserve Bank of Dallas — Speeches | — | — | Off · digest |
+| Federal Reserve Bank of New York — Liberty Street Economics | — | — | Off · digest |
+| Federal Reserve Bank of Richmond — Press Room | — | — | Off · digest |
+| Federal Reserve Bank of Richmond — Research | — | — | Off · digest |
+| Federal Reserve Bank of San Francisco — News & Research | — | — | Off · digest |
 | EIOPA — Risk-Free Rate Term Structures | — | — | Off · digest |
 | EIOPA — Symmetric Adjustment Equity Capital Charge | — | — | Off · digest |
 | DNB — Publications | — | — | Off · digest |
@@ -1009,15 +1271,26 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Finanstilsynet — Circulars (Norwegian) | — | — | Off · digest |
 | Japan Financial Services Agency — All News (Japanese) | — | — | Off · digest |
 | Japan Securities and Exchange Surveillance Commission — Press Releases | — | — | Off · digest |
+| Japan Securities and Exchange Surveillance Commission — Press Releases (Japanese) | — | — | Off · digest |
+| Japan Certified Public Accountants and Auditing Oversight Board — News (Japanese) | — | — | Off · digest |
 | Federal Register — OFAC Sanctions Notices | — | — | Off · digest |
 | Federal Register — FinCEN AML & Financial-Crime Notices | — | — | Off · digest |
 | Federal Register — OCC Banking Rules & Notices | — | — | Off · digest |
+| Hong Kong SFC — Press Releases | — | — | Off · digest |
+| Hong Kong SFC — Circulars | — | — | Off · digest |
+| Hong Kong SFC — Consultations & Conclusions | — | — | Off · digest |
 | CSSF — All Publications (English) | — | — | Off · digest |
 | FMA Austria — All News (English) | — | — | Off · digest |
 | FSMA Belgium — News & Warnings (English) | — | — | Off · digest |
 | BaFin — Supervisory Measures (German) | — | — | Off · digest |
 | BaFin — Circulars (German) | — | — | Off · digest |
 | Bank of Canada — Financial Stability Report | Yes | Yes | Off · digest |
+| Bank of Canada — Sparks at Bank Articles | — | — | Off · digest |
+| Bank of Canada — Staff Analytical Papers | — | — | Off · digest |
+| Bank of Canada — Staff Working Papers | — | — | Off · digest |
+| Central Bank of the Republic of Türkiye — Publications (English) | — | — | Off · digest |
+| Central Bank of the Republic of Türkiye — Data (English) | — | — | Off · digest |
+| Central Bank of the Republic of Türkiye — Remarks by Governor (English) | — | — | Off · digest |
 | HKMA — Daily Monetary Statistics | — | — | Off · digest |
 | HKMA — Speeches | — | — | Off · digest |
 | HKMA — Publications | — | — | Off · digest |
@@ -1040,6 +1313,17 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Eurogroup — Meetings | — | — | Off · digest |
 | European Council — Meetings | Yes | Yes | Off · digest |
 | Council of the EU — Transport, Telecommunications & Energy Meetings | — | — | Off · digest |
+| Council of the EU — Agriculture & Fisheries Meetings | — | — | Off · digest |
+| Council of the EU — Competitiveness Meetings | — | — | Off · digest |
+| Council of the EU — Environment Meetings | — | — | Off · digest |
+| Council of the EU — Foreign Affairs Meetings | — | — | Off · digest |
+| Council of the EU — General Affairs Meetings | — | — | Off · digest |
+| European Commission — Defence Industry & Space Latest News | — | — | Off · digest |
+| European Commission — Civil Protection & Humanitarian Aid News | — | — | Off · digest |
+| UK Office for Budget Responsibility — Research & Statistics | — | — | Off · digest |
+| Irish Fiscal Advisory Council — Beyond the Budget | — | — | Off · digest |
+| European Commission — EU Finance Podcast: The Future of Finance | — | — | Off · digest |
+| European Parliament Research Service — Think Tank | — | — | Off · digest |
 | European Parliament — Committee Press Releases | Yes | Yes | Off · digest |
 | UK Parliament — Public Bills | Yes | Yes | Off · digest |
 | UK Parliament — Private Bills | — | — | Off · digest |
@@ -1057,6 +1341,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | European Food Safety Authority — News | — | — | Off · digest |
 | European Food Safety Authority — Publications | — | — | Off · digest |
 | European Patent Office — News | — | — | Off · digest |
+| European Patent Office — Communications from the Boards of Appeal | — | — | Off · digest |
 | EU Agency for the Space Programme — News | — | — | Off · digest |
 | EU Agency for the Space Programme — Press Releases | — | — | Off · digest |
 | ECDC — News | — | — | Off · digest |
@@ -1122,6 +1407,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | CEPR — Discussion Papers | — | — | Off · digest |
 | Tax Foundation — Research & Commentary | — | — | Off · digest |
 | OECD Ecoscope — Economics Department Blog | — | — | Off · digest |
+| OECD.AI — AI Wonk | — | — | Off · digest |
 | Deutsche Bundesbank — Discussion Papers | — | — | Off · digest |
 | Deutsche Bundesbank — Latest Announcements | — | — | Off · digest |
 | Deutsche Bundesbank — Speeches, Interviews & Contributions | Yes | Yes | Off · digest |
@@ -1170,12 +1456,11 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Ireland NCSC — Alerts & Advisories | Yes | Yes | On |
 | Ireland NCSC — Guidance Documents | Yes | Yes | Off · digest |
 | CISA — All Advisories | Yes | Yes | On |
-| CIS — MS-ISAC Advisories | Yes | Yes | Off · digest |
 | CERT-EU — Security Advisories | Yes | Yes | On |
 | CERT-FR — Security Alerts (French) | Yes | Yes | Optional · French |
 | NCSC UK — News | Yes | Yes | Optional |
 | NCSC UK — All Updates | Yes | Yes | Optional |
-| CISA — News | Yes | Yes | Off · digest |
+| CISA — News | — | — | Off · digest |
 | NCSC Netherlands — Security Advisories | — | — | Off · digest |
 | NCSC Netherlands — News | — | — | Off · digest |
 | CERT Polska — Security Advisories & News (Polish) | — | — | Off · digest |
@@ -1186,7 +1471,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Communications Security Establishment — News | Yes | Yes | Off · digest |
 | European Data Protection Board — News | Yes | Yes | Off · digest |
 | Swiss NCSC — Press Releases (German) | — | — | Off · digest |
-| ACN / CSIRT Italia — Security Updates (Italian) | Yes | — | Off · digest |
+| ACN / CSIRT Italia — Security Updates (Italian) | — | — | Off · digest |
 | Centre for Cybersecurity Belgium — Advisories | Yes | Yes | Off · digest |
 | Romania DNSC — Cybersecurity News & Alerts | — | — | Off · digest |
 | CERT.LV — News & Cybersecurity Updates | — | — | Off · digest |
@@ -1197,6 +1482,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | NÚKIB — News (Czech) | — | — | Off · digest |
 | CERT.hr — News (Croatian) | — | — | Off · digest |
 | Estonian RIA — Cybersecurity News (Estonian) | — | — | Off · digest |
+| Lithuania NKSC — News (Lithuanian) | — | — | Off · digest |
 | JPCERT/CC — All Updates | — | — | Off · digest |
 | JVN — Vulnerability Notes | — | — | Off · digest |
 | Canadian Centre for Cyber Security — Alerts & Advisories | — | — | Off · digest |
@@ -1207,7 +1493,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | --- | :---: | :---: | --- |
 | BleepingComputer | Yes | Yes | Off · digest |
 | The Hacker News | — | — | Off · digest |
-| CyberScoop | Yes | Yes | Off · digest |
+| CyberScoop | — | — | Off · digest |
 | SecurityWeek | — | — | Off · digest |
 | The Record — Cybersecurity News | Yes | Yes | Off · digest |
 | The DFIR Report | — | — | Off · digest |
@@ -1278,7 +1564,14 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | Jamestown — Eurasia & Terrorism Analysis | — | — | Off · digest |
 | Atlantic Council — Global Security & Geopolitics | — | — | Off · digest |
 | FDD — National Security & Foreign Policy Analysis | — | — | Off · digest |
-| Lawfare — Cybersecurity & Tech | — | — | Off · digest |
+| International Crisis Group — Horn of Africa | — | — | Off · digest |
+| Council on Foreign Relations — Analysis & Podcasts | — | — | Off · digest |
+| Lowy Institute — The Interpreter | — | — | Off · digest |
+| International Criminal Court — News | — | — | Off · digest |
+| UN OCHA — Humanitarian Affairs News | — | — | Off · digest |
+| ReliefWeb — Humanitarian Updates | — | — | Off · digest |
+| OPCW — Chemical Security & Disarmament News | — | — | Off · digest |
+| European Data Protection Board — Publications | Yes | Yes | Off · digest |
 | NIST — General News & Critical Technology | — | — | Off · digest |
 | Council of the EU — Justice & Home Affairs Meetings | — | — | Off · digest |
 | EASA — Cybersecurity News | — | — | Off · digest |
@@ -1290,6 +1583,7 @@ The **Master** profile contains every feed. `Yes` means the feed is included in 
 | UK Government — Cyber Security Research & Statistics | — | — | Off · digest |
 | UK Government — Cyber Security Policy Papers & Consultations | — | — | Off · digest |
 | Canadian Centre for Cyber Security — Guidance, News & Events | — | — | Off · digest |
+| ThaiCERT — English News & Advisories | — | — | Off · digest |
 
 </details>
 
@@ -1347,7 +1641,7 @@ For the unattended 30-minute/hourly path, see [`NetNewsWire-Hourly-Apple-Intelli
 ## Hourly-or-faster digest handoff
 
 The optional high-coverage path runs `fetch-rss-digest-input.py` against the
-     wider 502-feed Master manifest, applies the bounded Master digest budget and
+     wider 658-feed Master manifest, applies the bounded Master digest budget and
 writes `shortcut-digest.txt`. A macOS launch agent can pass that file to the
 `Daily Finance + Cyber Digest` Shortcut every 30 minutes or every hour. This is
 an unattended manifest mirror, not a silent export of NetNewsWire’s iPhone
@@ -1373,6 +1667,8 @@ The generated `shortcut-digest.txt` is convenient for a Shortcut text action. Th
 ## Validate before sharing or publishing
 
 ```bash
+make doctor         # check offline-maintainer prerequisites
+make status         # show manifest, artifact and validation snapshot status
 make help           # show the project commands
 make check          # offline generation, lint, docs, hygiene, tests and syntax checks
 make check-frozen   # non-mutating checks for a frozen manifest/artifact handoff
@@ -1405,9 +1701,12 @@ Committed validation snapshots live under [`artifacts/validation/`](artifacts/va
 | [`fetch-rss-digest-input.py`](fetch-rss-digest-input.py) | Collects dated RSS/Atom items from the selected manifest profile with conditional requests |
 | [`run-hourly-rss-digest.py`](run-hourly-rss-digest.py) | Combines collection, deduplication, budgets and the Shortcut handoff |
 | [`automation/`](automation/) | Optional macOS launchd wrapper for recurring Shortcut runs |
+| [`check-environment.py`](check-environment.py) | Checks Python, shell and live-validation prerequisites |
+| [`project-status.py`](project-status.py) | Prints a read-only manifest, artifact and validation snapshot |
 | [`validate-docs.py`](validate-docs.py) | Checks README links, feed names and profile counts against the manifest |
 | [`check-repository-hygiene.py`](check-repository-hygiene.py) | Prevents tracked runtime state, credentials and machine-specific paths |
 | [`docs/`](docs/) | Setup guides, Apple Intelligence instructions, research notes and visual previews |
+| [`docs/Troubleshooting.md`](docs/Troubleshooting.md) | Common import, notification, validation and digest fixes |
 | [`artifacts/`](artifacts/) | Generated OPML, source tables, notification matrix, reports and AirDrop handoff |
 | [`examples/`](examples/) | Safe example input for digest preparation |
 | [`artifacts/AirDrop/`](artifacts/AirDrop/) | Ready-to-send iPhone Air OPML and handoff notes |

@@ -14,6 +14,16 @@ make package
 
 The `artifacts/AirDrop/` copy is a generated handoff artifact for the recommended iPhone Air profile.
 
+Before editing, run `make doctor` to check the local maintainer toolchain. Use `make doctor-live` when you also plan to run the network-backed feed audits.
+
+For a quick read-only snapshot of manifest counts, generated-file presence and the latest committed validation reports, run:
+
+```sh
+make status
+```
+
+The status command surfaces live-feed findings without rewriting files. Use `make check-frozen` when you need the byte-level reproducibility gate for generated artifacts.
+
 ## Required checks
 
 Run the offline gate before opening a pull request:

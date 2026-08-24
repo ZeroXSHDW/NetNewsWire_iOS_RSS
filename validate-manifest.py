@@ -70,6 +70,13 @@ def compare_generated_artifacts(data: dict, root: Path, errors: list[str], gener
                 errors.append(f"missing AirDrop handoff artifact: {handoff_air}")
             elif not root_air.exists() or handoff_air.read_bytes() != root_air.read_bytes():
                 errors.append(f"AirDrop handoff is stale: {handoff_air.name}")
+            generated_handoff_readme = temporary_root / "AirDrop-README.txt"
+            committed_handoff_readme = root / "artifacts" / "AirDrop" / "README.txt"
+            generator.write_airdrop_readme(data, generated_handoff_readme)
+            if not committed_handoff_readme.exists():
+                errors.append(f"missing generated artifact: {committed_handoff_readme.name}")
+            elif generated_handoff_readme.read_bytes() != committed_handoff_readme.read_bytes():
+                errors.append(f"generated artifact is stale: {committed_handoff_readme.name}")
 
         generated_matrix_md = temporary_root / "notifications.md"
         generated_matrix_json = temporary_root / "notifications.json"
