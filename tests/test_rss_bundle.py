@@ -1822,3 +1822,27 @@ class RepositoryHygieneTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReadmeOperatorContractTest(unittest.TestCase):
+    def test_root_readme_exposes_maintainer_boundaries(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        for heading in (
+            "## Maintainer configuration",
+            "## Troubleshooting",
+            "## Security",
+            "## License",
+            "## Publishing and maintenance",
+        ):
+            self.assertEqual(readme.count(heading), 1, heading)
+
+        for token in (
+            "feed-manifest.json",
+            "make doctor",
+            "make check-frozen",
+            "make validate-all",
+            "docs/Troubleshooting.md",
+            "No license file is included yet.",
+        ):
+            self.assertIn(token, readme)
