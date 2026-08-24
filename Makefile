@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help generate package lint docs-check hygiene test compile syntax workflow-lint validate validate-lite validate-air validate-all check
+.PHONY: help generate package lint docs-check hygiene patch-hygiene test compile syntax workflow-lint validate validate-lite validate-air validate-all check
 
 PYTHON ?= python3
 ACTIONLINT ?= actionlint
@@ -12,6 +12,7 @@ help:
 		'  make check         Run offline generation, lint, docs, hygiene and tests' \
 		'  make workflow-lint Run actionlint against GitHub Actions workflows' \
 		'  make hygiene       Scan tracked files for secrets, local paths and runtime state' \
+		'  make patch-hygiene  Reject whitespace errors and unresolved conflict markers' \
 		'  make validate-all  Run live validation for Master, iPhone Lite and Air' \
 		'  make validate      Run live validation for the Master profile' \
 		'  make validate-lite Run live validation for iPhone Lite' \
@@ -53,6 +54,9 @@ docs-check:
 hygiene:
 	$(PYTHON) check-repository-hygiene.py --root .
 
+patch-hygiene:
+	git diff --check
+
 validate:
 	./validate-rss-bundle.sh
 
@@ -75,4 +79,4 @@ validate-all:
 	$(MAKE) validate-lite
 	$(MAKE) validate-air
 
-check: package lint docs-check hygiene compile test syntax
+check: patch-hygiene package lint docs-check hygiene compile test syntax

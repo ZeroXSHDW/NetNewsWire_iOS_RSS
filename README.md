@@ -392,6 +392,7 @@ make help           # show the project commands
 make check          # offline generation, lint, docs, hygiene, tests and syntax checks
 make workflow-lint  # lint GitHub Actions workflows with actionlint
 make hygiene        # scan tracked files for secrets, local paths and runtime state
+make patch-hygiene  # reject whitespace errors and unresolved conflict markers
 make validate-all   # live validation for Master, iPhone Lite and iPhone Air
 ```
 
