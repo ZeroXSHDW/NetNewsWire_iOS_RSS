@@ -1,8 +1,9 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help doctor doctor-live status generate package hourly-digest lint docs-check hygiene test compile syntax validate validate-lite validate-air validate-all check check-frozen
+.PHONY: help doctor doctor-live status generate package hourly-digest lint docs-check hygiene patch-hygiene test compile syntax workflow-lint validate validate-lite validate-air validate-all check check-frozen
 
 PYTHON ?= python3
+ACTIONLINT ?= actionlint
 MANIFEST := feed-manifest.json
 OPML_ROOT := artifacts/opml
 SOURCE_ROOT := artifacts/sources
@@ -18,7 +19,9 @@ help:
 		'  make status        Show manifest, artifact and validation snapshot status' \
 		'  make package       Generate all profiles and refresh the AirDrop handoff' \
 		'  make check         Run offline generation, lint, docs, hygiene and tests' \
+		'  make workflow-lint Run actionlint against GitHub Actions workflows' \
 		'  make hygiene       Scan tracked files for secrets, local paths and runtime state' \
+		'  make patch-hygiene  Reject whitespace errors and unresolved conflict markers' \
 		'  make validate-all  Run live validation for Master, iPhone Lite and Air' \
 		'  make validate      Run live validation for the Master profile' \
 		'  make validate-lite Run live validation for iPhone Lite' \
@@ -67,6 +70,14 @@ compile:
 syntax:
 	zsh -n validate-rss-bundle.sh automation/run-hourly-digest.sh automation/install-hourly-digest-launch-agent.sh
 
+workflow-lint:
+	@if command -v "$(ACTIONLINT)" >/dev/null 2>&1; then \
+		"$(ACTIONLINT)"; \
+	else \
+		printf '%s\n' 'actionlint is required; install v1.7.12 or set ACTIONLINT=/path/to/actionlint' >&2; \
+		exit 1; \
+	fi
+
 lint:
 	$(PYTHON) validate-manifest.py --manifest $(MANIFEST) --root .
 
@@ -75,6 +86,9 @@ docs-check:
 
 hygiene:
 	$(PYTHON) check-repository-hygiene.py --root .
+
+patch-hygiene:
+	git diff --check
 
 validate:
 	PYTHON_BIN="$(PYTHON)" ./validate-rss-bundle.sh
@@ -98,7 +112,7 @@ validate-all:
 	$(MAKE) validate-lite
 	$(MAKE) validate-air
 
-check: package lint docs-check hygiene compile test syntax
+check: patch-hygiene generate package lint docs-check hygiene compile test syntax
 
 check-frozen:
 	PYTHONDONTWRITEBYTECODE=1 $(MAKE) lint docs-check hygiene test syntax

@@ -40,7 +40,7 @@ from rss_validation import (
 )
 from runtime_health import write_health
 import state_utils
-from state_utils import atomic_write_text, directory_lock
+from state_utils import atomic_write_bytes, atomic_write_text, directory_lock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -703,6 +703,35 @@ class ManifestConfigurationTest(unittest.TestCase):
 
 
 class GeneratedArtifactsTest(unittest.TestCase):
+    def test_atomic_artifact_writes_replace_symlinks_without_following_them(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            sentinel = directory / "sentinel.txt"
+            destination = directory / "artifact.txt"
+            sentinel.write_text("original\n", encoding="utf-8")
+            destination.symlink_to(sentinel.name)
+
+            atomic_write_text(destination, "replacement\n")
+
+            self.assertFalse(destination.is_symlink())
+            self.assertEqual(destination.read_text(encoding="utf-8"), "replacement\n")
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), "original\n")
+
+            binary_destination = directory / "artifact.bin"
+            binary_sentinel = directory / "sentinel.bin"
+            binary_sentinel.write_bytes(b"original")
+            binary_destination.symlink_to(binary_sentinel.name)
+            atomic_write_bytes(binary_destination, b"replacement")
+
+            self.assertFalse(binary_destination.is_symlink())
+            self.assertEqual(binary_destination.read_bytes(), b"replacement")
+            self.assertEqual(binary_sentinel.read_bytes(), b"original")
+
+    def test_bundle_generators_use_atomic_artifact_writers(self) -> None:
+        source = (ROOT / "generate-bundle.py").read_text(encoding="utf-8")
+        self.assertIn("atomic_write_bytes(destination", source)
+        self.assertIn("atomic_write_text(destination", source)
+
     def test_report_generator_rejects_missing_arguments_without_traceback(self) -> None:
         result = subprocess.run(
             [sys.executable, str(ROOT / "generate-rss-validation-report.py")],
@@ -1735,6 +1764,30 @@ class ValidationHistoryTest(unittest.TestCase):
             self.assertFalse(history_path.exists())
 
 
+class WorkflowContractTest(unittest.TestCase):
+    def test_workflow_lint_job_is_hash_pinned_and_read_only(self) -> None:
+        workflow = (ROOT / ".github/workflows/rss-validation.yml").read_text(encoding="utf-8")
+        makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+        self.assertIn("workflow-lint:", workflow)
+        self.assertIn("persist-credentials: false", workflow)
+        self.assertIn("ACTIONLINT_VERSION: 1.7.12", workflow)
+        self.assertIn(
+            "ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+            workflow,
+        )
+        self.assertIn("sha256sum --check --status", workflow)
+        self.assertIn('"${RUNNER_TEMP}/actionlint"', workflow)
+        self.assertEqual(
+            workflow.count("git diff --check"),
+            workflow.count("uses: actions/checkout@"),
+        )
+        self.assertIn("patch-hygiene:", makefile)
+        self.assertIn("check: patch-hygiene", makefile)
+        self.assertIn("check: patch-hygiene generate", makefile)
+        self.assertNotIn("check: patch-hygiene package", makefile)
+        self.assertIn("AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml", workflow)
+
+
 class RepositoryHygieneTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -1769,3 +1822,27 @@ class RepositoryHygieneTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReadmeOperatorContractTest(unittest.TestCase):
+    def test_root_readme_exposes_maintainer_boundaries(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        for heading in (
+            "## Maintainer configuration",
+            "## Troubleshooting",
+            "## Security",
+            "## License",
+            "## Publishing and maintenance",
+        ):
+            self.assertEqual(readme.count(heading), 1, heading)
+
+        for token in (
+            "feed-manifest.json",
+            "make doctor",
+            "make check-frozen",
+            "make validate-all",
+            "docs/Troubleshooting.md",
+            "No license file is included yet.",
+        ):
+            self.assertIn(token, readme)

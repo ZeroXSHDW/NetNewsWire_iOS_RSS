@@ -143,7 +143,6 @@ def atomic_write_bytes(path: str | Path, data: bytes) -> None:
             pass
         raise
 
-
 def _fsync_directory(directory: Path) -> None:
     """Best-effort sync of the containing directory after an atomic replace."""
 

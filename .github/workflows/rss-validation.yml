@@ -35,18 +35,50 @@ permissions:
   contents: read
 
 jobs:
+  workflow-lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
+      - name: Install hash-pinned actionlint
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+          ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+        run: |
+          set -euo pipefail
+          archive="${RUNNER_TEMP}/actionlint.tar.gz"
+          curl --fail --silent --show-error --location \
+            --proto '=https' --tlsv1.2 --max-time 60 \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            --output "$archive"
+          printf '%s  %s\n' "$ACTIONLINT_SHA256" "$archive" | sha256sum --check --status
+          tar --extract --gzip --no-same-owner --no-same-permissions \
+            --file "$archive" --directory "$RUNNER_TEMP"
+          test -x "${RUNNER_TEMP}/actionlint"
+      - name: Lint GitHub Actions workflows
+        run: |
+          "${RUNNER_TEMP}/actionlint"
+
   deterministic:
     if: ${{ github.event_name != 'schedule' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install zsh
@@ -72,12 +104,16 @@ jobs:
             artifacts/notifications/NetNewsWire-Notification-Profile.json
   validate:
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
       - name: Install XML validator and zsh
@@ -85,7 +121,7 @@ jobs:
       - name: Check live-validation environment
         run: make doctor-live
       - name: Restore RSS cache and drift baseline
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             .rss-validation-cache
@@ -112,7 +148,7 @@ jobs:
         run: make status
       - name: Upload validation reports
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: rss-validation-reports
           path: |
@@ -124,7 +160,7 @@ jobs:
             artifacts/validation/NetNewsWire-Finance-Cyber-iPhone-Air-VALIDATION-REPORT.json
       - name: Save RSS cache and drift baseline
         if: always()
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             .rss-validation-cache
