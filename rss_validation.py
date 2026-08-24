@@ -15,7 +15,8 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from email.utils import parsedate_to_datetime
 from pathlib import Path
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
+from zoneinfo import ZoneInfo
 
 
 TRACKING_QUERY_KEYS = {
@@ -44,6 +45,20 @@ def safe_xml_root(path: str | Path) -> ET.Element:
     lowered = declaration_scan.lower()
     if b"<!doctype" in lowered or b"<!entity" in lowered:
         raise ValueError(f"DTD/entity declarations are not allowed: {path}")
+    # A few official Drupal feeds emit harmless theme-debug comments before
+    # the XML declaration.  XML 1.0 requires the declaration to be first, so
+    # trim only a preamble made of whitespace, comments and processing
+    # instructions; reject any other bytes rather than guessing at HTML.
+    declaration_index = raw.find(b"<?xml")
+    if declaration_index > 0:
+        preamble = raw[:declaration_index]
+        if not re.fullmatch(
+            rb"(?:\xef\xbb\xbf|\s|<!--.*?-->|<\?.*?\?>)*",
+            preamble,
+            flags=re.DOTALL,
+        ):
+            raise ValueError(f"unexpected bytes before XML declaration: {path}")
+        raw = raw[declaration_index:]
     return ET.fromstring(raw)
 
 
@@ -67,6 +82,27 @@ def child_text(element: ET.Element, names: set[str]) -> str:
 def child_link(element: ET.Element) -> str:
     """Return the preferred article link from an RSS item or Atom entry."""
 
+    # A few official feeds put the article permalink in an anchor nested inside
+    # the item title while emitting a malformed, HTML-escaped value in the
+    # sibling ``link`` element.  Prefer an explicit title anchor when it is a
+    # usable absolute or relative web path; ``extract_feed`` resolves relative
+    # paths against the verified feed URL afterward.
+    title_anchor_candidates: list[tuple[int, str]] = []
+    for child in list(element):
+        if local_name(child.tag) != "title":
+            continue
+        for descendant in child.iter():
+            href = (descendant.attrib.get("href") or "").strip()
+            if not href:
+                continue
+            if url_is_web(href):
+                priority = 0 if href.startswith("https://") else 1
+                title_anchor_candidates.append((priority, href))
+            elif href.startswith(("/", "./", "../")):
+                title_anchor_candidates.append((2, href))
+    if title_anchor_candidates:
+        return min(title_anchor_candidates, key=lambda item: item[0])[1]
+
     candidates: list[tuple[int, str]] = []
     for child in list(element):
         if local_name(child.tag) != "link":
@@ -82,11 +118,120 @@ def child_link(element: ET.Element) -> str:
         candidates.append((priority, value))
     if candidates:
         return min(candidates, key=lambda item: item[0])[1]
+
+    # Some otherwise well-formed official RSS feeds publish a web permalink in
+    # ``guid`` and omit a separate ``link`` element.  Accept it only when the
+    # GUID is an explicit web URL and is not marked as a non-permalink ID; this
+    # keeps opaque GUIDs out of item-link validation while preserving usable
+    # article links for feeds such as the FBI's official podcast stream.
+    for child in list(element):
+        if local_name(child.tag) != "guid":
+            continue
+        value = text_content(child)
+        is_permalink = (child.attrib.get("isPermaLink") or "true").strip().lower()
+        if is_permalink != "false" and url_is_web(value):
+            return value
     return ""
 
 
-def item_date_raw(element: ET.Element) -> str:
-    """Prefer publication time, falling back to update time and legacy date fields."""
+_CBSL_HOSTS = {"cbsl.gov.lk", "www.cbsl.gov.lk"}
+_MONTH_NUMBERS = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
+
+
+def _cbsl_embedded_date(element: ET.Element, base_url: str) -> str:
+    """Extract an unambiguous CBSL report date when item date tags are absent.
+
+    CBSL's official RSS endpoints publish a current channel timestamp but omit
+    per-item ``pubDate``/``dc:date`` fields. Their report titles and PDF links
+    carry explicit publication/reporting dates, so accept only those strongly
+    typed patterns and only for the CBSL host. This keeps the general parser's
+    item-date requirement strict for every other publisher.
+    """
+
+    host = urlsplit((base_url or "").strip()).hostname
+    if (host or "").lower() not in _CBSL_HOSTS:
+        return ""
+
+    title = child_text(element, {"title"})
+    link = child_link(element)
+
+    def iso_date(year: str, month: str, day: str) -> str:
+        try:
+            parsed = datetime(int(year), int(month), int(day), tzinfo=timezone.utc)
+        except (TypeError, ValueError):
+            return ""
+        return parsed.isoformat()
+
+    # CBSL PDF routes use compact YYYYMMDD filenames, for example
+    # ``press_20260722_Monetary_Policy_Review...pdf``.
+    for raw in (link, title):
+        match = re.search(r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)", raw or "")
+        if match:
+            value = iso_date(match.group(1), match.group(2), match.group(3))
+            if value:
+                return value
+
+    month_pattern = "|".join(_MONTH_NUMBERS)
+    match = re.search(
+        rf"\b(\d{{1,2}})\s+({month_pattern})\s+(20\d{{2}})\b",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        value = iso_date(match.group(3), str(_MONTH_NUMBERS[match.group(2).lower()]), match.group(1))
+        if value:
+            return value
+
+    match = re.search(
+        rf"\b({month_pattern})\s+(\d{{1,2}}),?\s+(20\d{{2}})\b",
+        title,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        value = iso_date(match.group(3), str(_MONTH_NUMBERS[match.group(1).lower()]), match.group(2))
+        if value:
+            return value
+
+    # Monthly indicator titles identify the reporting month rather than a day.
+    # Use the first day of that explicit period as a deterministic, conservative
+    # date; the channel publication timestamp remains available in the raw RSS.
+    match = re.search(rf"\b({month_pattern})\s+(20\d{{2}})\b", title, flags=re.IGNORECASE)
+    if match:
+        value = iso_date(match.group(2), str(_MONTH_NUMBERS[match.group(1).lower()]), "1")
+        if value:
+            return value
+    return ""
+
+
+def item_date_raw(element: ET.Element, base_url: str = "") -> str:
+    """Prefer feed date fields, then explicit HTML or scoped source fallbacks.
+
+    A small number of official RSS feeds expose a standards-compliant item
+    description but place the publisher's creation timestamp inside escaped
+    HTML, for example ``<time datetime="...">``.  Treat that explicit
+    timestamp as a fallback only; ordinary RSS/Atom date fields always win.
+    """
+
+    def explicit_time_datetime(raw: str) -> str:
+        match = re.search(
+            r"<time\b[^>]*\bdatetime\s*=\s*([\"'])(.*?)\1",
+            html.unescape(raw or ""),
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        return match.group(2).strip() if match and match.group(2).strip() else ""
 
     for preferred_names in (
         {"published"},
@@ -94,13 +239,31 @@ def item_date_raw(element: ET.Element) -> str:
         {"updated"},
         {"date"},
     ):
-        value = child_text(element, preferred_names)
-        if value:
-            return value
+        for child in list(element):
+            if local_name(child.tag) not in preferred_names:
+                continue
+            raw = "".join(child.itertext())
+            explicit_datetime = explicit_time_datetime(raw)
+            if explicit_datetime:
+                return explicit_datetime
+            value = " ".join(html.unescape(raw).split())
+            if value:
+                return value
+
+    for child in list(element):
+        if local_name(child.tag) not in {"description", "summary", "content"}:
+            continue
+        explicit_datetime = explicit_time_datetime("".join(child.itertext()))
+        if explicit_datetime:
+            return explicit_datetime
+
+    embedded_date = _cbsl_embedded_date(element, base_url)
+    if embedded_date:
+        return embedded_date
     return ""
 
 
-def parse_date(raw: str) -> datetime | None:
+def parse_date(raw: str, naive_timezone: timezone | ZoneInfo = timezone.utc) -> datetime | None:
     raw = (raw or "").strip()
     if not raw:
         return None
@@ -115,12 +278,21 @@ def parse_date(raw: str) -> datetime | None:
             parsed = None
     if parsed is None:
         for fmt in (
+            "%d %b, %Y %z",
+            "%d %B, %Y %z",
+            "%d %b, %Y",
+            "%d %B, %Y",
+            "%b %d, %Y %z",
+            "%B %d, %Y %z",
+            "%b %d, %Y",
+            "%B %d, %Y",
             "%Y-%m-%d",
             "%Y-%m-%dT%H:%M:%S%z",
             "%Y-%m-%dT%H:%M:%S.%f%z",
             "%Y-%m-%d %H:%M:%S.%f",
             "%Y-%m-%d %H:%M:%S",
             "%A, %B %d, %Y - %H:%M",
+            "%a, %m/%d/%Y - %H:%M",
         ):
             try:
                 parsed = datetime.strptime(raw, fmt)
@@ -130,7 +302,7 @@ def parse_date(raw: str) -> datetime | None:
     if parsed is None:
         return None
     if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
+        parsed = parsed.replace(tzinfo=naive_timezone)
     return parsed.astimezone(timezone.utc)
 
 
@@ -190,6 +362,12 @@ def normalize_link(value: str) -> str:
     return urlunsplit((parsed.scheme.lower(), parsed.netloc.lower(), path, query, ""))
 
 
+def normalize_content_type(value: object) -> str:
+    """Normalize harmless header whitespace before comparing feed metadata."""
+
+    return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+
+
 def link_scheme(value: str) -> str:
     value = (value or "").strip()
     if not value:
@@ -198,8 +376,18 @@ def link_scheme(value: str) -> str:
     return parsed.scheme.lower() if parsed.scheme else "(none)"
 
 
-def extract_feed(root: ET.Element) -> tuple[str, list[dict[str, object]]]:
-    """Extract feed-level title and item records from RSS, Atom or RDF."""
+def extract_feed(
+    root: ET.Element,
+    naive_timezone: timezone | ZoneInfo = timezone.utc,
+    base_url: str = "",
+) -> tuple[str, list[dict[str, object]]]:
+    """Extract feed-level title and item records from RSS, Atom or RDF.
+
+    ``base_url`` lets callers turn valid relative item links into absolute web
+    URLs. A few official feeds contain relative links only in older archive
+    entries; resolving them here keeps the article handoff usable without
+    weakening the absolute-HTTPS checks applied to the final records.
+    """
 
     root_name = local_name(root.tag)
     feed_title = ""
@@ -228,7 +416,11 @@ def extract_feed(root: ET.Element) -> tuple[str, list[dict[str, object]]]:
     for element in item_elements:
         title = child_text(element, {"title"})
         link = child_link(element)
-        date = parse_date(item_date_raw(element))
+        if base_url and link and not url_is_web(link):
+            resolved_link = urljoin(base_url, link)
+            if url_is_web(resolved_link):
+                link = resolved_link
+        date = parse_date(item_date_raw(element, base_url=base_url), naive_timezone=naive_timezone)
         items.append({"title": title, "link": link, "date": date})
     return feed_title, items
 
@@ -358,7 +550,8 @@ def feed_snapshot(detail: dict[str, object]) -> dict[str, object]:
         "http_item_link_count": _snapshot_int(detail.get("http_item_link_count")) or 0,
         "missing_item_link_count": _snapshot_int(detail.get("missing_item_link_count")) or 0,
         "item_link_status": str(detail.get("item_link_status", "") or ""),
-        "content_type": str(detail.get("content_type", "") or ""),
+        "item_link_policy": str(detail.get("item_link_policy", "default") or "default"),
+        "content_type": normalize_content_type(detail.get("content_type")),
     }
 
 
@@ -448,7 +641,7 @@ def compare_feed_snapshots(
 
         old_recent = str(old.get("recent", ""))
         new_recent = str(new.get("recent", ""))
-        if old_recent in {"yes", "event-driven"} and new_recent == "no":
+        if old_recent in {"yes", "event-driven", "event-driven-empty"} and new_recent == "no":
             add(url, feed, "freshness-regression", "warning", "feed moved from recent/allowed content to stale content", old_recent, new_recent)
 
         old_payload = _snapshot_int(old.get("payload_bytes"))
@@ -458,21 +651,31 @@ def compare_feed_snapshots(
 
         old_transport = int(old.get("http_item_link_count") or 0) + int(old.get("missing_item_link_count") or 0)
         new_transport = int(new.get("http_item_link_count") or 0) + int(new.get("missing_item_link_count") or 0)
-        if new_transport > old_transport:
+        structured_alert_link_exception = (
+            str(new.get("item_link_status", "") or "") == "structured-alert"
+            or str(new.get("item_link_policy", "default") or "default") == "structured-alert"
+        )
+        if new_transport > old_transport and not structured_alert_link_exception:
             add(url, feed, "item-link-transport-regression", "warning", "legacy or missing item links increased", old_transport, new_transport)
 
         old_title_rate = float(old.get("duplicate_title_rate") or 0.0)
         new_title_rate = float(new.get("duplicate_title_rate") or 0.0)
         old_link_rate = float(old.get("duplicate_link_rate") or 0.0)
         new_link_rate = float(new.get("duplicate_link_rate") or 0.0)
-        if old_title_rate <= duplicate_rate_limit < new_title_rate:
+        noise_policy_exception = (
+            str(new.get("item_link_status", "") or "") == "structured-alert"
+            or str(new.get("item_link_policy", "default") or "default") in {"catalogue-update", "scheduled-calendar"}
+        )
+        if not noise_policy_exception and old_title_rate <= duplicate_rate_limit < new_title_rate:
             add(url, feed, "duplicate-title-threshold", "warning", "duplicate-title rate crossed the noise threshold", old_title_rate, new_title_rate)
-        if old_link_rate <= duplicate_rate_limit < new_link_rate:
+        if not noise_policy_exception and old_link_rate <= duplicate_rate_limit < new_link_rate:
             add(url, feed, "duplicate-link-threshold", "warning", "duplicate-link rate crossed the noise threshold", old_link_rate, new_link_rate)
 
-        if str(old.get("content_type", "")).lower() != str(new.get("content_type", "")).lower():
-            if old.get("content_type") and new.get("content_type"):
-                add(url, feed, "content-type-changed", "warning", "server content-type label changed", old.get("content_type"), new.get("content_type"))
+        old_content_type = normalize_content_type(old.get("content_type"))
+        new_content_type = normalize_content_type(new.get("content_type"))
+        if old_content_type != new_content_type:
+            if old_content_type and new_content_type:
+                add(url, feed, "content-type-changed", "warning", "server content-type label changed", old_content_type, new_content_type)
 
     severity_order = {"critical": 0, "warning": 1}
     warnings.sort(key=lambda item: (severity_order.get(str(item["severity"]), 9), str(item["url"]), str(item["kind"])))
@@ -487,17 +690,15 @@ def counter_rates(values: list[str]) -> tuple[int, int, float]:
 
 def _cli() -> int:
     if len(sys.argv) < 3:
-        print("usage: rss_validation.py latest-date FEED_XML | inspect FEED_XML | age-days ISO_DATE | cache-key URL", file=sys.stderr)
+        print("usage: rss_validation.py latest-date FEED_XML [FEED_URL] | inspect FEED_XML [FEED_URL] | age-days ISO_DATE | cache-key URL", file=sys.stderr)
         return 2
     operation, value = sys.argv[1:3]
+    source_url = sys.argv[3] if len(sys.argv) > 3 else ""
     if operation == "latest-date":
         root = safe_xml_root(value)
+        _, extracted_items = extract_feed(root, base_url=source_url)
         dates = [
-            item["date"]
-            for element in root.iter()
-            if local_name(element.tag) in {"item", "entry"}
-            for item in [{"date": parse_date(item_date_raw(element))}]
-            if item["date"] is not None
+            item["date"] for item in extracted_items if item["date"] is not None
         ]
         if dates:
             print(max(dates).isoformat())
@@ -506,7 +707,7 @@ def _cli() -> int:
     if operation == "inspect":
         started = time.perf_counter()
         root = safe_xml_root(value)
-        _, items = extract_feed(root)
+        _, items = extract_feed(root, base_url=source_url)
         dates = [item["date"] for item in items if item["date"] is not None]
         latest = max(dates).isoformat() if dates else ""
         print(f"{latest}\t{time.perf_counter() - started:.6f}\t{len(items)}")

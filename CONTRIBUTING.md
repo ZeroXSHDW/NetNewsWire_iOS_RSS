@@ -12,7 +12,17 @@ After a manifest change, regenerate everything with:
 make package
 ```
 
-The `AirDrop/` copy is a generated handoff artifact for the recommended iPhone Air profile.
+The `artifacts/AirDrop/` copy is a generated handoff artifact for the recommended iPhone Air profile.
+
+Before editing, run `make doctor` to check the local maintainer toolchain. Use `make doctor-live` when you also plan to run the network-backed feed audits.
+
+For a quick read-only snapshot of manifest counts, generated-file presence and the latest committed validation reports, run:
+
+```sh
+make status
+```
+
+The status command surfaces live-feed findings without rewriting files. Use `make check-frozen` when you need the byte-level reproducibility gate for generated artifacts.
 
 ## Required checks
 
@@ -26,6 +36,8 @@ git diff --check
 
 `make check` includes the repository hygiene gate. It scans tracked files for runtime state, high-confidence credentials and machine-specific absolute paths before a change is published.
 `make workflow-lint` runs actionlint against the GitHub Actions workflow; CI verifies the downloaded actionlint archive before running the same check.
+
+When the manifest and generated artifacts are intentionally frozen for an integration handoff, run `make check-frozen` instead. It runs the non-mutating lint, documentation, hygiene, test, shell-syntax and whitespace checks without invoking `make package` or rewriting committed artifacts.
 
 When network access is available, run all live profile audits as well:
 
@@ -41,7 +53,7 @@ Live validation also requires `curl` and `xmllint` from libxml2. The offline `ma
 
 ## Adding or changing a feed
 
-1. Document the coverage gap or operational reason in `Coverage-Gap-Assessment.md`.
+1. Document the coverage gap or operational reason in `docs/Coverage-Gap-Assessment.md`.
 2. Use a direct, public HTTPS RSS or Atom endpoint; keep the HTML page in `html_url`.
 3. Record the feed’s purpose, signal type, access model, cadence, validation date and profile membership in the manifest.
 4. Regenerate the artifacts and inspect the source table and notification matrix.

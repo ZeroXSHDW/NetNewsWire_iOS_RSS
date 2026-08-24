@@ -1,4 +1,10 @@
 .digest-state.json
+.rss-fetch-state.json
+.rss-fetch-state.json.lock
+.runtime/
+hourly-digest-input.json
+shortcut-digest.txt
+rss-articles.json
 digest-input.json
 .rss-validation-cache/
 .rss-validation-cache.lock/
@@ -9,4 +15,12 @@ __pycache__/
 tests/__pycache__/
 *.py[cod]
 *.tmp
+*.log
+*.lock
+.venv/
+venv/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
 .DS_Store

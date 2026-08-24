@@ -7,6 +7,7 @@ import math
 from datetime import date
 from pathlib import Path
 from urllib.parse import parse_qsl, urlsplit
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 NOTIFICATION_DISPLAY = {
@@ -26,10 +27,11 @@ VALIDATION_DEFAULTS = {
     "mobile_slow_seconds": 2.0,
     "max_response_bytes": 16 * 1024 * 1024,
     "duplicate_story_window_days": 3.0,
+    "future_date_tolerance_minutes": 90,
     "validated_max_age_days": 180.0,
 }
 
-ITEM_LINK_POLICIES = {"default", "structured-alert"}
+ITEM_LINK_POLICIES = {"default", "structured-alert", "catalogue-update", "scheduled-calendar"}
 
 REQUIRED_FEED_FIELDS = (
     "id",
@@ -420,6 +422,38 @@ def manifest_errors(
             stale_days = feed.get("stale_review_days")
             if not _is_finite_number(stale_days) or float(stale_days) <= 0:
                 errors.append(f"{label}: event-driven feed needs positive stale_review_days")
+
+        date_timezone = feed.get("date_timezone")
+        if date_timezone is not None:
+            if not isinstance(date_timezone, str) or not date_timezone.strip():
+                errors.append(f"{label}: date_timezone must be a non-empty IANA timezone name")
+            else:
+                try:
+                    ZoneInfo(date_timezone)
+                except ZoneInfoNotFoundError:
+                    errors.append(f"{label}: date_timezone must be a valid IANA timezone name")
+
+        future_date_tolerance = feed.get("future_date_tolerance_minutes")
+        future_date_reason = feed.get("future_date_reason")
+        if future_date_tolerance is None:
+            if future_date_reason is not None:
+                errors.append(f"{label}: future_date_reason needs future_date_tolerance_minutes")
+        else:
+            tolerance_valid = _is_finite_number(future_date_tolerance) and float(future_date_tolerance) > 0
+            if not tolerance_valid:
+                errors.append(
+                    f"{label}: future_date_tolerance_minutes must be a positive finite number"
+                )
+            if future_date_reason is not None and (
+                not isinstance(future_date_reason, str) or not future_date_reason.strip()
+            ):
+                errors.append(f"{label}: future_date_reason must be a non-empty string")
+            if tolerance_valid and float(future_date_tolerance) > float(
+                settings["future_date_tolerance_minutes"]
+            ) and (not isinstance(future_date_reason, str) or not future_date_reason.strip()):
+                errors.append(
+                    f"{label}: feed-specific future-date tolerance needs future_date_reason"
+                )
 
         if feed.get("notification") not in NOTIFICATION_DISPLAY:
             errors.append(f"{label}: invalid notification policy")

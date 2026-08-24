@@ -21,6 +21,7 @@
 
 ## Validation
 
+- [ ] `make status` reviewed for manifest/profile/artifact and snapshot findings
 - [ ] `make check`
 - [ ] `git diff --check`
 - [ ] `make validate` (when live network validation is available)

@@ -307,13 +307,17 @@ def load_state(path: Path) -> dict:
     if not isinstance(data, dict):
         raise ValueError("digest state must be a JSON object")
     version = data.get("version", 1)
-    if isinstance(version, bool) or not isinstance(version, int):
-        raise ValueError("digest state version must be an integer")
-    data["version"] = max(2, version)
+    if isinstance(version, bool) or not isinstance(version, int) or version not in {1, 2}:
+        raise ValueError("digest state version must be 1 or 2")
+    data["version"] = 2
     data.setdefault("last_run", "")
     data.setdefault("seen", {})
+    if not isinstance(data["last_run"], str):
+        raise ValueError("digest state last_run field must be a string")
     if not isinstance(data["seen"], dict):
         raise ValueError("digest state seen field must be an object")
+    if any(not isinstance(key, str) or not isinstance(value, dict) for key, value in data["seen"].items()):
+        raise ValueError("digest state seen entries must be string keys and objects")
     return data
 
 
@@ -349,6 +353,16 @@ def shortcut_text(package: dict) -> str:
         f"Coverage until: {coverage.get('until') or 'not specified'}",
         "",
     ]
+    collection = package.get("collection")
+    if isinstance(collection, dict):
+        lines.insert(
+            5,
+            "Feed collection: "
+            f"{collection.get('feeds_succeeded', 0)}/{collection.get('feeds_considered', 0)} succeeded; "
+            f"{collection.get('feeds_failed', 0)} failed",
+        )
+        if collection.get("status") == "partial":
+            lines.insert(6, "Warning: this batch is partial; check failed feed details before relying on completeness.")
     articles = package.get("articles", [])
     if not articles:
         lines.append("No material new articles were selected.")
@@ -401,7 +415,7 @@ def main() -> int:
     parser.add_argument("--max-seen-items", type=int, help="override the selected profile's seen-state budget")
     parser.add_argument("--duplicate-window-days", type=float, help="override the selected profile's duplicate window")
     parser.add_argument("--dry-run", action="store_true", help="do not update digest state")
-    parser.add_argument("--prompt-file", default="Apple-Intelligence-RSS-Summary-Prompt.md")
+    parser.add_argument("--prompt-file", default="docs/Apple-Intelligence-RSS-Summary-Prompt.md")
     parser.add_argument("--shortcut-output", type=Path, help="also write a compact plain-text package for an iPhone Shortcut")
     args = parser.parse_args()
 

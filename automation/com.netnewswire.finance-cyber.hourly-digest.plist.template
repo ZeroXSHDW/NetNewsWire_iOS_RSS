@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.netnewswire.finance-cyber.hourly-digest</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>__STAGED_ROOT__/automation/run-hourly-digest.sh</string>
+    <string>--run-shortcut</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>NETNEWSWIRE_DIGEST_DIR</key>
+    <string>__RUNTIME_DIR__</string>
+    <key>PYTHON_BIN</key>
+    <string>__PYTHON_BIN__</string>
+    <key>SHORTCUT_NAME</key>
+    <string>__SHORTCUT_NAME__</string>
+    <key>NETNEWSWIRE_SHORTCUT_TIMEOUT_SECONDS</key>
+    <string>__SHORTCUT_TIMEOUT__</string>
+    <key>NETNEWSWIRE_LOG_PATH</key>
+    <string>__RUNTIME_DIR__/hourly.log</string>
+    <key>NETNEWSWIRE_LOG_MAX_BYTES</key>
+    <string>__LOG_MAX_BYTES__</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>__INTERVAL__</integer>
+  <key>TimeOut</key>
+  <integer>__JOB_TIMEOUT__</integer>
+  <key>ThrottleInterval</key>
+  <integer>60</integer>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>__RUNTIME_DIR__/hourly.log</string>
+  <key>StandardErrorPath</key>
+  <string>__RUNTIME_DIR__/hourly.log</string>
+  <key>WorkingDirectory</key>
+  <string>__STAGED_ROOT__</string>
+</dict>
+</plist>

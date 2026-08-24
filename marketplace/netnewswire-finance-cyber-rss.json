@@ -1,0 +1,32 @@
+{
+  "id": "netnewswire-finance-cyber-rss",
+  "name": "NetNewsWire Finance + Cyber RSS",
+  "publisher": "ZeroDev LLC",
+  "availability": "free",
+  "license": "MIT",
+  "licenseUrl": "https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/blob/main/LICENSE",
+  "repositoryUrl": "https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS",
+  "readmeUrl": "https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS#readme",
+  "liveMonitorUrl": "https://zerodevllc.eu/rss",
+  "marketplaceUrl": "https://zerodevllc.eu/#work",
+  "summary": "A manifest-driven, privacy-conscious RSS bundle for NetNewsWire with finance and cybersecurity coverage, importable OPML profiles, and an edge-hosted live feed monitor.",
+  "profiles": [
+    { "name": "iPhone Air", "feeds": 125, "purpose": "Recommended daily profile" },
+    { "name": "iPhone Lite", "feeds": 120, "purpose": "Lower-noise mobile reading" },
+    { "name": "Master", "feeds": 672, "purpose": "Full research coverage" }
+  ],
+  "coverage": {
+    "financeFeeds": 556,
+    "cyberSecurityFeeds": 116,
+    "totalFeeds": 672
+  },
+  "platforms": [
+    "NetNewsWire on iPhone and iPad",
+    "NetNewsWire on macOS",
+    "Apple Shortcuts and optional Apple Intelligence digest",
+    "Cloudflare-hosted public RSS monitor",
+    "GitHub live README and OPML downloads"
+  ],
+  "price": "€0",
+  "sourceNote": "The software and configuration are MIT-licensed. RSS publishers retain their own content, trademarks, and feed terms."
+}

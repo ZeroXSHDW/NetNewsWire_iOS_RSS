@@ -60,9 +60,9 @@ def record_history(args: argparse.Namespace, report_data: dict) -> tuple[int, di
         if not isinstance(history, dict):
             raise ValueError("validation history must be a JSON object")
         version = history.get("version", 1)
-        if isinstance(version, bool) or not isinstance(version, int):
-            raise ValueError("validation history version must be an integer")
-        history["version"] = max(2, version)
+        if isinstance(version, bool) or not isinstance(version, int) or version not in {1, 2}:
+            raise ValueError("validation history version must be 1 or 2")
+        history["version"] = 2
         if not isinstance(history.get("profiles", {}), dict):
             raise ValueError("validation history profiles field must be an object")
 
