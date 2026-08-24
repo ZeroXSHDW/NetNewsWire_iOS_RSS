@@ -46,6 +46,22 @@ The repository contains **556 finance feeds** and **116 cybersecurity feeds**. F
 
 You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelligence and Notes only if you want the optional digest workflow.
 
+## Maintainer configuration
+
+The manifest is the only source of truth for feed identity, folders, profile
+membership, notification policy, and digest budgets. Change
+[`feed-manifest.json`](feed-manifest.json), then regenerate the committed
+OPML/source/notification artifacts with `make generate` or `make package`.
+
+The main local controls are `PYTHON` for the selected Python interpreter,
+`ACTIONLINT` for the pinned workflow-lint executable, and `RUNTIME_DIR` for
+the optional hourly digest state/output directory. Live validation uses the
+profile-specific `VALIDATION_PROFILE` and report paths documented in the
+Makefile; feed caches stay outside the repository by default.
+
+Use `make doctor` for offline prerequisites, `make doctor-live` before
+network validation, and `make check-frozen` when generated artifacts must
+remain unchanged.
 ## How it operates across platforms
 
 The same manifest remains the source of truth while each surface has a separate job:
@@ -1722,6 +1738,40 @@ Committed validation snapshots live under [`artifacts/validation/`](artifacts/va
 | [`.github/workflows/rss-validation.yml`](.github/workflows/rss-validation.yml) | Deterministic CI and scheduled live validation |
 | [`SECURITY.md`](SECURITY.md) | Security reporting and sensitive-data handling |
 
+## Troubleshooting
+
+- If an OPML import creates duplicates, remember that imports are additive;
+  remove the older profile in NetNewsWire or import only the intended Air/Lite
+  profile after checking the generated artifact.
+- If `make check` reports a generated diff, inspect the manifest and the first
+  changed artifact. Use `make check-frozen` for a non-mutating handoff check;
+  do not hand-edit OPML, source tables, or notification outputs.
+- If live validation cannot reach a feed, run the offline `make check` gate
+  and inspect the committed validation report. `make validate-all` is an
+  optional network gate, not a reason to weaken deterministic checks.
+- If the digest contains no usable items or exceeds its budget, inspect the
+  input profile, publication timestamps, and bounded item/body/total-size
+  settings before rerunning `prepare-rss-digest-input.py`.
+- If the AirDrop handoff is stale, run `make package`, review the generated
+  diff, and confirm the iPhone Air OPML and `artifacts/AirDrop/README.txt`
+  remain synchronized before sharing them.
+- Keep feed caches, Shortcut state, launch-agent files, credentials, and
+  selected article exports outside the repository unless an artifact contract
+  explicitly requires a sanitized fixture.
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md) for private reporting and data-handling
+guidance. The project does not provide trading, execution, incident-response,
+or financial-advice functionality; do not commit credentials, private feeds,
+reader databases, or selected article exports.
+
+## License
+
+No license file is included yet. Public visibility does not grant reuse
+rights; choose and publish the intended license before calling this a
+finished public release. RSS publishers retain their own content, trademarks,
+and feed terms.
 ## Publishing and maintenance
 
 The repository is public at [github.com/ZeroXSHDW/NetNewsWire_iOS_RSS](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS). The publishing checklist is in [`GITHUB-PUBLISHING.md`](GITHUB-PUBLISHING.md); contribution and feed-change rules are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
