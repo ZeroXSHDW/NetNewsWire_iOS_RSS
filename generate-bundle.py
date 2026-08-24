@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -19,6 +20,7 @@ from bundle_config import (
     profile_config,
     profile_settings,
 )
+from state_utils import atomic_write_bytes, atomic_write_text
 
 
 def load_manifest(path: Path) -> dict:
@@ -69,8 +71,9 @@ def write_opml(data: dict, feeds: list[dict], destination: Path, profile: str) -
 
     ET.indent(root, space="  ")
     tree = ET.ElementTree(root)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    tree.write(destination, encoding="utf-8", xml_declaration=True)
+    buffer = io.BytesIO()
+    tree.write(buffer, encoding="utf-8", xml_declaration=True)
+    atomic_write_bytes(destination, buffer.getvalue())
 
 
 def escape_markdown(value: object) -> str:
@@ -131,8 +134,7 @@ def write_source_table(data: dict, feeds: list[dict], destination: Path, profile
         "Run `make check`, `make validate`, `make validate-lite` and `make validate-air` after manifest changes and during the monthly live health review.",
         "",
     ])
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(destination, "\n".join(lines))
 
 
 def notification_matrix_data(data: dict) -> dict:
@@ -252,15 +254,13 @@ def write_notification_matrix(data: dict, destination: Path) -> None:
         "See [NetNewsWire setup and notification plan](NetNewsWire-Setup-and-Notification-Plan.md) for the operating rationale and [daily digest workflow](NetNewsWire-Daily-Digest-Workflow.md) for batch review.",
         "",
     ])
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(destination, "\n".join(lines))
 
 
 def write_notification_json(data: dict, destination: Path) -> None:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(
+    atomic_write_text(
+        destination,
         json.dumps(notification_matrix_data(data), indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
     )
 
 

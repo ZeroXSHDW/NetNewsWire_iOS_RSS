@@ -76,3 +76,27 @@ def atomic_write_text(path: str | Path, text: str) -> None:
         except FileNotFoundError:
             pass
         raise
+
+
+def atomic_write_bytes(path: str | Path, payload: bytes) -> None:
+    """Write bytes through a unique same-directory temporary file and replace."""
+
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    file_descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{destination.name}.",
+        suffix=".tmp",
+        dir=destination.parent,
+    )
+    try:
+        with os.fdopen(file_descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_name, destination)
+    except BaseException:
+        try:
+            os.unlink(temporary_name)
+        except FileNotFoundError:
+            pass
+        raise

@@ -32,6 +32,7 @@ from rss_validation import (
     similar_titles,
     source_table_entries,
 )
+from state_utils import atomic_write_bytes, atomic_write_text
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -182,6 +183,35 @@ class ManifestConfigurationTest(unittest.TestCase):
 
 
 class GeneratedArtifactsTest(unittest.TestCase):
+    def test_atomic_artifact_writes_replace_symlinks_without_following_them(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            sentinel = directory / "sentinel.txt"
+            destination = directory / "artifact.txt"
+            sentinel.write_text("original\n", encoding="utf-8")
+            destination.symlink_to(sentinel.name)
+
+            atomic_write_text(destination, "replacement\n")
+
+            self.assertFalse(destination.is_symlink())
+            self.assertEqual(destination.read_text(encoding="utf-8"), "replacement\n")
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), "original\n")
+
+            binary_destination = directory / "artifact.bin"
+            binary_sentinel = directory / "sentinel.bin"
+            binary_sentinel.write_bytes(b"original")
+            binary_destination.symlink_to(binary_sentinel.name)
+            atomic_write_bytes(binary_destination, b"replacement")
+
+            self.assertFalse(binary_destination.is_symlink())
+            self.assertEqual(binary_destination.read_bytes(), b"replacement")
+            self.assertEqual(binary_sentinel.read_bytes(), b"original")
+
+    def test_bundle_generators_use_atomic_artifact_writers(self) -> None:
+        source = (ROOT / "generate-bundle.py").read_text(encoding="utf-8")
+        self.assertIn("atomic_write_bytes(destination", source)
+        self.assertIn("atomic_write_text(destination", source)
+
     def test_report_generator_rejects_missing_arguments_without_traceback(self) -> None:
         result = subprocess.run(
             [sys.executable, str(ROOT / "generate-rss-validation-report.py")],
@@ -761,6 +791,9 @@ class WorkflowContractTest(unittest.TestCase):
         )
         self.assertIn("patch-hygiene:", makefile)
         self.assertIn("check: patch-hygiene", makefile)
+        self.assertIn("check: patch-hygiene generate", makefile)
+        self.assertNotIn("check: patch-hygiene package", makefile)
+        self.assertIn("AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml", workflow)
 
 
 class RepositoryHygieneTest(unittest.TestCase):

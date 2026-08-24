@@ -91,6 +91,7 @@ jobs:
             NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md \
             NetNewsWire-Finance-Cyber-iPhone-Air.opml \
             NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md \
+            AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml \
             NetNewsWire-Notification-Profile.md \
             NetNewsWire-Notification-Profile.json
   validate:
@@ -121,7 +122,7 @@ jobs:
       - name: Generate bundles
         run: make generate
       - name: Ensure generated artifacts are committed
-        run: git diff --exit-code -- NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Air.opml NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
+        run: git diff --exit-code -- AirDrop/NetNewsWire-Finance-Cyber-iPhone-Air.opml NetNewsWire-Finance-Cyber.opml NetNewsWire-Finance-Cyber-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Lite.opml NetNewsWire-Finance-Cyber-iPhone-Lite-Source-Table.md NetNewsWire-Finance-Cyber-iPhone-Air.opml NetNewsWire-Finance-Cyber-iPhone-Air-Source-Table.md NetNewsWire-Notification-Profile.md NetNewsWire-Notification-Profile.json
       - name: Lint manifest and generated artifacts
         run: make lint
       - name: Run deterministic tests

@@ -79,4 +79,4 @@ validate-all:
 	$(MAKE) validate-lite
 	$(MAKE) validate-air
 
-check: patch-hygiene package lint docs-check hygiene compile test syntax
+check: patch-hygiene generate lint docs-check hygiene compile test syntax

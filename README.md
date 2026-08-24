@@ -48,6 +48,8 @@ You can use the project with **NetNewsWire alone**. Add Shortcuts, Apple Intelli
 - Provides iPhone Air and iPhone Lite bundles so the phone gets useful signal without importing every research feed.
 - Prepares selected RSS articles for a repeatable Apple Intelligence workflow with deduplication, sanitization, time handling and size limits.
 - Validates feed URLs, metadata, profile budgets and generated artifacts in CI.
+- Publishes generated OPML, Markdown and JSON artifacts with same-directory atomic replacement, so interrupted generation cannot leave a partial bundle.
+- `make check` is deterministic and does not refresh the AirDrop handoff; it verifies that the committed handoff already matches the generated iPhone Air bundle.
 
 The generated files are delivery artifacts. Edit the manifest first, then run `make generate` or `make package` to rebuild them.
 
