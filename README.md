@@ -11,8 +11,6 @@
 
 # NetNewsWire Finance + Cyber RSS
 
-> **Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
-
 **[NetNewsWire Finance + Cyber RSS](https://ZeroDevLLC.com)** by [ZeroDev LLC](https://ZeroDevLLC.com) · GitHub: [ZeroXSHDW/NetNewsWire_iOS_RSS](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS)
 
 > Brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)** · Store: **[https://zerodevllc.store](https://zerodevllc.store)**  
@@ -20,13 +18,6 @@
 > Active development → private twin [`NetNewsWire_iOS_RSS-dev`](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS-dev).
 
 
-## Screenshots
-
-![Netnewswire Feed Preview](docs/previews/netnewswire-feed-preview.svg)
-
-![Apple Intelligence Preview](docs/previews/apple-intelligence-preview.svg)
-
----
 [![Validate RSS bundles](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/actions/workflows/rss-validation.yml/badge.svg)](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/actions/workflows/rss-validation.yml)
 
 A manifest-driven, privacy-conscious RSS workflow for **NetNewsWire on iPhone, iPad and Mac**. It combines Ireland, EU, UK and US finance sources with official cybersecurity alerts, incident reporting and technical research—and adds a local-first Apple Intelligence digest layer for articles you deliberately provide.
@@ -1751,7 +1742,6 @@ The repository is public at [github.com/ZeroXSHDW/NetNewsWire_iOS_RSS](https://g
 No license file is included yet. Public visibility does not grant reuse rights; choose the intended license before calling this a finished public release.
 
 When changing a feed, edit [`feed-manifest.json`](feed-manifest.json), regenerate the bundle, run the checks, inspect the generated diff and commit the source plus derived artifacts together.
-
 
 
 ## Troubleshooting
