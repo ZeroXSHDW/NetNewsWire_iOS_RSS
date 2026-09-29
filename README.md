@@ -5,16 +5,20 @@
   / /|  __/ | | (_) | |_| |  __/\ V / | |___| |__| |___
  /____\___|_|  \___/|____/ \___| \_/  |_____|_____\____|
                     ZeroDev LLC
-             https://ZeroDevLLC.com
+               NetNewsWire Finance + Cyber RSS
+    https://ZeroDevLLC.com  ·  https://zerodevllc.store
 ```
 
 # NetNewsWire Finance + Cyber RSS
 
+> **Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
+
 **[NetNewsWire Finance + Cyber RSS](https://ZeroDevLLC.com)** by [ZeroDev LLC](https://ZeroDevLLC.com) · GitHub: [ZeroXSHDW/NetNewsWire_iOS_RSS](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS)
 
-> Store / brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)**  
-> Production releases are published on the public-bound repo `NetNewsWire_iOS_RSS`.  
-> Active development uses the private twin [`NetNewsWire_iOS_RSS-dev`](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS-dev).
+> Brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)** · Store: **[https://zerodevllc.store](https://zerodevllc.store)**  
+> Production releases → public-bound `NetNewsWire_iOS_RSS`.  
+> Active development → private twin [`NetNewsWire_iOS_RSS-dev`](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS-dev).
+
 
 ## Screenshots
 
