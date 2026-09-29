@@ -1715,6 +1715,7 @@ Committed validation snapshots live under [`artifacts/validation/`](artifacts/va
 | [Validation reports](artifacts/validation/NetNewsWire-Finance-Cyber-VALIDATION-REPORT.md) | Committed profile evidence and live-feed snapshots |
 | [`NetNewsWire-Finance-Cyber-CHANGELOG.md`](NetNewsWire-Finance-Cyber-CHANGELOG.md) | Feed-selection, maintenance and validation history |
 | [`.github/`](.github/) | CI, Dependabot, ownership and contribution workflows |
+| [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Lightweight push/PR CI (`scripts/ci-validate.sh`: compile, manifest lint, docs, hygiene, unit tests) |
 | [`.github/workflows/rss-validation.yml`](.github/workflows/rss-validation.yml) | Deterministic CI and scheduled live validation |
 | [`SECURITY.md`](SECURITY.md) | Security reporting and sensitive-data handling |
 
