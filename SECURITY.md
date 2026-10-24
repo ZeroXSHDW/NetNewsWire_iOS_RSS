@@ -1,17 +1,20 @@
-# Security policy
+# Security Policy
 
-This repository is a static NetNewsWire bundle plus local Python and shell tooling. It does not provide a hosted service, accept credentials or execute remote code from feed contents.
+ZeroDevLLC projects follow a local-first, no-cloud, no-telemetry posture.
 
-## Reporting a security problem
+## Reporting a vulnerability
+Please report security issues privately to the maintainer rather than opening a public issue.
 
-For a vulnerability in the validation tools, unsafe input handling or accidental secret exposure, use a private GitHub Security Advisory if that feature is enabled for the repository:
+- Email: mmoran00000001@gmail.com
+- Subject: `[SECURITY] <repo> - <short summary>`
 
-[Open a private security advisory](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/security/advisories/new)
+We aim to acknowledge within 72 hours and provide a fix or mitigation plan.
 
-Do not publish credentials, private feed URLs or exploit details in a public issue. If private advisories are unavailable, open a non-sensitive issue asking the maintainer for a private contact path.
+## Supported versions
+Only the latest release on the default branch is supported.
 
-## Feed and content reports
+## Scope
+- In scope: code in this repository.
+- Out of scope: third-party dependencies; report those upstream.
 
-Broken feeds, stale sources, noisy coverage and profile-budget regressions belong in the public [validation failure issue template](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/issues/new?template=validation-failure.md). New source suggestions belong in the [feed request template](https://github.com/ZeroXSHDW/NetNewsWire_iOS_RSS/issues/new?template=feed-request.md).
-
-Never include API keys, account data, personal article exports, digest state or local validation cache files in an issue or pull request.
+ZeroDevLLC · cyber-deck · local-first · no cloud · no telemetry
